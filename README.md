@@ -1,4 +1,7 @@
-# 6 Qui Prend !
+# (Ce n'est pas) 6 Qui Prend !
+
+# Description
+[Règles du jeu](http://www.gigamic.com/files/catalog/products/rules/rules-6quiprend-05-2012.pdf)
 
 # Pré-Requis
 - [NodeJS](https://nodejs.org/)
