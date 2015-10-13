@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://bitbucket.org/kombucha/jeu-de-carte-online"
   },
   "author": "Vincent Lemeunier",
   "license": "ISC",
-  "homepage": "",
+  "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
   "dependencies": {},
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
