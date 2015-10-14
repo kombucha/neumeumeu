@@ -4,6 +4,7 @@ var Webpack = require('webpack'),
 var webpackConf = {
     entry: {
         app: process.cwd() + '/src/client/scripts/index.js',
+        // FIXME: If package.json is shared between client and server, we'll have to specify vendors manually
         vendor: Object.keys(conf.pkg.dependencies)
     },
     output: {
