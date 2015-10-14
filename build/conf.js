@@ -6,7 +6,7 @@ var env = args.env || 'mock';
 module.exports = {
     pkg: require('../package.json'),
     paths: {
-        srcBase: 'src',
+        srcBase: 'src/client',
         distBase: 'dist'
     },
     env: env,

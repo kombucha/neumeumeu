@@ -1,0 +1,17 @@
+{
+    "plugins": [
+        "babel-plugin-module-alias"
+    ],
+    "extra": {
+        "module-alias": [{
+            "src": "./src/client/scripts/",
+            "expose": "client"
+        }, {
+            "src": "./src/server/",
+            "expose": "server"
+        }, {
+            "src": "./src/common/",
+            "expose": "common"
+        }]
+    }
+}

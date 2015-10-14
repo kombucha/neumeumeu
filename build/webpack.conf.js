@@ -3,7 +3,7 @@ var Webpack = require('webpack'),
 
 var webpackConf = {
     entry: {
-        app: process.cwd() + '/src/scripts/index.js',
+        app: process.cwd() + '/src/client/scripts/index.js',
         vendor: Object.keys(conf.pkg.dependencies)
     },
     output: {
@@ -20,12 +20,7 @@ var webpackConf = {
     },
 
     resolve: {
-        extensions: ['', '.js'],
-        alias: {
-            'components': process.cwd() + '/src/scripts/components',
-            'actions': process.cwd() + '/src/scripts/actions',
-            'stores': process.cwd() + '/src/scripts/stores'
-        }
+        extensions: ['', '.js']
     },
 
     module: {

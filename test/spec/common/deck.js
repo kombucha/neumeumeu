@@ -1,4 +1,4 @@
-import * as deckUtils from '../../src/scripts/deck';
+import * as deckUtils from 'common/deck';
 
 describe('deckUtils', () => {
     it('should return 104 cards', () => {

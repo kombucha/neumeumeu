@@ -1,4 +1,4 @@
-import * as deckUtils from './deck';
+import * as deckUtils from 'common/deck';
 
 let deck = deckUtils.generateDeck();
 deck = deckUtils.shuffle(deck);
