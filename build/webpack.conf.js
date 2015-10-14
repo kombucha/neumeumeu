@@ -33,10 +33,7 @@ var webpackConf = {
     },
     plugins: [
         new Webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
-    ],
-    eslint: {
-        emitErrors: !conf.devMode
-    }
+    ]
 };
 
 if (conf.optimize) {
