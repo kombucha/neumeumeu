@@ -54,7 +54,6 @@ gulp.task('lint', function() {
 
 gulp.task('test', function() {
     return gulp.src('test/spec/**/*.js')
-        .pipe(require('gulp-debug')())
         .pipe(mocha({
             require: [
                 'babel-core/register-without-polyfill',
