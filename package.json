@@ -15,7 +15,9 @@
   "author": "Vincent Lemeunier",
   "license": "ISC",
   "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
-  "dependencies": {},
+  "dependencies": {
+    "redux": "^3.0.2"
+  },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
     "babel-loader": "^5.3.2",
