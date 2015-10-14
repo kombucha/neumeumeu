@@ -6,7 +6,8 @@
   "scripts": {
     "build": "gulp build --",
     "dev": "gulp dev --",
-    "test": "gulp test --"
+    "test": "gulp test --",
+    "server": "node src/server/index.js"
   },
   "repository": {
     "type": "git",
