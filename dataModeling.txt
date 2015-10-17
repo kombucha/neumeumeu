@@ -77,6 +77,8 @@ clientEvents: [
 //=================================================
 
 game: {
+  id: 7,
+  
   settings: {   // read from config file(YAML?)
     maxPlayers: 5,
     cardsPerDeal: 10,
@@ -87,6 +89,7 @@ game: {
     timeToChooseStack: 30,
     delayBetweenTurns: 5
   },
+  
   cardsDescription: {    // generated / or read from config file
     59: {
       malus: 1
@@ -99,6 +102,7 @@ game: {
       malus: 1
     }
   },
+  
   playersDescription: [   // update on JOIN_GAME and LEAVE_GAME events from clients
     {
       name: "Vincent",
@@ -121,7 +125,7 @@ game: {
         isReadyForGame: false,     // \
         isReadyForDeal: false,     //  - Game / Deal / Turn start when all players are ready
         isReadyForPlayTurn: true,  // /
-        cards: [34,79],
+        hand: [34,79],
         playing: 34,      // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
         playingMsg: "..." // updated on receive READY_FOR_PLAY_TURN from client
       },
@@ -131,7 +135,7 @@ game: {
         isReadyForGame: false,     // \
         isReadyForDeal: false,     //  - Game / Deal / Turn start when all players are ready
         isReadyForPlayTurn: false, // /
-        cards: [12,28],
+        hand: [12,28],
         playing: 28,      // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
         playingMsg: "..." // updated on receive READY_FOR_PLAY_TURN from client
       }
@@ -144,7 +148,11 @@ game: {
     ],
   },
   
-  deck: [76, 13, 28, 6, 81, ...]
+  deck: [76, 13, 28, 6, 81, ...],
+  
+  events:[
+    ...   // all server events up until now
+  ]
 }
 
 
