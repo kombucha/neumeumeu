@@ -23,7 +23,7 @@ game: {
   playersDescription : ..., // from START_GAME event
   
   myName             : "Hugo"        // from JOIN_GAME event  
-  mySecureHash       : "cf23df2207d99a74fbe169e3eba035e633b65d94",       // from JOIN_GAME response
+  mySecureHash       : "cf23df2207d99a74fbe169e3eba035e633b65d94",    // from JOIN_GAME response
   
   state              : ... // from START_DEAL and PLAY_TURN events
 }
@@ -33,14 +33,14 @@ game: {
 // Should be processed by the server to generate game events, then discarded
 clientEvents: [
   {
-    name: "LIST_GAMES"
+    name: "LIST_GAMES"  // server returns all infos on games waiting to start
   },
   {
     name: "JOIN_GAME",  // server returns a secure hash identifying player and game for future communication
     gameId: 7,
     player: {
       name: "Vincent",  // Use as player ID, refuse if same name already joined
-      avatarIcon: "/vincent.png"
+      avatarIcon: "d7a035e633b65d94..." // base64-encoded png
     },
     password: "..."  // optionally for password protected games
   },
@@ -77,14 +77,15 @@ clientEvents: [
 //=================================================
 
 game: {
-  settings: { // read from config file(YAML?)
+  settings: {   // read from config file(YAML?)
     maxPlayers: 5,
     cardsPerDeal: 10,
     endIfMalusIs: 77,
     endIfNbDealsIs: 8,
+    endIfDurationIs: 1800
     timePerRound: 45,
     timeToChooseStack: 30,
-    delayBetweenTurn: 5
+    delayBetweenTurns: 5
   },
   cardsDescription: {    // generated / or read from config file
     59: {
@@ -101,13 +102,14 @@ game: {
   playersDescription: [   // update on JOIN_GAME and LEAVE_GAME events from clients
     {
       name: "Vincent",
-      avatarIcon: "/vincent.png",
-      isReadyForGame: true     // game starts when all players are ready
+      avatarIcon: "d7a035e633b65d94...", // base64-encoded png
+      statistics: ... // optionally total games won / lost, etc...
     },
     {
       name: "Hugo",
-      avatarIcon: "/hugo.png",
-      isReadyForGame: false
+      avatarIcon: "d7a035e633b65d94...", // base64-encoded png
+      isReadyForGame: false,
+      statistics: ... // optionally total games won / lost, etc...
     }
   ],
 
@@ -116,16 +118,22 @@ game: {
       {
         name: "Hugo",
         malusScore: 22,
-        isReadyForPlayTurn: true,
+        isReadyForGame: false,     // \
+        isReadyForDeal: false,     //  - Game / Deal / Turn start when all players are ready
+        isReadyForPlayTurn: true,  // /
         cards: [34,79],
-        playing: 34     // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+        playing: 34,      // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+        playingMsg: "..." // updated on receive READY_FOR_PLAY_TURN from client
       },
       {
         name: "Vincent",
         malusScore: 37,
-        isReadyForPlayTurn: false,
+        isReadyForGame: false,     // \
+        isReadyForDeal: false,     //  - Game / Deal / Turn start when all players are ready
+        isReadyForPlayTurn: false, // /
         cards: [12,28],
-        playing: 28     // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+        playing: 28,      // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+        playingMsg: "..." // updated on receive READY_FOR_PLAY_TURN from client
       }
     ],
     playStacks:[
@@ -134,7 +142,9 @@ game: {
       [36,48],
       [91,102]
     ],
-  }
+  },
+  
+  deck: [76, 13, 28, 6, 81, ...]
 }
 
 
@@ -150,35 +160,46 @@ gameEvents: [
     cardsDescription: ... // from game.cardsDescription
   },
   {
-    name: "WAITING_FOR_GAME",  // send each time we receive a JOIN_GAME or LEAVE_GAME event (players can join until START_GAME)
-    playersDescription : ...  // from game.playersDescription
+    name: "WAITING_FOR_GAME",  // send each time we receive a JOIN_GAME, LEAVE_GAME, or READY_FOR_GAME event (players can join until START_GAME)
+    isReadyForGame: {    // from game.state.players.isReadyForGame
+      "Hugo": true,             
+      "Vincent": false
+    }
   },
   {
     name: "START_GAME",  // start when all players sent READY_FOR_GAME
     playersDescription : ...  // from game.playersDescription
   },
   {
+    name: "WAITING_FOR_DEAL",  // send each time we receive a READY_FOR_DEAL event
+    isReadyForDeal: {    // from game.state.players.isReadyForDeal
+      "Hugo": true,             
+      "Vincent": false
+    }
+  },
+  {
     name: "START_DEAL",   // start when all players sent READY_FOR_DEAL
     state: ...            // from SANITIZE(game.state) => cards of other players must be replaced by '*'
   },
   {
-    name: "START_TURN",   // start automatically after previous turn end + <delayBetweenTurn> delay 
+    name: "START_TURN",   // start automatically after previous turn end + <delayBetweenTurns> delay 
   },
   {
-    name: "WAITING_FOR_PLAY_TURN",  // just so that players know who has choosen/not choosen a card already
+    name: "WAITING_FOR_PLAY_TURN",  // send each time we receive a READY_FOR_PLAY_TURN event (players can re-send it until PLAY_TURN)
     isReadyForPlayTurn: {    // from game.state.players.isReadyForPlayTurn
       "Hugo": true,             
       "Vincent": false
     }
   },
   {
-    name: "PLAY_TURN",
+    name: "PLAY_TURN",    // start when all players sent READY_FOR_PLAY_TURN
     state: ...            // from SANITIZE(game.state) => cards of other players must be replaced by '*'
     mustChooseStack: "Hugo",
     stackChoosen: null   // if mustChooseStack != null, this event is updated and sent again when receiving CHOOSE_STACK from client
   },
   {
-    name: "END_GAME"
+    name: "END_GAME",
+    reason: "..." // finished because of malus / or nb deals / or duration
   }
 ]
 
