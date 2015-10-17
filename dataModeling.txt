@@ -9,17 +9,84 @@
 // and have a "cards description" hash with the complementary info(malus,...) when needed
 // reason 1: information about cards is not changing during game
 // reason 2: we cannot accept malus info from client because of tampering risk
-// reason 3: simpler action data
+// reason 3: simpler event data
 
-gameDescription: {
-  settings:{
+
+
+//=================================================
+// CLIENT SIDE VIEW
+//=================================================
+
+game: {
+  settings           : ..., // from CREATE_GAME event
+  cardsDescription   : ..., // from CREATE_GAME event
+  playersDescription : ..., // from START_GAME event
+  
+  myName             : "Hugo"        // from JOIN_GAME event  
+  mySecureHash       : "cf23df2207d99a74fbe169e3eba035e633b65d94",       // from JOIN_GAME response
+  
+  state              : ... // from START_DEAL and PLAY_TURN events
+}
+
+
+// Events initiated by CLIENTS (not trusted)
+// Should be processed by the server to generate game events, then discarded
+clientEvents: [
+  {
+    name: "LIST_GAMES"
+  },
+  {
+    name: "JOIN_GAME",  // server returns a secure hash identifying player and game for future communication
+    gameId: 7,
+    player: {
+      name: "Vincent",  // Use as player ID, refuse if same name already joined
+      avatarIcon: "/vincent.png"
+    },
+    password: "..."  // optionally for password protected games
+  },
+  {
+    name: "LEAVE_GAME",  // auto-send this when browser is closed
+    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
+  },
+  {
+    name: "READY_FOR_GAME",  // Server wait for all players ACK before starting the game
+    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
+  },
+  {
+    name: "READY_FOR_DEAL",  // Server wait for all players ACK before starting a new deal
+    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
+  },
+  {
+    name: "READY_FOR_PLAY_TURN",  // Client can send several READY_FOR_PLAY_TURN event if user change is mind, up to the PLAY_TURN event
+    playing: 102,
+    message: "Por favor!",
+    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
+  },
+  {
+    name: "CHOOSE_STACK",
+    stack: 2,
+    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
+  }
+}
+
+
+
+
+//=================================================
+// SERVER SIDE VIEW
+//=================================================
+
+game: {
+  settings: { // read from config file(YAML?)
+    maxPlayers: 5,
+    cardsPerDeal: 10,
     endIfMalusIs: 77,
     endIfNbDealsIs: 8,
-    cardsPerDeal: 10,
     timePerRound: 45,
-    timeToChooseStack: 30
-  }
-  cards: {
+    timeToChooseStack: 30,
+    delayBetweenTurn: 5
+  },
+  cardsDescription: {    // generated / or read from config file
     59: {
       malus: 1
       icon: "..."  // optionally for custom design
@@ -31,117 +98,88 @@ gameDescription: {
       malus: 1
     }
   },
-  players: {
-    "Hugo":{
-      avatarIcon: "/hugo.png"
-    },
-    "Vincent":{
+  playersDescription: [   // update on JOIN_GAME and LEAVE_GAME events from clients
+    {
+      name: "Vincent",
       avatarIcon: "/vincent.png",
+      isReadyForGame: true     // game starts when all players are ready
+    },
+    {
+      name: "Hugo",
+      avatarIcon: "/hugo.png",
+      isReadyForGame: false
     }
+  ],
+
+  state: {
+    players:[
+      {
+        name: "Hugo",
+        malusScore: 22,
+        isReadyForPlayTurn: true,
+        cards: [34,79],
+        playing: 34     // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+      },
+      {
+        name: "Vincent",
+        malusScore: 37,
+        isReadyForPlayTurn: false,
+        cards: [12,28],
+        playing: 28     // updated on receive READY_FOR_PLAY_TURN from client(value must be in current cards)
+      }
+    ],
+    playStacks:[
+      [8],
+      [59],
+      [36,48],
+      [91,102]
+    ],
   }
 }
 
-gameState: {
-  players:[
-    {
-      name: "Hugo",
-      malusScore: 22,
-      cards:[71,100],
-      playedCard: 9     // null except for END_TURN action
-    },
-    {
-      name: "Vincent",
-      malusScore: 37,
-      cards:[34,79],
-      playedCard: 3     // null except for END_TURN action
-    }
-  ],
-  playStacks:[
-    [8],
-    [59],
-    [36,48],
-    [91,102]
-  ]
-}
 
-gameActions:[
-  ... // only server actions(see below), can be used for replay
-]
-
-
-// Actions initiated by SERVER (trusted)
-// Should be able to replay a game using only server actions
-// Not described here, but every server action should be linked to:
+// Events initiated by SERVER (trusted)
+// Should be able to replay a game using only server events
+// Not described here, but every server event should be linked to:
 // * a game id
 // * a timestamp format ISO 8601: "2015-10-15T18:25:43.511Z"
-serverActions: [
+gameEvents: [
   {
     name: "CREATE_GAME",
-    settings: ...  // gameDescription.settings object as described above
+    settings: ... // from game.settings
+    cardsDescription: ... // from game.cardsDescription
   },
   {
-    name: "HAS_JOINED",  // just so that players know who has joined the game already
-    player: "Hugo"       // players can join until START_GAME
-  },
-  {
-    name: "IS_READY_FOR_GAME",  // just so that players know who is ready/not ready
-    player: "Hugo"
+    name: "WAITING_FOR_GAME",  // send each time we receive a JOIN_GAME or LEAVE_GAME event (players can join until START_GAME)
+    playersDescription : ...  // from game.playersDescription
   },
   {
     name: "START_GAME",  // start when all players sent READY_FOR_GAME
-    gameDescription: ... // gameDescription object as described above
+    playersDescription : ...  // from game.playersDescription
   },
   {
     name: "START_DEAL",   // start when all players sent READY_FOR_DEAL
-    gameState: ... // gameState object as described above
+    state: ...            // from SANITIZE(game.state) => cards of other players must be replaced by '*'
   },
   {
-    name: "START_TURN",   // start automatically
-    gameState: ... // gameState object as described above
+    name: "START_TURN",   // start automatically after previous turn end + <delayBetweenTurn> delay 
   },
   {
-    name: "IS_READY_FOR_PLAY",  // just so that players know who has choosen/not choosen a card already
-    player: "Hugo"
+    name: "WAITING_FOR_PLAY_TURN",  // just so that players know who has choosen/not choosen a card already
+    isReadyForPlayTurn: {    // from game.state.players.isReadyForPlayTurn
+      "Hugo": true,             
+      "Vincent": false
+    }
   },
   {
-    name: "END_TURN",
-    gameState: ... // gameState object as described above
+    name: "PLAY_TURN",
+    state: ...            // from SANITIZE(game.state) => cards of other players must be replaced by '*'
+    mustChooseStack: "Hugo",
+    stackChoosen: null   // if mustChooseStack != null, this event is updated and sent again when receiving CHOOSE_STACK from client
   },
   {
-    name: "END_GAME",
-    gameState: ... // gameState object as described above
+    name: "END_GAME"
   }
 ]
 
 
-// Actions initiated by CLIENTS (not trusted)
-// Should be processed by the server to generate game actions, then discarded
-clientActions: [
-  {
-    name: "JOIN_GAME",  // server returns a secure hash identifying player and game for future communication
-    player: {
-      name: "Vincent",  // Use as player ID, refuse if same name already joined
-      avatarIcon: "/vincent.png"
-    },
-    password: "..."  // optionally for password protected games
-  },
-  {
-    name: "READY_FOR_GAME",  // Server wait for all players ACK before starting the game
-    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
-  },
-  {
-    name: "READY_FOR_DEAL",  // Server wait for all players ACK before starting a new deal
-    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
-  },
-  {
-    name: "READY_FOR_PLAY",  // Client can send several READY_FOR_PLAY event if user change is mind, up to the END_TURN event
-    card: 102,
-    message: "Por favor!",
-    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
-  },
-  {
-    name: "CHOOSE_STACK",
-    stack: 2,
-    secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
-  }
-}
