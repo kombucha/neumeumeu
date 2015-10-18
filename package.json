@@ -20,13 +20,11 @@
     "redux": "^3.0.2"
   },
   "devDependencies": {
-    "autoprefixer-loader": "^3.1.0",
     "babel": "^5.8.23",
     "babel-loader": "^5.3.2",
     "babel-plugin-module-alias": "^0.1.2",
     "browser-sync": "^2.9.11",
     "chai": "^3.3.0",
-    "css-loader": "^0.19.0",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
@@ -42,7 +40,6 @@
     "run-sequence": "^1.1.4",
     "sinon": "^1.17.1",
     "sinon-chai": "^2.8.0",
-    "style-loader": "^0.12.4",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.0",
     "yargs": "^3.27.0"
