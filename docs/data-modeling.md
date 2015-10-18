@@ -1,30 +1,27 @@
+Everything in English
+For card game terms, see [the glossary of card game terms](https://en.wikipedia.org/wiki/Glossary_of_card_game_terms)
 
-// Everything in English
-// For card game terms, see: https://en.wikipedia.org/wiki/Glossary_of_card_game_terms
-// => One Game consists of several Deals where Players use all their cards during successive Rounds 
-
-
-
-// IMHO better to use just int number to reference cards in all messages
-// and have a "cards description" hash with the complementary info(malus,...) when needed
-// reason 1: information about cards is not changing during game
-// reason 2: we cannot accept malus info from client because of tampering risk
-// reason 3: simpler event data
+One Game consists of several Deals where Players use all their cards during successive Rounds
 
 
 
-//=================================================
-// CLIENT SIDE VIEW
-//=================================================
+IMHO better to use just `int` number to reference cards in all messages and have a "cards description" hash with the complementary info (malus,...) when needed:
+1. information about cards is not changing during game
+2. we cannot accept malus info from client because of tampering risk
+3. simpler event data
 
+
+# CLIENT SIDE VIEW
+
+```javascript
 game: {
   settings           : ..., // from CREATE_GAME event
   cardsDescription   : ..., // from CREATE_GAME event
   playersDescription : ..., // from START_GAME event
-  
+
   myName             : "Hugo"        // from JOIN_GAME event  
   mySecureHash       : "cf23df2207d99a74fbe169e3eba035e633b65d94",    // from JOIN_GAME response
-  
+
   state              : ... // from START_DEAL and PLAY_TURN events
 }
 
@@ -68,17 +65,15 @@ clientEvents: [
     secureHash: "cf23df2207d99a74fbe169e3eba035e633b65d94"
   }
 }
+```
 
 
+# SERVER SIDE VIEW
 
-
-//=================================================
-// SERVER SIDE VIEW
-//=================================================
-
+```javascript
 game: {
   id: 7,
-  
+
   settings: {   // read from config file(YAML?)
     maxPlayers: 5,
     cardsPerDeal: 10,
@@ -89,7 +84,7 @@ game: {
     timeToChooseStack: 30,
     delayBetweenTurns: 5
   },
-  
+
   cardsDescription: {    // generated / or read from config file
     59: {
       malus: 1
@@ -102,7 +97,7 @@ game: {
       malus: 1
     }
   },
-  
+
   playersDescription: [   // update on JOIN_GAME and LEAVE_GAME events from clients
     {
       name: "Vincent",
@@ -147,9 +142,9 @@ game: {
       [91,102]
     ],
   },
-  
+
   deck: [76, 13, 28, 6, 81, ...],
-  
+
   events:[
     ...   // all server events up until now
   ]
@@ -190,7 +185,7 @@ gameEvents: [
     state: ...            // from SANITIZE(game.state) => cards of other players must be replaced by '*'
   },
   {
-    name: "START_TURN",   // start automatically after previous turn end + <delayBetweenTurns> delay 
+    name: "START_TURN",   // start automatically after previous turn end + <delayBetweenTurns> delay
   },
   {
     name: "WAITING_FOR_PLAY_TURN",  // send each time we receive a READY_FOR_PLAY_TURN event (players can re-send it until PLAY_TURN)
@@ -210,5 +205,4 @@ gameEvents: [
     reason: "..." // finished because of malus / or nb deals / or duration
   }
 ]
-
-
+```
