@@ -1,15 +1,15 @@
 var Webpack = require('webpack'),
     conf = require('./conf.js');
 
+
 var webpackConf = {
     entry: {
-        app: process.cwd() + '/src/client/scripts/index.js',
-        // FIXME: If package.json is shared between client and server, we'll have to specify vendors manually
-        vendor: Object.keys(conf.pkg.dependencies)
+        app: conf.files.clientEntryJs,
+        vendor: conf.clientVendorPackages
     },
     output: {
-        path: 'dist/scripts/',
-        filename: 'app.js'
+        path: conf.paths.distScripts,
+        filename: conf.files.clientAppBundleName
     },
 
     cache: conf.devMode,
@@ -36,7 +36,7 @@ var webpackConf = {
         }]
     },
     plugins: [
-        new Webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
+        new Webpack.optimize.CommonsChunkPlugin('vendor', conf.files.clientVendorBundleName)
     ]
 };
 

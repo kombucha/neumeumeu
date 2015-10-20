@@ -9,6 +9,8 @@ var gulp = require('gulp'),
 
     webpack = require('webpack'),
     mocha = require('gulp-mocha'),
+    istanbul = require('gulp-istanbul'),
+    isparta = require('isparta'),
     eslint = require('gulp-eslint'),
 
     less = require('gulp-less'),
@@ -46,24 +48,46 @@ gulp.task('scripts', ['lint'], function(callback) {
 });
 
 gulp.task('lint', function() {
-    return gulp.src(path.join(buildConf.paths.srcBase, 'scripts', '**', '*.js'))
+    return gulp.src(buildConf.files.clientJs)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(gIf(!buildConf.devMode, eslint.failOnError()));
 });
 
-gulp.task('test', function() {
-    return gulp.src('test/spec/**/*.js')
-        .pipe(mocha({
-            require: [
-                'babel-core/register-without-polyfill',
-                path.resolve('./test/helpers/index.js')
-            ]
-        }));
+gulp.task('test', function(done) {
+    // Code coverage with iSparta, see https://github.com/douglasduteil/isparta/issues/45
+    // NB: This MUST be called before, not in mocha({require}), because otherwise
+    // it seems to be overwritten by/conflicting with istanbul.hookRequire()...
+    // Actual src babelification will be handled by iSparta's instrumenter, the specs
+    // babelification will be handled by this hook...
+    // It's convoluted and seems brittle...but it works ! ^^
+    require('babel-core/register-without-polyfill')({only: new RegExp(buildConf.paths.testBase)});
+
+    gulp.src(buildConf.files.allJs)
+        .pipe(istanbul({
+            instrumenter: isparta.Instrumenter,
+            includeUntested: true
+        }))
+        .pipe(istanbul.hookRequire())
+        .on('finish', function() {
+            gulp.src(buildConf.files.testSpecsJs, {read: false})
+                .pipe(plumber())
+                .pipe(mocha({
+                    reporter: 'spec',
+                    clearRequireCache: true,
+                    require: [
+                        buildConf.files.testHelperJs
+                    ]
+                }))
+                .pipe(istanbul.writeReports({
+                    reporters: [ 'lcov', 'json', 'text-summary', 'html' ]
+                }))
+                .on('end', done);
+        });
 });
 
 gulp.task('styles', function() {
-    return gulp.src(path.join(buildConf.paths.srcBase, 'styles', 'main.less'))
+    return gulp.src(buildConf.files.clientEntryStyles)
         .pipe(plumber(buildConf.plumber))
         .pipe(sourcemaps.init())
         .pipe(less())
@@ -80,7 +104,7 @@ gulp.task('assets', function() {
         path.join(buildConf.paths.srcBase, 'assets/**'),
         path.join(buildConf.paths.srcBase, '*.html')
     ])
-    .pipe(gulp.dest(buildConf.paths.distBase));
+        .pipe(gulp.dest(buildConf.paths.distBase));
 });
 
 gulp.task('serve', ['build'], function() {
@@ -101,8 +125,8 @@ gulp.task('serve', ['build'], function() {
 
 gulp.task('watch', function() {
     // Script watch/rebuild is handled directly by webpack
-    gulp.watch(path.join(buildConf.paths.srcBase, '**', '*.js'), ['lint']);
-    gulp.watch(path.join(buildConf.paths.srcBase, '**', '*.less'), ['styles']);
+    gulp.watch(buildConf.files.clientJs, ['lint']);
+    gulp.watch(buildConf.files.clientStyles, ['styles']);
     gulp.watch([
         path.join(buildConf.paths.srcBase, 'assets', '**'),
         path.join(buildConf.paths.srcBase, '**', '*.html')
