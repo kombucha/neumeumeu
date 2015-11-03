@@ -18,6 +18,7 @@
   "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
   "dependencies": {
     "history": "^1.13.0",
+    "immutable": "^3.7.5",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-redux": "^4.0.0",
