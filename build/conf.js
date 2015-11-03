@@ -6,6 +6,7 @@ var env = args.env || 'mock',
     pkg = require('../package.json'),
     paths = {
         srcBase: 'src',
+        clientIndex: 'src/client/index.html',
         clientJsBase: 'src/client/scripts',
         commonJsBase: 'src/common',
         serverJsBase: 'src/server',

@@ -24,12 +24,13 @@ var gulp = require('gulp'),
 
 gulp.task('scripts', ['lint'], function(callback) {
     var webpackCallback = function(err, stats) {
-            GulpUtil.log('webpack', 'BUILD OK');
+            var statsStr = stats.toString({colors: true});
+            GulpUtil.log('webpack', 'BUILD DONE');
 
-            if (stats.hasErrors()) {
-                throw new GulpUtil.PluginError('webpack:build', stats.toString({
-                    colors: true
-                }));
+            if (buildConf.devMode) {
+                GulpUtil.log('webpack', statsStr);
+            } else if (stats.hasErrors()) {
+                throw new GulpUtil.PluginError('webpack:build', statsStr);
             }
 
             if (!callback._called) {
@@ -102,7 +103,7 @@ gulp.task('styles', function() {
 gulp.task('assets', function() {
     return gulp.src([
         path.join(buildConf.paths.srcBase, 'assets/**'),
-        path.join(buildConf.paths.srcBase, '*.html')
+        buildConf.paths.clientIndex
     ])
         .pipe(gulp.dest(buildConf.paths.distBase));
 });
@@ -129,7 +130,7 @@ gulp.task('watch', function() {
     gulp.watch(buildConf.files.clientStyles, ['styles']);
     gulp.watch([
         path.join(buildConf.paths.srcBase, 'assets', '**'),
-        path.join(buildConf.paths.srcBase, '**', '*.html')
+        buildConf.paths.clientIndex
     ], ['assets']);
 });
 
