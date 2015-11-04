@@ -75,10 +75,7 @@ gulp.task('test', function(done) {
                 .pipe(plumber())
                 .pipe(mocha({
                     reporter: 'spec',
-                    clearRequireCache: true,
-                    require: [
-                        buildConf.files.testHelperJs
-                    ]
+                    clearRequireCache: true
                 }))
                 .pipe(istanbul.writeReports({
                     reporters: [ 'lcov', 'json', 'text-summary', 'html' ]

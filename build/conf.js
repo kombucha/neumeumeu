@@ -28,8 +28,7 @@ var env = args.env || 'mock',
         clientEntryStyles: path.join(paths.clientStylesBase, 'main.less'),
         clientStyles: path.join(paths.clientStylesBase, '**', '*.less'),
 
-        testSpecsJs: path.join(paths.testBase, 'spec', '**', '*.js'),
-        testHelperJs: path.resolve(path.join(paths.testBase, 'helpers', 'index.js'))
+        testSpecsJs: path.join(paths.testBase, 'spec', '**', '*.js')
     };
 
 module.exports = {

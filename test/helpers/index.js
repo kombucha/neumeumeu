@@ -1,4 +1,15 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import React from 'react';
+import {createRenderer} from 'react-addons-test-utils';
 
-global.expect = chai.expect;
+chai.use(sinonChai);
+
+export const expect = chai.expect;
+
+// See http://simonsmith.io/unit-testing-react-components-without-a-dom/
+export function createComponent(component, props, ...children) {
+    const shallowRenderer = createRenderer();
+    shallowRenderer.render(React.createElement(component, props, children.length > 1 ? children : children[0]));
+    return shallowRenderer.getRenderOutput();
+}

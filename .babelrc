@@ -1,6 +1,7 @@
 {
     "plugins": [
-        "babel-plugin-module-alias"
+        "babel-plugin-module-alias",
+        "react-require"
     ],
     "extra": {
         "module-alias": [{
@@ -12,6 +13,9 @@
         }, {
             "src": "./src/common/",
             "expose": "common"
+        }, {
+            "src": "./test/",
+            "expose": "test"
         }]
     }
 }

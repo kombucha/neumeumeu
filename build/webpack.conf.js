@@ -28,7 +28,7 @@ var webpackConf = {
         loaders: [{
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel?plugins[]=react-require'
+            loader: 'babel'
         }, {
             test: /\.json$/,
             exclude: /node_modules/,
