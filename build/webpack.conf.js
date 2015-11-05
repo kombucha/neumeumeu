@@ -1,6 +1,16 @@
 var Webpack = require('webpack'),
     conf = require('./conf.js');
 
+function mapNodeEnvironmentReplacement(env) {
+    switch (env) {
+    case 'prod':
+        return '"production"';
+    case 'dev':
+        return '"development"';
+    }
+
+    return '"' + env + '"';
+}
 
 var webpackConf = {
     entry: {
@@ -36,6 +46,11 @@ var webpackConf = {
         }]
     },
     plugins: [
+        new Webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': mapNodeEnvironmentReplacement(conf.env)
+            }
+        }),
         new Webpack.optimize.CommonsChunkPlugin('vendor', conf.files.clientVendorBundleName)
     ]
 };

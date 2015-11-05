@@ -2,7 +2,7 @@ var args = require('yargs').argv,
     path = require('path'),
     gUtil = require('gulp-util');
 
-var env = args.env || 'mock',
+var env = args.env || 'dev',
     pkg = require('../package.json'),
     isDevMode = args._.indexOf('dev') >= 0,
     paths = {
