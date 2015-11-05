@@ -1,5 +1,5 @@
 import {expect, createComponent} from 'test/helpers';
-import Home from 'client/components/Home';
+import Home from 'client/containers/Home';
 
 describe('Home', function () {
     let component;

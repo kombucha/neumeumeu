@@ -1,8 +1,12 @@
-import PureRenderComponent from './PureRenderComponent';
+import PureRenderComponent from 'client/components/PureRenderComponent';
 import {connect} from 'react-redux';
-import * as actionCreators from 'client/action-creators';
+import * as actionCreators from 'client/actions';
 
 export default class Home extends PureRenderComponent {
+
+    static fetchData() {
+        console.log('lol');
+    }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -22,8 +26,10 @@ export default class Home extends PureRenderComponent {
     }
 }
 
-function mapStateToProps() {
-    return {};
+function mapStateToProps(state) {
+    return {
+        games: state.get('games')
+    };
 }
 
 export const HomeContainer = connect(

@@ -1,19 +1,17 @@
 import ReactDOM from 'react-dom';
 import Router, {Route} from 'react-router';
-import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import App from 'client/components/App';
-import {HomeContainer} from 'client/components/Home';
-import reducer from 'client/reducer';
+import configureStore from 'client/store/configureStore';
+import App from 'client/containers/App';
+import {HomeContainer} from 'client/containers/Home';
 
 // STORE
-const store = createStore(reducer);
-
+const store = configureStore();
 
 // ROUTING
 const ROUTES = (
     <Route component={App}>
-        <Route path="/" component={HomeContainer} />
+        <Route path="/" component={HomeContainer} onEnter={HomeContainer.fetchData} />
     </Route>
 );
 
