@@ -52,7 +52,7 @@ gulp.task('lint', function() {
     return gulp.src(buildConf.files.clientJs)
         .pipe(eslint())
         .pipe(eslint.format())
-        .pipe(gIf(!buildConf.devMode, eslint.failOnError()));
+        .pipe(gIf(buildConf.codeStyle, eslint.failOnError()));
 });
 
 gulp.task('test', function(done) {

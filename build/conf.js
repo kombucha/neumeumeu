@@ -4,6 +4,7 @@ var args = require('yargs').argv,
 
 var env = args.env || 'mock',
     pkg = require('../package.json'),
+    isDevMode = args._.indexOf('dev') >= 0,
     paths = {
         srcBase: 'src',
         clientIndex: 'src/client/index.html',
@@ -38,9 +39,9 @@ module.exports = {
     paths: paths,
     files: files,
     env: env,
-    codeStyle: !!args.strict,
+    codeStyle: args.hasOwnProperty('codeStyle') ? !!args.codeStyle : !isDevMode,
     optimize: args.hasOwnProperty('optimize') ? args.optimize : (['preprod', 'prod'].indexOf(env) >= 0 || false),
-    devMode: args._.indexOf('dev') >= 0,
+    devMode: isDevMode,
     plumber: {
         errorHandler: process.argv.indexOf('dev') > -1 ? function(err) {
             gUtil.log(err);
