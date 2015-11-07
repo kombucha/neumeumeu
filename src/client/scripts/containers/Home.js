@@ -1,11 +1,13 @@
 import PureRenderComponent from 'client/components/PureRenderComponent';
+import {List} from 'immutable';
+import GameList from 'client/components/GameList';
 import {connect} from 'react-redux';
 import * as actionCreators from 'client/actions';
 
 export default class Home extends PureRenderComponent {
 
-    static fetchData() {
-        console.log('lol');
+    componentWillMount() {
+        this.props.fetchGames();
     }
 
     handleSubmit(event) {
@@ -13,14 +15,16 @@ export default class Home extends PureRenderComponent {
         this.props.register(this.refs.username.value);
     }
 
+    selectGame(game) {
+        console.log(game.toJS());
+        // TODO: set current game, redirect to game page
+    }
+
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <label>Username:</label>
-                    <input type="text" ref="username"/>
-                    <button type="submit">Register</button>
-                </form>
+                <GameList games={this.props.games}
+                          onGameItemSelected={this.selectGame.bind(this)}/>
             </div>
         );
     }
@@ -28,7 +32,7 @@ export default class Home extends PureRenderComponent {
 
 function mapStateToProps(state) {
     return {
-        games: state.get('games')
+        games: state.get('games') || List()
     };
 }
 

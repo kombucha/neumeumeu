@@ -4,7 +4,17 @@ export function fetchGames() {
             id: 0,
             name: 'IWN',
             players: [],
-            status: 'waiting_for_players'
+            maxPlayers: 10,
+            status: 'waiting_for_players',
+            isProtected: false
+        },
+        {
+            id: 1,
+            name: 'VIP',
+            players: [],
+            maxPlayers: 4,
+            status: 'waiting_for_players',
+            isProtected: true
         }
     ]);
 }

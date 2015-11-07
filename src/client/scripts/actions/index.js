@@ -1,4 +1,4 @@
-import api from 'client/api';
+import * as api from 'client/api';
 
 export function register(username) {
     return {
