@@ -2,7 +2,7 @@ var args = require('yargs').argv,
     path = require('path'),
     gUtil = require('gulp-util');
 
-var env = args.env || 'dev',
+var env = args.env || 'development',
     pkg = require('../package.json'),
     isDevMode = args._.indexOf('dev') >= 0,
     paths = {
@@ -40,10 +40,10 @@ module.exports = {
     files: files,
     env: env,
     codeStyle: args.hasOwnProperty('codeStyle') ? !!args.codeStyle : !isDevMode,
-    optimize: args.hasOwnProperty('optimize') ? args.optimize : (['preprod', 'prod'].indexOf(env) >= 0 || false),
+    optimize: args.hasOwnProperty('optimize') ? args.optimize : (env === 'production' || false),
     devMode: isDevMode,
     plumber: {
-        errorHandler: process.argv.indexOf('dev') > -1 ? function(err) {
+        errorHandler: isDevMode ? function(err) {
             gUtil.log(err);
             this.emit('end');
         } : false
