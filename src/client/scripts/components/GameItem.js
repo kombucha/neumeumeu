@@ -1,11 +1,3 @@
-import PureRenderComponent from './PureRenderComponent';
-
-export default class GameItem extends PureRenderComponent {
-    render() {
-
-    }
-}
-
 export default ({game}) => {
     return (
         <span>
