@@ -18,3 +18,9 @@ export function fetchGames() {
         }
     ]);
 }
+
+export function joinGame(userId, gameId, password) { // eslint-disable-line no-unused-vars
+    return Promise.resolve({
+        id: gameId
+    });
+}

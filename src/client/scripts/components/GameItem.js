@@ -9,8 +9,8 @@ export default class GameItem extends PureRenderComponent {
 export default ({game}) => {
     return (
         <span>
-            <span>{game.get('id')}</span>
-            <span>Players {game.get('players').size} / {game.get('maxPlayers')}</span>
+            <span>{game.id}</span>
+            <span>Players {game.players.size} / {game.maxPlayers}</span>
         </span>
     );
 };

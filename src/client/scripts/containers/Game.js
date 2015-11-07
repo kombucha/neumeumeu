@@ -1,5 +1,4 @@
 import {connect} from 'react-redux';
-import {List} from 'immutable';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import * as actionCreators from 'client/actions';
 
@@ -10,12 +9,9 @@ export default class Game extends PureRenderComponent {
     }
 
     render() {
-        const game = this.props.game ? this.props.game.toJS() : null;
         return (
             <div>
-                {
-                    game ? JSON.stringify(game, null, 2) : game
-                }
+                {JSON.stringify(this.props.game, null, 2)}
             </div>
         );
     }
@@ -24,9 +20,7 @@ export default class Game extends PureRenderComponent {
 function mapStateToProps(state, props) {
     const gameId = parseInt(props.params.gameId, 10);
     return {
-        game: state.get('games', List())
-                   .filter(game => game.get('id') === gameId)
-                   .get(0, null)
+        game: (state.games || []).filter(game => game.id === gameId)[0]
     };
 }
 

@@ -18,7 +18,6 @@
   "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
   "dependencies": {
     "history": "^1.13.0",
-    "immutable": "^3.7.5",
     "react": "^0.14.2",
     "react-addons-shallow-compare": "^0.14.2",
     "react-dom": "^0.14.2",
@@ -50,6 +49,7 @@
     "isparta": "^3.1.0",
     "json-loader": "^0.5.3",
     "react-addons-test-utils": "^0.14.2",
+    "redux-immutable-state-invariant": "^1.1.1",
     "run-sequence": "^1.1.4",
     "sinon": "^1.17.1",
     "sinon-chai": "^2.8.0",
