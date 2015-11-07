@@ -19,6 +19,7 @@ var gulp = require('gulp'),
 
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
+    history = require('connect-history-api-fallback'),
     del = require('del'),
     path = require('path');
 
@@ -112,9 +113,9 @@ gulp.task('serve', ['build'], function() {
             interval: 500
         },
         reloadDebounce: 1000,
-
         server: {
-            baseDir: buildConf.paths.distBase
+            baseDir: buildConf.paths.distBase,
+            middleware: [history()]
         },
         online: false,
         notify: false

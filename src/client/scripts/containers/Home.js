@@ -14,16 +14,10 @@ export default class Home extends PureRenderComponent {
         this.props.register(this.refs.username.value);
     }
 
-    selectGame(game) {
-        console.log(game);
-        // TODO: set current game, redirect to game page
-    }
-
     render() {
         return (
             <div>
-                <GameList games={this.props.games}
-                          onGameItemSelected={this.selectGame.bind(this)}/>
+                <GameList games={this.props.games}/>
             </div>
         );
     }
