@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import Router, {Route} from 'react-router';
 import {Provider} from 'react-redux';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
+import {syncReduxAndRouter} from 'redux-simple-router';
 import configureStore from 'client/store/configureStore';
 import App from 'client/containers/App';
 import {HomeContainer} from 'client/containers/Home';
@@ -20,6 +21,8 @@ const ROUTES = (
         </Route>
     ),
     history = createBrowserHistory();
+
+syncReduxAndRouter(history, store);
 
 ReactDOM.render(
     <Provider store={store}>
