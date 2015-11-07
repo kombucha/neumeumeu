@@ -25,8 +25,15 @@ var gulp = require('gulp'),
 
 gulp.task('scripts', ['lint'], function(callback) {
     var webpackCallback = function(err, stats) {
-            var statsStr = stats.toString({colors: true});
-            GulpUtil.log('webpack', 'BUILD DONE');
+            var statsStr = stats.toString({
+                colors: true,
+                timings: true,
+                version: false,
+                assets: false,
+                chunks: false,
+                modules: false,
+                errorsDetails: true
+            });
 
             if (buildConf.devMode) {
                 GulpUtil.log('webpack', statsStr);
