@@ -15,11 +15,7 @@ export default class Home extends PureRenderComponent {
     }
 
     render() {
-        return (
-            <div>
-                <GameList games={this.props.games}/>
-            </div>
-        );
+        return (<GameList games={this.props.games}/>);
     }
 }
 

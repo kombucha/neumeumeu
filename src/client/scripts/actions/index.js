@@ -7,6 +7,13 @@ function fetchedGames(games) {
     };
 }
 
+function fetchedCurrentGame(game) {
+    return {
+        type: 'FETCH_CURRENT_GAME',
+        game
+    };
+}
+
 function joinedGame(userId, gameId) {
     return {
         type: 'JOIN_GAME',
@@ -16,6 +23,8 @@ function joinedGame(userId, gameId) {
 }
 
 // Public actions
+// TODO: handle error (action_name_FAIL) ?
+// TODO: handle optimistic update (action_name_PENDING) ?
 export function register(username) {
     return {
         type: 'REGISTER',
@@ -34,5 +43,12 @@ export function fetchGames() {
     return dispatch => {
         return api.fetchGames()
             .then(games => dispatch(fetchedGames(games)));
+    };
+}
+
+export function fetchCurrentGame(gameId) {
+    return dispatch => {
+        return api.fetchCurrentGame(gameId)
+            .then(game => dispatch(fetchedCurrentGame(game)));
     };
 }
