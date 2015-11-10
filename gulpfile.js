@@ -96,7 +96,7 @@ gulp.task('styles', function() {
     return gulp.src(buildConf.files.clientEntryStyles)
         .pipe(plumber(buildConf.plumber))
         .pipe(sourcemaps.init())
-        .pipe(less())
+        .pipe(less({paths: 'node_modules'}))
         .pipe(autoprefixer({
             browsers: ['ie >= 9', 'last 2 versions']
         }))

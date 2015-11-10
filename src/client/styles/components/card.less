@@ -1,0 +1,51 @@
+@card-width: 130px;
+@card-height: 200px;
+@card-border: 10px;
+@card-center-size: 90px;
+
+.card {
+    position: relative;
+    width: @card-width;
+    height: @card-height;
+
+    border: @card-border solid @color-white;
+    border-radius: 2%;
+    background: @color-accent-1;
+    box-shadow: 0px 10px 40px 0px rgba(0,0,0,0.4);
+}
+
+// TOP
+.card__top {
+    display: flex;
+    flex-direction: row;
+}
+
+.card__value--top {
+    color: @color-accent-2;
+    font-weight: bold;
+}
+
+.card__value--top,
+.car__malus {
+    flex: 1;
+}
+
+// CENTER
+.card__value--center {
+    display: block;
+    position: absolute;
+    top: (@card-height - @card-center-size - 2*@card-border) / 2;
+    left: (@card-width - @card-center-size - 2*@card-border) / 2;
+
+    height: @card-center-size;
+    line-height: @card-center-size;
+    width: @card-center-size;
+    text-align: center;
+
+    border-radius: 50%;
+
+    font-size: @card-center-size/2;
+    font-weight: bold;
+    background: @color-accent-2;
+    color: @color-accent-contrast;
+}

@@ -17,8 +17,10 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
   "dependencies": {
+    "classnames": "^2.2.0",
     "connect-history-api-fallback": "^1.1.0",
     "history": "^1.13.0",
+    "normalize.css": "^3.0.3",
     "react": "^0.14.2",
     "react-addons-shallow-compare": "^0.14.2",
     "react-dom": "^0.14.2",

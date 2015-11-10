@@ -8,7 +8,7 @@ export default ({cards}) => (
         <ul className="hand__cards">
             {
                 cards.map(card => (
-                    <li key={card.value}>
+                    <li className="hand__item" key={card.value}>
                         <Card className="card--hand" card={card}/>
                     </li>
                 ))

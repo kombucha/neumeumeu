@@ -1,0 +1,16 @@
+@cards-overlap: 20px;
+@card-raise: 20px;
+
+.hand__item {
+    display: inline;
+    margin-left: -@cards-overlap;
+
+    &:first-of-type {
+        margin-left: 0;
+    }
+}
+
+// Card modifier
+.card--hand {
+    display: inline-block;
+}

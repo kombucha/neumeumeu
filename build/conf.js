@@ -34,8 +34,18 @@ var env = args.env || 'development',
 
 module.exports = {
     pkg: pkg,
-    // FIXME: If package.json is shared between client and server, we'll have to specify vendors manually
-    clientVendorPackages: Object.keys(pkg.dependencies),
+    clientVendorPackages: [
+        'react',
+        'react-dom',
+        'react-router',
+        'react-addons-shallow-compare',
+        'react-redux',
+        'redux',
+        'redux-simple-router',
+        'redux-thunk',
+        'history',
+        'classnames'
+    ],
     paths: paths,
     files: files,
     env: env,
