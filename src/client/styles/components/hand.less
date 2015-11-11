@@ -1,25 +1,21 @@
+@hand-width: 800px;
 @cards-overlap: 20px;
 @card-raise: 20px;
 @card-default-z: 1;
 @card-raised-z: 2;
 
 .hand__cards {
-    .m_clearfix;
+    display: flex;
+    max-width: @hand-width;
+    margin: auto;
 }
 
 .hand__item {
-    display: block;
-    float: left;
-    margin-left: -@cards-overlap;
-
-    &:first-of-type {
-        margin-left: 0;
-    }
+    flex: 1;
 }
 
 // Card modifier
 .card--hand {
-    display: inline-block;
     cursor: pointer;
     z-index: @card-default-z;
 }
