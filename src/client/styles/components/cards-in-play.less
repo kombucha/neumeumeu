@@ -1,0 +1,48 @@
+@cards-in-play-width: 800px;
+@cards-in-play-pile-5th: (100%/5);
+
+.cards-in-play {
+    margin: 100px 0;
+}
+
+.cards-in-play__piles {
+    display: flex;
+    flex-direction: row;
+    height: 300px; // FIXME: Should/Can it be computed ?
+    max-width: @cards-in-play-width;
+    margin: auto;
+}
+
+.cards-in-play__pile {
+    flex: 1;
+}
+
+// From http://tympanus.net/Development/StackEffects/
+// FIXME: I dunno, with some kind of mixin ? :/
+.card-pile--in-play {
+    position: relative;
+
+    .card-pile__item {
+        position: absolute;
+    }
+
+    .card-pile__item:last-child {
+        position: relative;
+    }
+
+    .card-pile__item:nth-child(2) {
+        transform: translateY(@cards-in-play-pile-5th);
+    }
+
+    .card-pile__item:nth-child(3) {
+        transform: translateY(2 * @cards-in-play-pile-5th);
+    }
+
+    .card-pile__item:nth-child(4) {
+        transform: translateY(3 * @cards-in-play-pile-5th);
+    }
+
+    .card-pile__item:nth-child(5) {
+        transform: translateY(4 * @cards-in-play-pile-5th);
+    }
+}

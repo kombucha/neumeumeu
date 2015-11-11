@@ -7,19 +7,30 @@ export function fetchCurrentGame(gameId) {
                 {value: 10, malus: 2}
             ],
             [
-                {value: 20, malus: 2}
+                {value: 19, malus: 1},
+                {value: 20, malus: 3},
+                {value: 21, malus: 1}
             ],
             [
-                {value: 30, malus: 2}
+                {value: 30, malus: 2},
+                {value: 38, malus: 2}
             ],
             [
-                {value: 40, malus: 2}
+                {value: 40, malus: 2},
+                {value: 41, malus: 1},
+                {value: 42, malus: 1},
+                {value: 43, malus: 1},
+                {value: 44, malus: 1}
             ]
         ],
         currentHand: [
             {value: 55, malus: 7},
             {value: 11, malus: 3},
-            {value: 104, malus: 1}
+            {value: 104, malus: 1},
+            {value: 23, malus: 1},
+            {value: 78, malus: 1},
+            {value: 1, malus: 1},
+            {value: 24, malus: 1}
         ],
         players: [
             {username: 'Gabriela'},
