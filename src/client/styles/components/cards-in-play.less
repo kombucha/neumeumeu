@@ -15,12 +15,14 @@
 
 .cards-in-play__pile {
     flex: 1;
+    text-align: center;
 }
 
 // From http://tympanus.net/Development/StackEffects/
 // FIXME: I dunno, with some kind of mixin ? :/
 .card-pile--in-play {
     position: relative;
+    display: inline-block;
 
     .card-pile__item {
         position: absolute;
