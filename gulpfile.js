@@ -107,7 +107,7 @@ gulp.task('styles', function() {
 
 gulp.task('assets', function() {
     return gulp.src([
-        path.join(buildConf.paths.srcBase, 'assets/**'),
+        path.join(buildConf.paths.clientAssetsBase, '/**'),
         buildConf.paths.clientIndex
     ])
         .pipe(gulp.dest(buildConf.paths.distBase));

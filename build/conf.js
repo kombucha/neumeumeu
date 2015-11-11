@@ -12,6 +12,7 @@ var env = args.env || 'development',
         commonJsBase: 'src/common',
         serverJsBase: 'src/server',
         clientStylesBase: 'src/client/styles',
+        clientAssetsBase: 'src/client/assets',
         testBase: 'test',
         distBase: 'dist',
         distScripts: 'dist/scripts'

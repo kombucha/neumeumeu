@@ -1,8 +1,7 @@
 import Card from './Card';
 
-export default ({player, defaultAvatarURL}) => {
-    const defaultAvatar = defaultAvatarURL || 'assets/images/default-avatar.png';
-    const avatarURL = player.avatarURL || defaultAvatar;
+export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
+    const avatarURL = player.avatarURL || defaultAvatarURL;
 
     return (
         <div className="player">
