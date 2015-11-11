@@ -1,8 +1,15 @@
 @cards-overlap: 20px;
 @card-raise: 20px;
+@card-default-z: 1;
+@card-raised-z: 2;
+
+.hand__cards {
+    .m_clearfix;
+}
 
 .hand__item {
-    display: inline;
+    display: block;
+    float: left;
     margin-left: -@cards-overlap;
 
     &:first-of-type {
@@ -13,4 +20,18 @@
 // Card modifier
 .card--hand {
     display: inline-block;
+    cursor: pointer;
+    z-index: @card-default-z;
+}
+
+// Raising the card
+.hand__item {
+    transition: margin-top 0.1s ease-in;
+}
+
+.hand__item:hover {
+    margin-top: -@card-raise;
+    .card--hand {
+        z-index: @card-raised-z;
+    }
 }
