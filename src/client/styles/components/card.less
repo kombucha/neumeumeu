@@ -1,17 +1,30 @@
 @card-width: 130px;
 @card-height: 200px;
-@card-border: 10px;
-@card-center-size: 90px;
+@card-border: 8px;
+@card-center-size: 2.5em;
+@card-center-type: 40px;
+
 
 .card {
     position: relative;
     width: @card-width;
     height: @card-height;
 
-    border: @card-border solid @color-white;
-    border-radius: 2%;
-    background: @color-accent-1;
+    background: #fff;
     box-shadow: 0px 10px 40px 0px rgba(0,0,0,0.4);
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: @card-border;
+      left: @card-border;
+      right: @card-border;
+      bottom: @card-border;
+      border-left: (@card-width - 16px)  solid @color-accent-1;
+      border-top: @card-border solid transparent;
+      border-bottom: @card-border solid transparent;
+      border-radius: 2%;
+    }
 }
 
 // TOP
@@ -23,6 +36,7 @@
 .card__value--top {
     color: @color-accent-2;
     font-weight: bold;
+    z-index: 1;
 }
 
 .card__value--top {
@@ -37,19 +51,23 @@
 
 // CENTER
 .card__value--center {
-    display: block;
+    display: inline-block;
     position: absolute;
-    top: (@card-height - @card-center-size - 2*@card-border) / 2;
-    left: (@card-width - @card-center-size - 2*@card-border) / 2;
+    top: 0;
+    left: 50%;
 
     height: @card-center-size;
-    line-height: @card-center-size;
     width: @card-center-size;
+    line-height: @card-center-size;
     text-align: center;
 
-    border-radius: 50%;
+    transform: translate(-50%, 50%);
+    transform-origin: top;
 
-    font-size: @card-center-size/2;
+    border-radius: 50%;
+    border: 2px solid #EEBF00;
+
+    font-size: @card-center-type;
     font-weight: bold;
     background: @color-accent-2;
     color: @color-accent-contrast;
@@ -60,4 +78,5 @@
                   2px -2px 0 #fff,
                  -2px  2px 0 #fff,
                   2px  2px 0 #fff;
+
 }
