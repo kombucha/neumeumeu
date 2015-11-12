@@ -2,7 +2,44 @@
 @card-height: 200px;
 @card-border: 8px;
 @card-center-size: 2.5em;
-@card-center-type: 40px;
+@card-center-type: 70px;
+
+// Card colors
+
+@color-card-1-background: @color-white;
+@color-card-1-number: @color-white;
+@color-card-1-border: @color-dark-blue;
+@color-card-1-logo: @color-purple;
+@color-card-1-malus: @color-dark-blue;
+@color-card-1-corner: @color-dark-blue;
+
+@color-card-2-background: @color-cyan;
+@color-card-2-number: @color-yellow;
+@color-card-2-border: @color-dark-blue;
+@color-card-2-logo: @color-blue;
+@color-card-2-malus: @color-blue;
+@color-card-2-corner: @color-blue;
+
+@color-card-3-background: @color-orange;
+@color-card-3-number: @color-cyan;
+@color-card-3-border: @color-dark-blue;
+@color-card-3-logo: @color-red;
+@color-card-3-malus: @color-purple;
+@color-card-3-corner: @color-red;
+
+@color-card-5-background: @color-red;
+@color-card-5-number: @color-orange;
+@color-card-5-border: @color-purple;
+@color-card-5-logo: @color-blue;
+@color-card-5-malus: @color-purple;
+@color-card-5-corner: @color-orange;
+
+@color-card-7-background: @color-purple;
+@color-card-7-number: @color-yellow;
+@color-card-7-border: @color-orange;
+@color-card-7-logo: @color-red;
+@color-card-7-malus: @color-red;
+@color-card-7-corner: @color-yellow;
 
 
 .card {
@@ -11,16 +48,21 @@
     height: @card-height;
 
     background: #fff;
-    box-shadow: 0px 10px 40px 0px rgba(0,0,0,0.4);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
 
-    &:before {
+    &:hover {
+        box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &::before {
       content: '';
       position: absolute;
       top: @card-border;
       left: @card-border;
       right: @card-border;
       bottom: @card-border;
-      border-left: (@card-width - 16px)  solid @color-accent-1;
+      border-left: (@card-width - 16px) solid;
       border-top: @card-border solid transparent;
       border-bottom: @card-border solid transparent;
       border-radius: 2%;
@@ -34,7 +76,6 @@
 }
 
 .card__value--top {
-    color: @color-accent-2;
     font-weight: bold;
     z-index: 1;
 }
@@ -45,38 +86,106 @@
 }
 
 .card__malus {
-    flex: 1;
-    text-align: right;
+    position: relative;
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin: 0 30px 0 8px;
+
+    span {
+        display: inline-block;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        margin: 3px;
+    }
 }
 
 // CENTER
 .card__value--center {
-    display: inline-block;
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
 
-    height: @card-center-size;
-    width: @card-center-size;
-    line-height: @card-center-size;
-    text-align: center;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80px;
+        height: 80px;
+        margin: -40px 0 0 -40px;
+        display: inline-block;
+        border-radius: 50%;
+    }
 
-    transform: translate(-50%, 50%);
-    transform-origin: top;
+    span {
+        text-align: center;
+        position: relative;
 
-    border-radius: 50%;
-    border: 2px solid #EEBF00;
+        font-size: @card-center-type;
+        font-weight: bold;
 
-    font-size: @card-center-type;
-    font-weight: bold;
-    background: @color-accent-2;
-    color: @color-accent-contrast;
+        -webkit-text-stroke-width: 3px;
 
-    -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: black;
-    text-shadow: -2px -2px 0 #fff,
-                  2px -2px 0 #fff,
-                 -2px  2px 0 #fff,
-                  2px  2px 0 #fff;
+        text-shadow: -2px -2px 0 #fff,
+                      2px -2px 0 #fff,
+                     -2px  2px 0 #fff,
+                      2px  2px 0 #fff;
+    }
+}
 
+// MALUS DEPENDENCIES
+.mixin__card(@color-background, @color-number, @color-border, @color-logo, @color-malus, @color-corner) {
+    &::before {
+        border-left-color: @color-background;
+    }
+
+    .card__value--top {
+        color: @color-corner;
+    }
+
+    .card__value--center {
+        color: @color-number;
+        -webkit-text-stroke-color: @color-border;
+
+        &::before {
+            background: @color-logo;
+        }
+    }
+
+    .card__malus span {
+        background: @color-malus;
+    }
+}
+
+.mixin_applyCard(@index) {
+    @background: "color-card-@{index}-background";
+    @number: "color-card-@{index}-number";
+    @border: "color-card-@{index}-border";
+    @logo: "color-card-@{index}-logo";
+    @malus: "color-card-@{index}-malus";
+    @corner: "color-card-@{index}-corner";
+    .mixin__card(@@background, @@number, @@border, @@logo, @@malus, @@corner)
+}
+
+.card--malus-1 {
+    .mixin_applyCard(1);
+}
+
+.card--malus-2 {
+    .mixin_applyCard(2);
+}
+
+.card--malus-3 {
+    .mixin_applyCard(3);
+}
+
+.card--malus-5 {
+    .mixin_applyCard(5);
+}
+
+.card--malus-7 {
+    .mixin_applyCard(7);
 }

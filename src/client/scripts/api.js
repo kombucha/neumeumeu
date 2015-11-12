@@ -4,7 +4,7 @@ export function fetchCurrentGame(gameId) {
         name: 'IWN',
         cardsInPlay: [
             [
-                {value: 10, malus: 2}
+                {value: 60, malus: 3}
             ],
             [
                 {value: 19, malus: 1},
@@ -20,14 +20,14 @@ export function fetchCurrentGame(gameId) {
                 {value: 41, malus: 1},
                 {value: 42, malus: 1},
                 {value: 43, malus: 1},
-                {value: 44, malus: 1}
+                {value: 44, malus: 5}
             ]
         ],
         currentHand: [
             {value: 55, malus: 7},
-            {value: 11, malus: 3},
+            {value: 10, malus: 3},
             {value: 104, malus: 1},
-            {value: 23, malus: 1},
+            {value: 22, malus: 5},
             {value: 78, malus: 1},
             {value: 1, malus: 1},
             {value: 24, malus: 1}
