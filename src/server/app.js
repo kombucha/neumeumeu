@@ -1,3 +1,7 @@
-import * as deckUtils from 'common/deck';
+import Server from 'socket.io';
 
-console.log(deckUtils.generateDeck());
+const io = new Server().attach(8090);
+
+io.on('connection', socket => {
+    socket.on('action', ({socketId, action}) => console.log(socketId, action));
+});
