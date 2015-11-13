@@ -56,17 +56,21 @@
     }
 
     &::before {
-      content: '';
-      position: absolute;
-      top: @card-border;
-      left: @card-border;
-      right: @card-border;
-      bottom: @card-border;
-      border-left: (@card-width - 16px) solid;
-      border-top: @card-border solid transparent;
-      border-bottom: @card-border solid transparent;
-      border-radius: 2%;
+        content: '';
+        position: absolute;
+        top: @card-border;
+        left: @card-border;
+        right: @card-border;
+        bottom: @card-border;
+        border-left: (@card-width - 16px) solid;
+        border-top: @card-border solid transparent;
+        border-bottom: @card-border solid transparent;
+        border-radius: 2%;
     }
+}
+
+.card__value {
+    font-family: 'Bangers';
 }
 
 // TOP
@@ -76,8 +80,10 @@
 }
 
 .card__value--top {
-    font-weight: bold;
+    font-size: 22px;
+    letter-spacing: .1em;
     z-index: 1;
+    margin: 3px 0 0 3px;
 }
 
 .card__value--top {
@@ -90,50 +96,49 @@
     text-align: center;
     display: block;
     width: 100%;
-    margin: 0 30px 0 8px;
+    margin: 5px 30px 0 8px;
+    line-height: 13px;
 
     span {
         display: inline-block;
         border-radius: 50%;
-        width: 10px;
-        height: 10px;
-        margin: 3px;
+        width: 8px;
+        height: 8px;
+        margin: 0 2px;
     }
 }
 
 // CENTER
 .card__value--center {
+    .icon-fairy;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 80px;
-        height: 80px;
-        margin: -40px 0 0 -40px;
-        display: inline-block;
-        border-radius: 50%;
+        .icon;
+        font-size: 105px;
     }
 
     span {
         text-align: center;
-        position: relative;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 
         font-size: @card-center-type;
-        font-weight: bold;
-
-        -webkit-text-stroke-width: 3px;
-
-        text-shadow: -2px -2px 0 #fff,
-                      2px -2px 0 #fff,
-                     -2px  2px 0 #fff,
-                      2px  2px 0 #fff;
     }
+}
+
+.card__value__text {
+    -webkit-text-stroke-width: 4px;
+}
+
+.card__value__border {
+    -webkit-text-stroke-width: 12px;
+    -webkit-text-stroke-color: @color-white;
 }
 
 // MALUS DEPENDENCIES
@@ -146,13 +151,13 @@
         color: @color-corner;
     }
 
-    .card__value--center {
+    .card__value__text {
         color: @color-number;
         -webkit-text-stroke-color: @color-border;
+    }
 
-        &::before {
-            background: @color-logo;
-        }
+    .card__value--center::before {
+        color: @color-logo;
     }
 
     .card__malus span {

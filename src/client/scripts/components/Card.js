@@ -17,7 +17,8 @@ export default ({card, className}) => {
                 </div>
             </div>
             <div className="card__value card__value--center">
-                <span>{card.value}</span>
+                <span className="card__value__border">{card.value}</span>
+                <span className="card__value__text">{card.value}</span>
             </div>
         </div>
     );
