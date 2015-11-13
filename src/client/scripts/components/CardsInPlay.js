@@ -2,7 +2,6 @@ import CardPile from './CardPile';
 
 export default ({piles}) => (
     <div className="cards-in-play">
-        <div>Cartes en jeux</div>
         <ul className="cards-in-play__piles">
             {
                 piles.map((pile, index) => (

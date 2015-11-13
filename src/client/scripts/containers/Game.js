@@ -5,6 +5,7 @@ import * as actionCreators from 'client/actions';
 import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
 import Hand from 'client/components/Hand';
+import Malus from 'client/components/Malus';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -23,6 +24,7 @@ export default class Game extends PureRenderComponent {
                 <CardsInPlay piles={game.cardsInPlay} />
                 <Hand cards={game.currentHand}
                       onCardSelected={this.props.playCard}/>
+                <Malus malus="16"/>
             </div>
         );
     }
