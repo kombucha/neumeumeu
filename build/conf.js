@@ -45,7 +45,8 @@ module.exports = {
         'redux-simple-router',
         'redux-thunk',
         'history',
-        'classnames'
+        'classnames',
+        'socket.io-client'
     ],
     paths: paths,
     files: files,

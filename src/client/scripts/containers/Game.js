@@ -21,7 +21,8 @@ export default class Game extends PureRenderComponent {
             <div className="game">
                 <Players players={game.players} />
                 <CardsInPlay piles={game.cardsInPlay} />
-                <Hand cards={game.currentHand} />
+                <Hand cards={game.currentHand}
+                      onCardSelected={this.props.playCard}/>
             </div>
         );
     }

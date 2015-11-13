@@ -10,9 +10,7 @@ export default ({card, className}) => {
                 <div className="card__value card__value--top">{card.value}</div>
                 <div className="card__malus">
                     {
-                        malusRange.map(range => (
-                            <span></span>
-                        ))
+                        malusRange.map((val, idx) => (<span key={idx}></span>))
                     }
                 </div>
             </div>

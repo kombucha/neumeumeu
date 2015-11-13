@@ -1,6 +1,6 @@
 import Card from './Card';
 
-export default ({cards}) => (
+export default ({cards, onCardSelected}) => (
     <div className="hand">
         <div>
             Mes cartes
@@ -8,7 +8,9 @@ export default ({cards}) => (
         <ul className="hand__cards">
             {
                 cards.map(card => (
-                    <li className="hand__item" key={card.value}>
+                    <li className="hand__item"
+                        key={card.value}
+                        onClick={() => onCardSelected(card)}>
                         <Card className="card--hand" card={card}/>
                     </li>
                 ))

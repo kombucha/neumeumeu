@@ -1,3 +1,4 @@
+// TODO: Split actions
 import * as api from 'client/api';
 
 function fetchedGames(games) {
@@ -50,5 +51,22 @@ export function fetchCurrentGame(gameId) {
     return dispatch => {
         return api.fetchCurrentGame(gameId)
             .then(game => dispatch(fetchedCurrentGame(game)));
+    };
+}
+
+export function playCard(card) {
+    return {
+        type: 'PLAY_CARD',
+        card,
+        meta: {
+            remote: true
+        }
+    };
+}
+
+export function updateRemoteStatus(connected) {
+    return {
+        type: 'UPDATE_REMOTE_STATUS',
+        connected
     };
 }
