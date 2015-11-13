@@ -1,8 +1,15 @@
 @hand-width: 800px;
-@cards-overlap: 20px;
-@card-raise: 20px;
+@hand-offset: -60px;
+@card-raise: @s-game-gutter - @hand-offset;
 @card-default-z: 1;
 @card-raised-z: 2;
+
+.hand {
+    position: fixed;
+    bottom: @hand-offset;
+    left: @s-game-gutter;
+    right: @s-game-gutter;
+}
 
 .hand__cards {
     display: flex;
@@ -27,7 +34,8 @@
 
 .hand__item:hover {
     margin-top: -@card-raise;
+
     .card--hand {
-        z-index: @card-raised-z;
+        //z-index: @card-raised-z;
     }
 }
