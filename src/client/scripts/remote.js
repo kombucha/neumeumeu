@@ -3,7 +3,7 @@ import {updateRemoteStatus} from 'client/actions';
 
 export const middleware =  socket => (/* store */) => next => action => {
     if (action.meta && action.meta.remote) {
-        socket.emit('action', {socketId: socket.io.engine.id, action: action});
+        return socket.emit('action', action);
     }
     return next(action);
 };

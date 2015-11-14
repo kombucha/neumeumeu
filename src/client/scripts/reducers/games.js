@@ -4,7 +4,7 @@ function updateGames(state, games) {
 
 export default function games(state = [], action) {
     switch (action.type) {
-    case 'FETCH_GAMES':
+    case 'UPDATE_GAMES':
         return updateGames(state, action.games);
     }
 

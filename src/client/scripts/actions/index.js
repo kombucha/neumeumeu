@@ -1,13 +1,6 @@
 // TODO: Split actions
 import * as api from 'client/api';
 
-function fetchedGames(games) {
-    return {
-        type: 'FETCH_GAMES',
-        games
-    };
-}
-
 function fetchedCurrentGame(game) {
     return {
         type: 'FETCH_CURRENT_GAME',
@@ -41,9 +34,9 @@ export function joinGame(userId, gameId, password) {
 }
 
 export function fetchGames() {
-    return dispatch => {
-        return api.fetchGames()
-            .then(games => dispatch(fetchedGames(games)));
+    return {
+        type: 'UPDATE_GAMES',
+        meta: {remote: true}
     };
 }
 
