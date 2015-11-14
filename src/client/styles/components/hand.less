@@ -1,8 +1,6 @@
 @hand-width: 800px;
 @hand-offset: -60px;
 @card-raise: @s-game-gutter - @hand-offset;
-@card-default-z: 1;
-@card-raised-z: 2;
 
 .hand {
     position: fixed;
@@ -24,7 +22,6 @@
 // Card modifier
 .card--hand {
     cursor: pointer;
-    z-index: @card-default-z;
 }
 
 // Raising the card
@@ -34,8 +31,4 @@
 
 .hand__item:hover {
     margin-top: -@card-raise;
-
-    .card--hand {
-        //z-index: @card-raised-z;
-    }
 }
