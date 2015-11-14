@@ -38,6 +38,7 @@ export function fetchCurrentGame(gameId) {
             {username: 'Vincent'},
             {username: 'Hugo'},
             {username: 'Samuel'},
+            {username: 'Julian'},
             {username: 'Arnaud'}
         ],
         maxPlayers: 10,
