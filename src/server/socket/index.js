@@ -1,4 +1,5 @@
 import Server from 'socket.io';
+import log from 'server/log';
 import * as gameService from 'server/services/game';
 
 const DEFAULT_CONFIG = {
@@ -6,6 +7,7 @@ const DEFAULT_CONFIG = {
 };
 
 function handleAction(socket, action) {
+    log.info({action: action}, 'Handled action');
     switch (action.type) {
     case 'CREATE_GAME':
         return gameService.createGame(action.game);
