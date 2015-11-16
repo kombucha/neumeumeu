@@ -9,6 +9,7 @@ import App from 'client/containers/App';
 import {HomeContainer} from 'client/containers/Home';
 import {RegisterContainer} from 'client/containers/Register';
 import {GameContainer} from 'client/containers/Game';
+import {GameCreationContainer} from 'client/containers/GameCreation';
 
 // SOCKET
 const socket = configureSocket();
@@ -23,6 +24,7 @@ const ROUTES = (
         <Route component={App}>
             <Route path="/" component={HomeContainer} />
             <Route path="/register" component={RegisterContainer} />
+            <Route path="/games/create" component={GameCreationContainer} />
             <Route path="/games/:gameId" component={GameContainer} />
         </Route>
     ),

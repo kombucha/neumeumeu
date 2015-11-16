@@ -16,7 +16,12 @@ function simpleGame(game) {
 
 export function createGame(options) {
     // TODO: cleanup game options
-    return r.table('game').insert(options).run();
+    return r.table('game').insert({
+        ...options,
+        status:  "waiting_for_players",
+        players: []
+        //, owner: currentPlayer
+    }).run();
 }
 
 export function joinGame(playerId, gameId, password = '') {

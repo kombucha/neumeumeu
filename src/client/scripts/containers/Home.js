@@ -1,6 +1,7 @@
+import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import GameList from 'client/components/GameList';
-import {connect} from 'react-redux';
 import * as actionCreators from 'client/actions';
 
 export default class Home extends PureRenderComponent {
@@ -15,7 +16,12 @@ export default class Home extends PureRenderComponent {
     }
 
     render() {
-        return (<GameList games={this.props.games}/>);
+        return (
+            <div className="home">
+                <Link to="/games/create">Create Game</Link>
+                <GameList games={this.props.games}/>
+            </div>
+        );
     }
 }
 

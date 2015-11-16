@@ -26,6 +26,14 @@ export function register(username) {
     };
 }
 
+export function createGame(game) {
+    return {
+        type: 'CREATE_GAME',
+        meta: {remote: true},
+        game
+    };
+}
+
 export function joinGame(userId, gameId, password) {
     return dispatch => {
         return api.joinGame(userId, gameId, password)
