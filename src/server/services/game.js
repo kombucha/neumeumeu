@@ -54,8 +54,15 @@ export function getCurrentGames() {
 }
 
 export function startGame(playerID, gameId) {
-    // TODO: check if player has the right to realise that action (move that to the controller ?)
-    // TODO: change game status
-    // TODO: generate cards (maybe delegate this to startRound())
-    return false;
+    // TODO: generate cards (maybe delegate this to startRound() ?)
+    return r.table('game')
+        .get(gameId)
+        .update(game => {
+            return r.branch(
+                game('owner')('id').eq(playerID),
+                {status: 'started'},
+                {}
+            );
+        })
+        .run();
 }
