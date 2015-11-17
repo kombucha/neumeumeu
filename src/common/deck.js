@@ -51,3 +51,22 @@ export function shuffle(deck) {
 
     return deckCopy;
 }
+
+function chunk(arr, size) {
+    var result = [];
+
+    while (arr.length > 0) {
+        result.push(arr.splice(0, size));
+    }
+
+    return result;
+}
+
+export function generateGameCards() {
+    const deck = shuffle(generateDeck());
+
+    return {
+        cardsInPlay: chunk(deck.splice(0, 4), 1),
+        hands: chunk(deck, 10)
+    };
+}
