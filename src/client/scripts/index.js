@@ -3,8 +3,10 @@ import Router, {Route} from 'react-router';
 import {Provider} from 'react-redux';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import {syncReduxAndRouter} from 'redux-simple-router';
+
 import configureStore from 'client/store/configureStore';
 import {configureSocket, bindSocketToStore} from 'client/remote';
+import auth from 'client/auth';
 import App from 'client/containers/App';
 import {HomeContainer} from 'client/containers/Home';
 import {RegisterContainer} from 'client/containers/Register';
@@ -19,13 +21,16 @@ const store = configureStore(undefined, socket);
 
 bindSocketToStore(socket, store);
 
+// AUTHENTICATION
+const requireAuth = auth(store);
+
 // ROUTING
 const ROUTES = (
         <Route component={App}>
             <Route path="/" component={HomeContainer} />
             <Route path="/register" component={RegisterContainer} />
-            <Route path="/games/create" component={GameCreationContainer} />
-            <Route path="/games/:gameId" component={GameContainer} />
+            <Route path="/games/create" component={GameCreationContainer} onEnter={requireAuth}/>
+            <Route path="/games/:gameId" component={GameContainer} onEnter={requireAuth}/>
         </Route>
     ),
     history = createBrowserHistory();
