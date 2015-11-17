@@ -26,6 +26,12 @@ export function register(username) {
     };
 }
 
+export function logout() {
+    return {
+        type: 'LOGOUT'
+    };
+}
+
 export function createGame(game) {
     return {
         type: 'CREATE_GAME',

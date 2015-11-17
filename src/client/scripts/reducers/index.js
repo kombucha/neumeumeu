@@ -1,10 +1,10 @@
 import currentGame from './currentGame';
 import games from './games';
-import user from './user';
-import remote from './user';
+import authentication from './authentication';
+import remote from './remote';
 
 export default {
-    user,
+    authentication,
     currentGame,
     games,
     remote
