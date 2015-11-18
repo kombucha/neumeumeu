@@ -1,13 +1,14 @@
 import r from 'server/database';
 import {getPlayer} from 'server/services/player';
+import {startRound} from 'server/services/gameplay';
 
 function simpleGame(game) {
     return {
         id: game.id,
         name: game.name,
-        players: game.players.map(p => ({
-            id: p.id,
-            name: p.name
+        players: Object.keys(game.players).map(playerId => ({
+            id: playerId,
+            name: game.players[playerId].name
         })),
         maxPlayers: game.maxPlayers,
         isProtected: !!game.password
@@ -18,9 +19,9 @@ export function createGame(options) {
     // TODO: cleanup game options
     return r.table('game').insert({
         ...options,
-        status:  "waiting_for_players",
-        players: []
-        //, owner: currentPlayer
+        status:  'waiting_for_players',
+        players: {}
+        // , owner: currentPlayer // TODO
     }).run();
 }
 
@@ -37,15 +38,15 @@ export function joinGame(playerId, gameId, password = '') {
                             game('status').eq('waiting_for_players')
                             // AND password OK
                             .and(game('password').default('').eq(password))
-                            // AND not already joined
-                            .and(r.not(game('players').contains(player => player('id').eq(playerId)))
-                        ),
+                            // AND not already at max capacity
+                            .and(game('players').keys().count().lt(game('maxPlayers'))),
                         // TODO: prepare player data as a game-player (with status and stuff)
                         {players: game('players').append(player)},
                         {}
                     );
                 });
-        });
+        })
+        .run();
         // TODO: reject promise if result.replaced !== 1
 }
 
@@ -69,5 +70,6 @@ export function startGame(playerID, gameId) {
                 {}
             );
         })
-        .run();
+        .run()
+        .then(() => startRound());
 }
