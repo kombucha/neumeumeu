@@ -1,16 +1,15 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import {middleware as remoteMiddleware} from 'client/remote';
 import {routeReducer} from 'redux-simple-router';
 import reducers from 'client/reducers';
 
-export default function configureStore(initialState, socket) {
+export default function configureStore(initialState) {
     const combinedReducers = combineReducers({
         ...reducers,
         routing: routeReducer
     });
 
-    let middlewares = [thunkMiddleware, remoteMiddleware(socket)];
+    let middlewares = [thunkMiddleware];
 
     if (process.env.NODE_ENV !== 'production') {
         middlewares = [require('redux-immutable-state-invariant')(), ...middlewares];

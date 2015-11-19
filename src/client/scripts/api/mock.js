@@ -1,4 +1,32 @@
-export function fetchCurrentGame(gameId) {
+
+function init() {}
+
+function createGame() {
+    return Promise.resolve({});
+}
+
+function fetchGames() {
+    return Promise.resolve([
+        {
+            id: 0,
+            name: 'IWN',
+            players: [],
+            maxPlayers: 10,
+            status: 'waiting_for_players',
+            isProtected: false
+        },
+        {
+            id: 1,
+            name: 'VIP',
+            players: [],
+            maxPlayers: 4,
+            status: 'waiting_for_players',
+            isProtected: true
+        }
+    ]);
+}
+
+function fetchCurrentGame(gameId) {
     return Promise.resolve({
         id: gameId,
         name: 'IWN',
@@ -47,29 +75,9 @@ export function fetchCurrentGame(gameId) {
     });
 }
 
-export function fetchGames() {
-    return Promise.resolve([
-        {
-            id: 0,
-            name: 'IWN',
-            players: [],
-            maxPlayers: 10,
-            status: 'waiting_for_players',
-            isProtected: false
-        },
-        {
-            id: 1,
-            name: 'VIP',
-            players: [],
-            maxPlayers: 4,
-            status: 'waiting_for_players',
-            isProtected: true
-        }
-    ]);
-}
-
-export function joinGame(userId, gameId, password) { // eslint-disable-line no-unused-vars
-    return Promise.resolve({
-        id: gameId
-    });
-}
+export default {
+    init,
+    createGame,
+    fetchGames,
+    fetchCurrentGame
+};

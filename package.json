@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/scripts/index.js",
   "scripts": {
-    "build": "gulp build --",
-    "dev": "gulp dev --",
-    "test": "gulp test --",
+    "build": "gulp build",
+    "dev": "gulp dev",
+    "test": "gulp test",
     "server": "node src/server/index.js | bunyan --"
   },
   "repository": {

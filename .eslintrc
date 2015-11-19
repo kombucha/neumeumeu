@@ -9,6 +9,8 @@ ecmaFeatures:
   experimentalObjectRestSpread: true
 plugins:
   - "react"
+globals:
+  __USE_MOCKS__: true
 rules:
   indent: [2, 4]
   quotes: [2, "single"]

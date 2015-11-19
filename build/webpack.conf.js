@@ -38,7 +38,8 @@ var webpackConf = {
         new Webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': '"' + conf.env + '"'
-            }
+            },
+            '__USE_MOCKS__': conf.useMocks
         }),
         new Webpack.optimize.CommonsChunkPlugin('vendor', conf.files.clientVendorBundleName)
     ]

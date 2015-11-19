@@ -9,7 +9,7 @@ import Malus from 'client/components/Malus';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
-        const gameId = parseInt(this.props.params.gameId, 10);
+        const gameId = this.props.params.gameId;
         this.props.fetchCurrentGame(gameId);
     }
 

@@ -1,4 +1,6 @@
 // TODO: Split actions
+// TODO: Move "simple actions" (no thunk) to common/actions
+import {updatePath} from 'redux-simple-router';
 import * as api from 'client/api';
 
 function fetchedCurrentGame(game) {
@@ -8,60 +10,51 @@ function fetchedCurrentGame(game) {
     };
 }
 
-function joinedGame(userId, gameId) {
+function updateGames(games) {
     return {
-        type: 'JOIN_GAME',
-        userId,
-        gameId
+        type: 'UPDATE_GAMES',
+        games
     };
 }
 
 // Public actions
-// TODO: handle error (action_name_FAIL) ?
-// TODO: handle optimistic update (action_name_PENDING) ?
-export function register(username) {
+function register(username) {
     return {
         type: 'REGISTER',
         username
     };
 }
 
-export function logout() {
+function logout() {
     return {
         type: 'LOGOUT'
     };
 }
 
-export function createGame(game) {
-    return {
-        type: 'CREATE_GAME',
-        meta: {remote: true},
-        game
-    };
-}
-
-export function joinGame(userId, gameId, password) {
+function createGame(game) {
     return dispatch => {
-        return api.joinGame(userId, gameId, password)
-            .then(() => dispatch(joinedGame(userId, gameId)));
+        return api.createGame(game)
+            .then(() => {
+                dispatch(updatePath('/'));
+            });
     };
 }
 
-export function fetchGames() {
-    return {
-        type: 'UPDATE_GAMES',
-        meta: {remote: true}
+function fetchGames() {
+    return dispatch => {
+        return api.fetchGames()
+            .then(games => dispatch(updateGames(games)));
     };
 }
 
-export function fetchCurrentGame(gameId) {
+function fetchCurrentGame(gameId) {
     return dispatch => {
         return api.fetchCurrentGame(gameId)
             .then(game => dispatch(fetchedCurrentGame(game)));
     };
 }
 
-export function playCard(card) {
+function playCard(card) {
     return {
         type: 'PLAY_CARD',
         card,
@@ -71,9 +64,19 @@ export function playCard(card) {
     };
 }
 
-export function updateRemoteStatus(connected) {
+function updateRemoteStatus(connected) {
     return {
         type: 'UPDATE_REMOTE_STATUS',
         connected
     };
 }
+
+export default {
+    register,
+    logout,
+    createGame,
+    fetchGames,
+    fetchCurrentGame,
+    playCard,
+    updateRemoteStatus
+};

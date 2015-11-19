@@ -52,8 +52,9 @@ module.exports = {
     files: files,
     env: env,
     codeStyle: args.hasOwnProperty('codeStyle') ? !!args.codeStyle : !isDevMode,
-    optimize: args.hasOwnProperty('optimize') ? args.optimize : (env === 'production' || false),
+    optimize: args.hasOwnProperty('optimize') ? !!args.optimize : (env === 'production' || false),
     devMode: isDevMode,
+    useMocks: args.hasOwnProperty('mocks') ? !!args.mocks : false,
     plumber: {
         errorHandler: isDevMode ? function(err) {
             gUtil.log(err);

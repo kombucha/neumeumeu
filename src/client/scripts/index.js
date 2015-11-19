@@ -7,18 +7,20 @@ import {syncReduxAndRouter} from 'redux-simple-router';
 import configureStore from 'client/store/configureStore';
 import {configureSocket, bindSocketToStore} from 'client/remote';
 import auth from 'client/auth';
+import api from 'client/api';
 import App from 'client/containers/App';
 import {HomeContainer} from 'client/containers/Home';
 import {RegisterContainer} from 'client/containers/Register';
 import {GameContainer} from 'client/containers/Game';
 import {GameCreationContainer} from 'client/containers/GameCreation';
 
+// STORE
+const store = configureStore();
+
+
 // SOCKET
 const socket = configureSocket();
-
-// STORE
-const store = configureStore(undefined, socket);
-
+api.init(socket, store);
 bindSocketToStore(socket, store);
 
 // AUTHENTICATION
