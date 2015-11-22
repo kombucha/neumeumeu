@@ -5,7 +5,9 @@ describe('Home', function () {
     let component;
 
     beforeEach(function () {
-        component = createComponent(Home);
+        const noOp = () => null;
+        // FIXME: Meh, find a way to mock actionCreators bindings ?
+        component = createComponent(Home, {fetchGames: noOp});
     });
 
     it('should create a new instance of Home', function () {

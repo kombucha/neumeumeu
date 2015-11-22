@@ -5,6 +5,8 @@ import {createRenderer} from 'react-addons-test-utils';
 
 chai.use(sinonChai);
 
+global.__USE_MOCKS__ = true;
+
 export const expect = chai.expect;
 
 // See http://simonsmith.io/unit-testing-react-components-without-a-dom/
