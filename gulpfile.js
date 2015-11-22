@@ -17,43 +17,32 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     minifyCss = require('gulp-minify-css'),
 
+    devServer = require('./build/server'),
     runSequence = require('run-sequence'),
-    browserSync = require('browser-sync'),
-    history = require('connect-history-api-fallback'),
     del = require('del'),
     path = require('path');
 
 gulp.task('scripts', ['lint'], function(callback) {
     var webpackCallback = function(err, stats) {
-            var statsStr = stats.toString({
-                colors: true,
-                timings: true,
-                version: false,
-                assets: false,
-                chunks: false,
-                modules: false,
-                errorsDetails: true
-            });
+        var statsStr = stats.toString({
+            colors: true,
+            timings: true,
+            version: false,
+            assets: false,
+            chunks: false,
+            modules: false,
+            errorsDetails: true
+        });
 
-            if (buildConf.devMode) {
-                GulpUtil.log('webpack', statsStr);
-            } else if (stats.hasErrors()) {
-                throw new GulpUtil.PluginError('webpack:build', statsStr);
-            }
+        if (stats.hasErrors()) {
+            callback(statsStr);
+        } else {
+            GulpUtil.log('webpack', statsStr);
+            callback();
+        }
+    };
 
-            if (!callback._called) {
-                callback(err);
-                callback._called = true;
-            }
-        },
-        compiler;
-
-    compiler = webpack(webpackConf);
-    if (buildConf.devMode) {
-        compiler.watch(300, webpackCallback);
-    } else {
-        compiler.run(webpackCallback);
-    }
+    webpack(webpackConf).run(webpackCallback);
 });
 
 gulp.task('lint', function() {
@@ -113,20 +102,8 @@ gulp.task('assets', function() {
         .pipe(gulp.dest(buildConf.paths.distBase));
 });
 
-gulp.task('serve', ['build'], function() {
-    browserSync({
-        files: path.join(buildConf.paths.distBase, '**'),
-        watchOptions: {
-            interval: 500
-        },
-        reloadDebounce: 1000,
-        server: {
-            baseDir: buildConf.paths.distBase,
-            middleware: [history()]
-        },
-        online: false,
-        notify: false
-    });
+gulp.task('serve', ['serve-build'], function() {
+    devServer();
 });
 
 gulp.task('watch', function() {
@@ -143,6 +120,12 @@ gulp.task('clean', function() {
     return del([buildConf.paths.distBase], {
         force: true
     });
+});
+
+// serve-build is the same as build, except it doesn't handle scripts
+// (handled by wepback-dev-server)
+gulp.task('serve-build', function(cb) {
+    return runSequence('clean', ['styles', 'assets'], cb);
 });
 
 gulp.task('build', function(cb) {
