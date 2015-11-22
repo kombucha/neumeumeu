@@ -1,26 +1,16 @@
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import {connect} from 'react-redux';
-import * as actionCreators from 'client/actions';
+import {register, logout} from 'client/actions';
+import LoginForm from 'client/components/LoginForm';
+import RegisterForm from 'client/components/RegisterForm';
 
 export default class Register extends PureRenderComponent {
-
-    componentWillMount() {
-        this.props.fetchGames();
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.props.register(this.refs.username.value);
-    }
-
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <label>Username:</label>
-                    <input type="text" ref="username"/>
-                    <button type="submit">Register</button>
-                </form>
+                <LoginForm/>
+                <div>Don't have an account ?</div>
+                <RegisterForm/>
             </div>
         );
     }
@@ -32,5 +22,5 @@ function mapStateToProps() {
 
 export const RegisterContainer = connect(
     mapStateToProps,
-    actionCreators
+    {register, logout}
 )(Register);

@@ -1,7 +1,7 @@
 import {Link} from 'react-router';
-import {Component} from 'react';
+import FormComponent from 'client/components/FormComponent';
 
-export default class GameCreationForm extends Component {
+export default class GameCreationForm extends FormComponent {
     constructor(props) {
         super(props);
         this.state = {
