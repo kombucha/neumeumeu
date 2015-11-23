@@ -7,7 +7,9 @@
     "build": "gulp build",
     "dev": "gulp dev",
     "test": "gulp test",
-    "server": "node src/server/index.js | bunyan --"
+    "server": "node src/server/index.js | bunyan --",
+    "serverdev": "nodemon --delay 2 --watch src/server --watch src/common  src/server/index.js | ./node_modules/.bin/bunyan",
+    "serverdb": "rethinkdb"
   },
   "repository": {
     "type": "git",
