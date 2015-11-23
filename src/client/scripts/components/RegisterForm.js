@@ -9,6 +9,7 @@ export default class RegisterForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
+        
     }
 
     render() {

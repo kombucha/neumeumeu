@@ -1,9 +1,12 @@
 import FormComponent from 'client/components/FormComponent';
+import {PropTypes} from 'react';
 
 export default class LoginForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
+        // TODO: validation
+        this.props.handleLogin(this.state.username, this.state.password);
     }
 
     render() {
@@ -26,3 +29,7 @@ export default class LoginForm extends FormComponent {
         );
     }
 }
+
+LoginForm.propTypes = {
+    handleLogin: PropTypes.func.isRequired
+};

@@ -1,7 +1,8 @@
 // TODO: Split actions
 // TODO: Move "simple actions" (no thunk) to common/actions
 import {updatePath} from 'redux-simple-router';
-import * as api from 'client/api';
+import authentication from './authentication';
+import api from 'client/api';
 
 function fetchedCurrentGame(game) {
     return {
@@ -18,19 +19,6 @@ function updateGames(games) {
 }
 
 // Public actions
-function register(username) {
-    return {
-        type: 'REGISTER',
-        username
-    };
-}
-
-function logout() {
-    return {
-        type: 'LOGOUT'
-    };
-}
-
 function createGame(game) {
     return dispatch => {
         return api.createGame(game)
@@ -72,8 +60,7 @@ function updateRemoteStatus(connected) {
 }
 
 export default {
-    register,
-    logout,
+    ...authentication,
     createGame,
     fetchGames,
     fetchCurrentGame,
