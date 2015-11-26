@@ -1,6 +1,6 @@
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import {connect} from 'react-redux';
-import {login, logout} from 'client/actions';
+import {login, register} from 'client/actions';
 import LoginForm from 'client/components/LoginForm';
 import RegisterForm from 'client/components/RegisterForm';
 
@@ -10,7 +10,7 @@ export default class Register extends PureRenderComponent {
             <div>
                 <LoginForm handleLogin={this.props.login}/>
                 <div>Don't have an account ?</div>
-                <RegisterForm/>
+                <RegisterForm handleRegistration={this.props.register}/>
             </div>
         );
     }
@@ -22,5 +22,5 @@ function mapStateToProps() {
 
 export const RegisterContainer = connect(
     mapStateToProps,
-    {login, logout}
+    {login, register}
 )(Register);

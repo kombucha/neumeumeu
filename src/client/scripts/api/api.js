@@ -34,6 +34,13 @@ function login(username, password) {
     });
 }
 
+function register(newUser) {
+    return emitAction({
+        type: 'REGISTER',
+        user: newUser
+    });
+}
+
 function fetchCurrentGame(gameId) {
     return Promise.resolve({
         id: gameId,
@@ -99,6 +106,7 @@ function createGame(game) {
 export default {
     init,
     login,
+    register,
     createGame,
     fetchGames,
     fetchCurrentGame

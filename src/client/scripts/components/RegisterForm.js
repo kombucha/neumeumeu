@@ -1,4 +1,5 @@
 import FormComponent from 'client/components/FormComponent';
+import {PropTypes} from 'react';
 
 export default class RegisterForm extends FormComponent {
 
@@ -9,7 +10,12 @@ export default class RegisterForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
-        
+        const newUser = Object.assign({}, {
+            username: this.state.username,
+            password: this.state.password,
+            email: this.state.email
+        });
+        this.props.handleRegistration(newUser);
     }
 
     render() {
@@ -46,3 +52,7 @@ export default class RegisterForm extends FormComponent {
         );
     }
 }
+
+RegisterForm.propTypes = {
+    handleRegistration: PropTypes.func.isRequired
+};

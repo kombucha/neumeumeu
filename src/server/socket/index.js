@@ -1,6 +1,7 @@
 import Server from 'socket.io';
 import log from 'server/log';
-import * as gameService from 'server/services/game';
+import gameService from 'server/services/game';
+import authService from 'server/services/authentication';
 
 const DEFAULT_CONFIG = {
     port: 8090
@@ -11,6 +12,10 @@ const DEFAULT_CONFIG = {
 function handleAction(socket, action) {
     log.info({action: action}, 'Handled action');
     switch (action.type) {
+    case 'LOGIN':
+        return authService.login(action.username, action.password);
+    case 'REGISTER':
+        return authService.register(action.user);
     case 'CREATE_GAME':
         return gameService.createGame(action.game);
     case 'UPDATE_GAMES':

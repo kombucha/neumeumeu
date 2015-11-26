@@ -15,7 +15,7 @@ function simpleGame(game) {
     };
 }
 
-export function createGame(options) {
+function createGame(options) {
     // TODO: cleanup game options
     let newGame = Object.assign({}, options, {
         status:  'waiting_for_players',
@@ -25,7 +25,7 @@ export function createGame(options) {
     return r.table('game').insert(newGame).run();
 }
 
-export function joinGame(playerId, gameId, password = '') {
+function joinGame(playerId, gameId, password = '') {
     // Atomic conditional update
     // https://www.rethinkdb.com/docs/cookbook/javascript/#atomically-updating-a-document-based-on-a-condition
     return getPlayer(playerId)
@@ -50,16 +50,16 @@ export function joinGame(playerId, gameId, password = '') {
         // TODO: reject promise if result.replaced !== 1
 }
 
-export function getGame(gameId) {
+function getGame(gameId) {
     return r.table('game').get(gameId).run();
 }
 
-export function getCurrentGames() {
+function getCurrentGames() {
     return r.table('game').run()
         .then(games => games.map(simpleGame));
 }
 
-export function startGame(playerID, gameId) {
+function startGame(playerID, gameId) {
     // TODO: generate cards (maybe delegate this to startRound() ?)
     return r.table('game')
         .get(gameId)
@@ -73,3 +73,11 @@ export function startGame(playerID, gameId) {
         .run()
         .then(() => startRound());
 }
+
+export default {
+    createGame,
+    joinGame,
+    getGame,
+    getCurrentGames,
+    startGame
+};
