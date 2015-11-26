@@ -1,8 +1,7 @@
 function register(state, username) {
-    return {
-        ...state,
+    return Object.assign({}, state, {
         currentUsername: username
-    };
+    });
 }
 
 function login (state, token, user) {

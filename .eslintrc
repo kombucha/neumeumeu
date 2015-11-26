@@ -6,7 +6,6 @@ env:
 ecmaFeatures:
   jsx: true
   modules: true
-  experimentalObjectRestSpread: true
 plugins:
   - "react"
 globals:

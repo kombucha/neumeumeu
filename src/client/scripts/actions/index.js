@@ -59,11 +59,12 @@ function updateRemoteStatus(connected) {
     };
 }
 
-export default {
-    ...authentication,
-    createGame,
-    fetchGames,
-    fetchCurrentGame,
-    playCard,
-    updateRemoteStatus
-};
+export default Object.assign({},
+    authentication, {
+        createGame,
+        fetchGames,
+        fetchCurrentGame,
+        playCard,
+        updateRemoteStatus
+    }
+);

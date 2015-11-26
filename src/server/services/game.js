@@ -17,12 +17,12 @@ function simpleGame(game) {
 
 export function createGame(options) {
     // TODO: cleanup game options
-    return r.table('game').insert({
-        ...options,
+    let newGame = Object.assign({}, options, {
         status:  'waiting_for_players',
         players: {}
         // , owner: currentPlayer // TODO
-    }).run();
+    });
+    return r.table('game').insert(newGame).run();
 }
 
 export function joinGame(playerId, gameId, password = '') {

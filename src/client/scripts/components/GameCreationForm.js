@@ -12,9 +12,7 @@ export default class GameCreationForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
-        const game = {
-            ...this.state
-        };
+        const game = Object.assign({}, this.state);
         this.props.onCreateGame(game);
     }
 

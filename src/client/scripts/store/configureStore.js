@@ -4,10 +4,10 @@ import {routeReducer} from 'redux-simple-router';
 import reducers from 'client/reducers';
 
 export default function configureStore(initialState) {
-    const combinedReducers = combineReducers({
-        ...reducers,
-        routing: routeReducer
-    });
+    const combinedReducers = combineReducers(Object.assign({},
+        reducers,
+        {routing: routeReducer}
+    ));
 
     let middlewares = [thunkMiddleware];
 
