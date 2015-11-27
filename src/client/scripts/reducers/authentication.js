@@ -16,8 +16,8 @@ function logout() {
 }
 
 const DEFAULT_STATE = {
-    user: (process.env.NODE_ENV === 'development') ? {} : null, // TODO
-    token: (process.env.NODE_ENV === 'development') ? 'DUMMY_TOKEN' : null
+    user: null,
+    token: null
 };
 
 export default function users(state = DEFAULT_STATE, action) {

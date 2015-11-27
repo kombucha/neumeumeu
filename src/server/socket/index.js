@@ -14,8 +14,11 @@ function handleAction(socket, action) {
     switch (action.type) {
     case 'LOGIN':
         return authService.login(action.username, action.password);
+    case 'LOGOUT':
+        return authService.logout(action.token);
     case 'REGISTER':
         return authService.register(action.user);
+
     case 'CREATE_GAME':
         return gameService.createGame(action.game);
     case 'UPDATE_GAMES':

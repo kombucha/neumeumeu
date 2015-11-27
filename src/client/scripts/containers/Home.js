@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import GameList from 'client/components/GameList';
+import {LoginStatusContainer} from 'client/components/LoginStatus';
 import * as actionCreators from 'client/actions';
 
 export default class Home extends PureRenderComponent {
@@ -18,6 +19,7 @@ export default class Home extends PureRenderComponent {
     render() {
         return (
             <div className="home">
+                <LoginStatusContainer/>
                 <Link to="/games/create">Create Game</Link>
                 <GameList games={this.props.games}/>
             </div>

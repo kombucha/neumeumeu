@@ -20,6 +20,14 @@ function login (username, password) {
     };
 }
 
+function logout() {
+    return dispatch => api.logout()
+        .then(() => {
+            dispatch({type: 'LOGOUT'});
+            dispatch(updatePath('/'));
+        });
+}
+
 function register(newUser) {
     return dispatch => {
         return api.register(newUser)
@@ -30,5 +38,6 @@ function register(newUser) {
 
 export default {
     login,
+    logout,
     register
 };

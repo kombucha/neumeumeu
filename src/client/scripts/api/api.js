@@ -34,6 +34,13 @@ function login(username, password) {
     });
 }
 
+function logout() {
+    return emitAction({
+        type: 'LOGOUT',
+        token: getAuthToken()
+    });
+}
+
 function register(newUser) {
     return emitAction({
         type: 'REGISTER',
@@ -99,6 +106,7 @@ function fetchGames() {
 function createGame(game) {
     return emitAction({
         type: 'CREATE_GAME',
+        token: getAuthToken,
         game
     });
 }
@@ -106,6 +114,7 @@ function createGame(game) {
 export default {
     init,
     login,
+    logout,
     register,
     createGame,
     fetchGames,
