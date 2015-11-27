@@ -1,6 +1,7 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {routeReducer} from 'redux-simple-router';
+import persistState from 'redux-localstorage';
 import reducers from 'client/reducers';
 
 export default function configureStore(initialState) {
@@ -10,7 +11,9 @@ export default function configureStore(initialState) {
     ));
 
     let middlewares = [thunkMiddleware],
-        storeEnhancers = [];
+        storeEnhancers = [
+            persistState('authentication', {key: 'card-game-auth'})
+        ];
 
     if (process.env.NODE_ENV !== 'production') {
         middlewares = [require('redux-immutable-state-invariant')(), ...middlewares];

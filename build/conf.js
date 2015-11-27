@@ -42,6 +42,7 @@ module.exports = {
         'react-addons-shallow-compare',
         'react-redux',
         'redux',
+        'redux-localstorage',
         'redux-simple-router',
         'redux-thunk',
         'history',
