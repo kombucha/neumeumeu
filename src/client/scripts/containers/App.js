@@ -1,1 +1,16 @@
-export default (props) => <div>{props.children}</div>;
+let App;
+
+if (process.env.NODE_ENV === 'development') {
+    let DevTools = require('client/containers/DevTools');
+
+    App = (props) => (
+        <div className="app">
+            {props.children}
+            <DevTools/>
+        </div>
+    );
+} else {
+    App = (props) => (<div className="app">{props.children}</div>);
+}
+
+export default App;

@@ -1,4 +1,4 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {routeReducer} from 'redux-simple-router';
 import reducers from 'client/reducers';
@@ -9,13 +9,18 @@ export default function configureStore(initialState) {
         {routing: routeReducer}
     ));
 
-    let middlewares = [thunkMiddleware];
+    let middlewares = [thunkMiddleware],
+        storeEnhancers = [];
 
     if (process.env.NODE_ENV !== 'production') {
         middlewares = [require('redux-immutable-state-invariant')(), ...middlewares];
+        storeEnhancers = [...storeEnhancers, require('client/containers/DevTools').instrument()];
     }
 
-    const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
+    const finalCreateStore = compose(
+            applyMiddleware(...middlewares),
+            ...storeEnhancers
+        )(createStore);
 
-    return createStoreWithMiddleware(combinedReducers, initialState);
+    return finalCreateStore(combinedReducers, initialState);
 }
