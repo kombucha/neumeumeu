@@ -82,7 +82,8 @@ function register(newUser) {
                     name: newUser.username,
                     email: newUser.email,
                     password: hashedPassword,
-                    salt
+                    salt,
+                    tokens: []
                 })
                 .run();
         })
@@ -101,7 +102,7 @@ function createTokenForPlayer(playerId) {
     return r.table('player')
         .get(playerId)
         .update({
-            tokens: r.row('tokens').default([]).append(token)
+            tokens: r.row('tokens').append(token)
         })
         .run()
         .then(() => token);

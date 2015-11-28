@@ -1,3 +1,4 @@
+import {shuffle, chunk} from 'common/utils';
 
 const NUMBER_OF_CARDS = 104;
 
@@ -30,38 +31,6 @@ export function generateDeck() {
     return deck;
 }
 
-// http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
-export function shuffle(deck) {
-    let deckCopy = deck.slice(),
-        counter = deckCopy.length, temp, index;
-
-    // While there are elements in the deckCopy
-    while (counter > 0) {
-        // Pick a random index
-        index = Math.floor(Math.random() * counter);
-
-        // Decrease counter by 1
-        counter--;
-
-        // And swap the last element with it
-        temp = deckCopy[counter];
-        deckCopy[counter] = deckCopy[index];
-        deckCopy[index] = temp;
-    }
-
-    return deckCopy;
-}
-
-function chunk(arr, size) {
-    var result = [];
-
-    while (arr.length > 0) {
-        result.push(arr.splice(0, size));
-    }
-
-    return result;
-}
-
 export function generateGameCards() {
     const deck = shuffle(generateDeck());
 
@@ -70,3 +39,9 @@ export function generateGameCards() {
         hands: chunk(deck, 10)
     };
 }
+
+export default {
+    generateDeck,
+    generateGameCards
+
+};

@@ -10,6 +10,7 @@ function simpleGame(game) {
             id: playerId,
             name: game.players[playerId].name
         })),
+        status: game.status,
         maxPlayers: game.maxPlayers,
         isProtected: !!game.password
     };
