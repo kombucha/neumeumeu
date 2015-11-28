@@ -4,6 +4,7 @@ let socket,
 function init(_socket, _store) {
     socket = _socket;
     store = _store;
+    window.socket = socket;
 }
 
 function getAuthToken() {
@@ -106,16 +107,37 @@ function fetchGames() {
 function createGame(game) {
     return emitAction({
         type: 'CREATE_GAME',
-        token: getAuthToken,
+        token: getAuthToken(),
         game
+    });
+}
+
+function joinRoom(id) {
+    return emitAction({
+        type: 'JOIN_ROOM',
+        token: getAuthToken(),
+        id
+    });
+}
+
+function leaveRoom(id) {
+    return emitAction({
+        type: 'LEAVE_ROOM',
+        token: getAuthToken(),
+        id
     });
 }
 
 export default {
     init,
+
     login,
     logout,
     register,
+
+    joinRoom,
+    leaveRoom,
+
     createGame,
     fetchGames,
     fetchCurrentGame

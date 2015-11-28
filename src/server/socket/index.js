@@ -7,10 +7,11 @@ const DEFAULT_CONFIG = {
     port: 8090
 };
 
-// TODO: something more similar to Sails
+// TODO: Something more similar to Sails
 // (ie: use express routes, and have both regular requests and websockets working)
 function handleAction(socket, action) {
     log.info({action: action}, 'Handled action');
+
     switch (action.type) {
     case 'LOGIN':
         return authService.login(action.username, action.password);
@@ -19,8 +20,22 @@ function handleAction(socket, action) {
     case 'REGISTER':
         return authService.register(action.user);
 
+    case 'JOIN_ROOM':
+        return joinRoom(socket, action.id);
+    case 'LEAVE_ROOM':
+        return leaveRoom(socket, action.id);
+
     case 'CREATE_GAME':
-        return gameService.createGame(action.game);
+        return gameService.createGame(action.game)
+            .then(game => {
+                gameService.getCurrentGames()
+                    .then(games => broadCastToRoom(socket.server, 'lobby', {
+                        type: 'UPDATE_GAMES',
+                        games
+                    }));
+
+                return game;
+            });
     case 'UPDATE_GAMES':
         return gameService.getCurrentGames(action);
     default:
@@ -28,8 +43,18 @@ function handleAction(socket, action) {
     }
 }
 
-export function emitAction(socket, action) {
-    return socket.emit('action', action);
+function joinRoom(socket, roomId) {
+    socket.join(roomId);
+    return Promise.resolve(roomId);
+}
+
+function leaveRoom(socket, roomId) {
+    socket.leave(roomId);
+    return Promise.resolve(roomId);
+}
+
+function broadCastToRoom(io, roomId, action) {
+    io.sockets.in(roomId).emit('action', action);
 }
 
 export default function startSocket(config = DEFAULT_CONFIG) {

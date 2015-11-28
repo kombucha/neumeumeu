@@ -3,17 +3,17 @@ import {Link} from 'react-router';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import GameList from 'client/components/GameList';
 import {LoginStatusContainer} from 'client/components/LoginStatus';
-import * as actionCreators from 'client/actions';
+import {register, fetchGames, joinRoom, leaveRoom} from 'client/actions';
 
 export default class Home extends PureRenderComponent {
 
     componentWillMount() {
+        this.props.joinRoom('lobby');
         this.props.fetchGames();
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        this.props.register(this.refs.username.value);
+    componentWillUnmount() {
+        this.props.leaveRoom('lobby');
     }
 
     render() {
@@ -35,5 +35,5 @@ function mapStateToProps(state) {
 
 export const HomeContainer = connect(
     mapStateToProps,
-    actionCreators
+    {register, fetchGames, joinRoom, leaveRoom}
 )(Home);
