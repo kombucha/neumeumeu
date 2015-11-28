@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import r from 'server/database';
+import {promisify} from 'common/utils';
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
@@ -11,7 +12,14 @@ function getUserFromToken(token) {
     return r.table('player')
         .filter(player => player('tokens').contains(token))
         .limit(1)
-        .run();
+        .run()
+        .then(players => {
+            if (players.length !== 1) {
+                return Promise.reject('Invalid token');
+            }
+
+            return players[0];
+        });
 }
 
 function simpleUser(user) {
@@ -134,20 +142,8 @@ function hashAndSaltPassword(password, salt) {
         .then(buffer => buffer.toString('hex'));
 }
 
-// TODO: Extract to utils when used elsewhere
-function promisify(fn) {
-    return (...args) => new Promise((resolve, reject) => {
-        fn(...args, (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve(result);
-        });
-    });
-}
-
 export default {
+    getUserFromToken,
     register,
     login,
     logout

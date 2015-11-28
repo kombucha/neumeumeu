@@ -34,8 +34,21 @@ function chunk(arr, size) {
     return result;
 }
 
+function promisify(fn) {
+    return (...args) => new Promise((resolve, reject) => {
+        fn(...args, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+
+            return resolve(result);
+        });
+    });
+}
+
 export default {
     range,
     shuffle,
-    chunk
+    chunk,
+    promisify
 };

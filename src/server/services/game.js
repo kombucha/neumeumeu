@@ -42,13 +42,14 @@ function joinGame(playerId, gameId, password = '') {
                             // AND not already at max capacity
                             .and(game('players').keys().count().lt(game('maxPlayers'))),
                         // TODO: prepare player data as a game-player (with status and stuff)
-                        {players: game('players').append(player)},
+                        {players: game('players').merge(r.object(player.id, player))},
                         {}
                     );
-                });
-        })
-        .run();
-        // TODO: reject promise if result.replaced !== 1
+                })
+                .run();
+        });
+        // TODO: Reject promise if result.replaced !== 1 or errors.length !== 0
+        // TODO: In case of success, return the new game ?
 }
 
 function getGame(gameId) {

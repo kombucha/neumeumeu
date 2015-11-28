@@ -112,6 +112,15 @@ function createGame(game) {
     });
 }
 
+function joinGame(id, password) {
+    return emitAction({
+        type: 'JOIN_GAME',
+        token: getAuthToken(),
+        id,
+        password
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -140,5 +149,6 @@ export default {
 
     createGame,
     fetchGames,
-    fetchCurrentGame
+    fetchCurrentGame,
+    joinGame
 };

@@ -10,7 +10,13 @@ import Malus from 'client/components/Malus';
 export default class Game extends PureRenderComponent {
     componentWillMount() {
         const gameId = this.props.params.gameId;
+        this.props.joinRoom(gameId);
         this.props.fetchCurrentGame(gameId);
+    }
+
+    componentWillUnmount() {
+        const gameId = this.props.params.gameId;
+        this.props.leaveRoom(gameId);
     }
 
     renderLoadingGame() {

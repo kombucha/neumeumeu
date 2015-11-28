@@ -24,10 +24,12 @@ function createGame(game) {
     };
 }
 
-function joinGame(gameId) {
-    return {
-        type: 'JOIN_GAME',
-        id: gameId
+function joinGame(gameId, password) {
+    return dispatch => {
+        return api.joinGame(gameId, password)
+            .then(() => {
+                return dispatch(updatePath(`/games/${gameId}`));
+            });
     };
 }
 
