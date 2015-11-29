@@ -3,7 +3,11 @@ import classNames from 'classnames/dedupe';
 import {range} from 'common/utils';
 
 export default ({card, className}) => {
-    const classes = classNames('card', className, 'card--malus-' + card.malus);
+    const isFlipped = !!card.value,
+        classes = classNames(
+        'card',
+        className,
+        isFlipped ? 'card--malus-' + card.malus : 'card--flipped');
 
     return (
         <div className={classes}>

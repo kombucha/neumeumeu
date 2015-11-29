@@ -84,13 +84,13 @@ function fetchCurrentGame(gameId) {
             {value: 24, malus: 1}
         ],
         players: [
-            {username: 'Gabriela'},
-            {username: 'Azadeh'},
-            {username: 'Vincent'},
-            {username: 'Hugo'},
-            {username: 'Samuel'},
+            {username: 'Gabriela', card: {}},
+            {username: 'Azadeh', card: {}},
+            {username: 'Vincent', card: {}},
+            {username: 'Hugo', card: {}},
+            {username: 'Samuel', card: {}},
             {username: 'Julian'},
-            {username: 'Arnaud'}
+            {username: 'Arnaud', card: {}}
         ],
         maxPlayers: 10,
         status: 'playing',

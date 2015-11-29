@@ -6,7 +6,6 @@ import {login,logout} from 'client/actions';
 export class LoginStatus extends PureRenderComponent {
 
     handleLogout() {
-        console.log('LOGGIN OUT');
         this.props.logout();
     }
 

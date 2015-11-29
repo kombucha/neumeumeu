@@ -5,7 +5,6 @@
 @card-center-type: 70px;
 
 // Card colors
-
 @color-card-1-background: @color-white;
 @color-card-1-number: @color-light-purple;
 @color-card-1-logo: @color-purple;
@@ -35,6 +34,13 @@
 @color-card-7-logo: @color-purple;
 @color-card-7-malus: @color-red;
 @color-card-7-corner: @color-blue;
+
+// Card flipped
+@color-card-0-background: @color-card-2-background;
+@color-card-0-number: @color-card-2-number;
+@color-card-0-logo: @color-card-2-logo;
+@color-card-0-malus: @color-card-2-malus;
+@color-card-0-corner: @color-card-2-corner;
 
 
 .card {
@@ -185,4 +191,18 @@
 
 .card--malus-7 {
     .mixin_applyCard(7);
+}
+
+.card--flipped {
+    .mixin_applyCard(0);
+
+    .card__top,
+    .card__value__text,
+    .card__value__border, {
+        display: none;
+    }
+
+    &::before {
+        top: @card-border;
+    }
 }
