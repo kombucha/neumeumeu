@@ -1,11 +1,11 @@
 import authentication from './authentication';
-import game from './game';
+import games from './games';
 import remote from './remote';
 import gameplay from './gameplay';
 
 export default Object.assign({},
     authentication,
-    game,
+    games,
     remote,
     gameplay
 );

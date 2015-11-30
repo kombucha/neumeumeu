@@ -1,12 +1,11 @@
 import {connect} from 'react-redux';
 import PureRenderComponent from 'client/components/PureRenderComponent';
-import * as actionCreators from 'client/actions';
+import {updateCurrentGame, startRound, joinRoom, leaveRoom} from 'client/actions';
 
-import {sort} from 'common/utils';
+import GameStatus from 'common/constants/game-status';
 import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
-import Hand from 'client/components/Hand';
-import Malus from 'client/components/Malus';
+import PlayerHud from 'client/components/PlayerHUD';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -20,47 +19,54 @@ export default class Game extends PureRenderComponent {
         this.props.leaveRoom(gameId);
     }
 
+    startGame() {
+        this.props.startRound(this.props.game.id);
+    }
+
     renderLoadingGame() {
         return (<div>Chargement du jeu en cours...</div>);
     }
 
+    renderPlayerHUD(player) {
+        return (<PlayerHud player={player} onCardSelected={this.props.playCard}/>);
+    }
+
+    renderStartGame() {
+        return (<button onClick={this.startGame.bind(this)}>Start Game</button>);
+    }
+
     renderGame(game) {
         const {currentPlayer} = this.props,
-            handCards = sort(currentPlayer.hand, (a, b) => a.value - b.value),
+            isOwner = (game.owner === currentPlayer.id),
+            gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
             topPlayers = game.players.filter(player => player.id !== currentPlayer.id);
 
         return (
             <div className="game">
                 <Players players={topPlayers} />
                 <CardsInPlay piles={game.cardsInPlay} />
-                <Hand cards={handCards}
-                      onCardSelected={this.props.playCard}/>
-                <Malus malus={currentPlayer.malus}/>
+                {gameStarted ? this.renderPlayerHUD(currentPlayer) : null}
+                {!gameStarted && isOwner ? this.renderStartGame() : null}
             </div>
         );
     }
 
     render() {
         const {game} = this.props;
-
-        if (!game) {
-            return this.renderLoadingGame();
-        }
-
-        return this.renderGame(game);
+        return game ? this.renderGame(game) : this.renderLoadingGame();
     }
 }
 
 function mapStateToProps(state) {
     return {
-        game: state.currentGame,
-        currentPlayer: state.currentGame ?
-            state.currentGame.players.find(player => player.id === state.authentication.player.id)
+        game: state.gameplay,
+        currentPlayer: state.gameplay ?
+            state.gameplay.players.find(player => player.id === state.authentication.player.id)
             : null
     };
 }
 
 export const GameContainer = connect(
     mapStateToProps,
-    actionCreators
+    {updateCurrentGame, startRound, joinRoom, leaveRoom}
 )(Game);

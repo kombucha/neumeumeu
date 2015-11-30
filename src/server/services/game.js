@@ -1,6 +1,7 @@
 import r from 'server/database';
 import {getPlayer} from 'server/services/player';
-import {startRound} from 'server/services/gameplay';
+import PlayerStatus from 'common/constants/player-status';
+import GameStatus from 'common/constants/game-status';
 
 function simpleGame(game) {
     return {
@@ -44,7 +45,7 @@ function createGamePlayer(player) {
         name: player.name,
         hand: [],
         chosenCard: null,
-        status: 'idle',
+        status: PlayerStatus.IDLE,
         malus: 0
     };
 }
@@ -52,7 +53,7 @@ function createGamePlayer(player) {
 function createGame(playerId, options) {
     // TODO: cleanup game options
     const newGame = Object.assign({}, options, {
-        status:  'waiting_for_players',
+        status: GameStatus.WAITING_FOR_PLAYERS,
         players: {},
         owner: playerId,
         cardsInPlay: [[], [], [], []]
@@ -72,7 +73,7 @@ function joinGame(playerId, gameId, password = '') {
                 .update(game => {
                     return r.branch(
                         // Status OK
-                        game('status').eq('waiting_for_players')
+                        game('status').eq(GameStatus.WAITING_FOR_PLAYERS)
                         // AND password OK
                         .and(game('password').default('').eq(password))
                         // AND not already at max capacity
@@ -94,28 +95,15 @@ function getGame(gameId) {
 }
 
 function getCurrentGames() {
-    return r.table('game').run()
-        .then(games => games.map(simpleGame));
-}
-
-function startGame(playerID, gameId) {
     return r.table('game')
-        .get(gameId)
-        .update(game => {
-            return r.branch(
-                game('owner')('id').eq(playerID),
-                {status: 'started'},
-                {}
-            );
-        })
+        .filter({status: GameStatus.WAITING_FOR_PLAYERS})
         .run()
-        .then(() => startRound());
+        .then(games => games.map(simpleGame));
 }
 
 export default {
     createGame,
     joinGame,
     getGame,
-    getCurrentGames,
-    startGame
+    getCurrentGames
 };

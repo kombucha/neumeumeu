@@ -79,6 +79,14 @@ function joinGame(id, password) {
     });
 }
 
+function startRound(id) {
+    return emitAction({
+        type: 'START_ROUND',
+        token: getAuthToken(),
+        id
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -108,5 +116,7 @@ export default {
     createGame,
     fetchGames,
     getGame,
-    joinGame
+    joinGame,
+
+    startRound
 };

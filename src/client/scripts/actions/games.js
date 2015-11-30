@@ -1,13 +1,6 @@
 import api from 'client/api';
 import {updatePath} from 'redux-simple-router';
 
-function fetchedCurrentGame(game) {
-    return {
-        type: 'FETCH_CURRENT_GAME',
-        game
-    };
-}
-
 function updateGames(games) {
     return {
         type: 'UPDATE_GAMES',
@@ -34,6 +27,7 @@ function joinGame(gameId, password) {
 }
 
 function spectateGame(gameId) {
+    // TODO
     return {
         type: 'SPECTATE_GAME',
         id: gameId
@@ -47,17 +41,9 @@ function fetchGames() {
     };
 }
 
-function updateCurrentGame(gameId) {
-    return dispatch => {
-        return api.getGame(gameId)
-            .then(game => dispatch(fetchedCurrentGame(game)));
-    };
-}
-
 export default {
     createGame,
     fetchGames,
-    updateCurrentGame,
     joinGame,
     spectateGame
 };

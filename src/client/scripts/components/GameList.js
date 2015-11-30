@@ -12,7 +12,7 @@ export const GameList = ({games, joinGame, spectateGame}) => (
                         onJoin={game => joinGame(game.id)}
                         onSpectate={game => spectateGame(game.id)} />
                 </li>
-            )) : <li>Aucune partie en cours</li>
+            )) : <li>Aucune partie ouverte</li>
         }
     </ul>
 );

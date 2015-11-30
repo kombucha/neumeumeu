@@ -1,6 +1,7 @@
 import Server from 'socket.io';
 import log from 'server/log';
 import gameService from 'server/services/game';
+import gameplayService from 'server/services/gameplay';
 import authService from 'server/services/authentication';
 
 const DEFAULT_CONFIG = {
@@ -44,6 +45,10 @@ function handleAction(socket, action) {
         return gameService.getGame(action.id);
     case 'UPDATE_GAMES':
         return gameService.getCurrentGames(action);
+
+    case 'START_ROUND':
+        return authService.getUserFromToken(action.token)
+            .then(player => gameplayService.startRound(player.id, action.id));
     default:
         return Promise.reject('Unhandled action: ' + action.type);
     }

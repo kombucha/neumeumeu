@@ -4,8 +4,8 @@ const NUMBER_OF_CARDS = 104;
 
 function generateCard(cardNumber) {
     return {
-        number: cardNumber,
-        penality: computePenality(cardNumber)
+        value: cardNumber,
+        malus: computePenality(cardNumber)
     };
 }
 
