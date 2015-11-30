@@ -27,11 +27,10 @@ function handleAction(socket, action) {
 
     case 'JOIN_GAME':
         return authService.getUserFromToken(action.token)
-            .then(player => {
-                return gameService.joinGame(player.id, action.id, action.password);
-            });
+            .then(player => gameService.joinGame(player.id, action.id, action.password));
     case 'CREATE_GAME':
-        return gameService.createGame(action.game)
+        return authService.getUserFromToken(action.token)
+            .then(player => gameService.createGame(player.id, action.game))
             .then(game => {
                 gameService.getCurrentGames()
                     .then(games => broadCastToRoom(socket.server, 'lobby', {
@@ -41,6 +40,8 @@ function handleAction(socket, action) {
 
                 return game;
             });
+    case 'GET_GAME':
+        return gameService.getGame(action.id);
     case 'UPDATE_GAMES':
         return gameService.getCurrentGames(action);
     default:

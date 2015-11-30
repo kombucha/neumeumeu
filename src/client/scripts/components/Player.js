@@ -7,7 +7,7 @@ export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'})
         <div className="player">
             <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
             <div className="player__username">
-                {player.username}
+                {player.name}
             </div>
             <div className="player__card">
             {

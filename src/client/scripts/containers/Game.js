@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import * as actionCreators from 'client/actions';
 
+import {sort} from 'common/utils';
 import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
 import Hand from 'client/components/Hand';
@@ -11,7 +12,7 @@ export default class Game extends PureRenderComponent {
     componentWillMount() {
         const gameId = this.props.params.gameId;
         this.props.joinRoom(gameId);
-        this.props.fetchCurrentGame(gameId);
+        this.props.updateCurrentGame(gameId);
     }
 
     componentWillUnmount() {
@@ -24,13 +25,17 @@ export default class Game extends PureRenderComponent {
     }
 
     renderGame(game) {
+        const {currentPlayer} = this.props,
+            handCards = sort(currentPlayer.hand, (a, b) => a.value - b.value),
+            topPlayers = game.players.filter(player => player.id !== currentPlayer.id);
+
         return (
             <div className="game">
-                <Players players={game.players} />
+                <Players players={topPlayers} />
                 <CardsInPlay piles={game.cardsInPlay} />
-                <Hand cards={game.currentHand}
+                <Hand cards={handCards}
                       onCardSelected={this.props.playCard}/>
-                <Malus malus="16"/>
+                <Malus malus={currentPlayer.malus}/>
             </div>
         );
     }
@@ -48,7 +53,10 @@ export default class Game extends PureRenderComponent {
 
 function mapStateToProps(state) {
     return {
-        game: state.currentGame
+        game: state.currentGame,
+        currentPlayer: state.currentGame ?
+            state.currentGame.players.find(player => player.id === state.authentication.player.id)
+            : null
     };
 }
 

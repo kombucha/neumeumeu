@@ -47,9 +47,9 @@ function fetchGames() {
     };
 }
 
-function fetchCurrentGame(gameId) {
+function updateCurrentGame(gameId) {
     return dispatch => {
-        return api.fetchCurrentGame(gameId)
+        return api.getGame(gameId)
             .then(game => dispatch(fetchedCurrentGame(game)));
     };
 }
@@ -57,7 +57,7 @@ function fetchCurrentGame(gameId) {
 export default {
     createGame,
     fetchGames,
-    fetchCurrentGame,
+    updateCurrentGame,
     joinGame,
     spectateGame
 };

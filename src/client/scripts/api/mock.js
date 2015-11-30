@@ -26,7 +26,7 @@ function fetchGames() {
     ]);
 }
 
-function fetchCurrentGame(gameId) {
+function getGame(gameId) {
     return Promise.resolve({
         id: gameId,
         name: 'IWN',
@@ -79,5 +79,5 @@ export default {
     init,
     createGame,
     fetchGames,
-    fetchCurrentGame
+    getGame
 };

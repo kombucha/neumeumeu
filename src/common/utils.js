@@ -2,6 +2,11 @@ function range(size) {
     return Array.apply(null, Array(size)).map((_, i) => i);
 }
 
+// Returns a sorted COPY of an array
+function sort(arr, compareFn) {
+    return arr.concat().sort(compareFn);
+}
+
 // http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
 function shuffle(arr) {
     let arrCopy = arr.slice(),
@@ -48,6 +53,7 @@ function promisify(fn) {
 
 export default {
     range,
+    sort,
     shuffle,
     chunk,
     promisify

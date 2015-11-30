@@ -49,52 +49,10 @@ function register(newUser) {
     });
 }
 
-function fetchCurrentGame(gameId) {
-    return Promise.resolve({
-        id: gameId,
-        name: 'IWN',
-        cardsInPlay: [
-            [
-                // {value: 60, malus: 3}
-            ],
-            [
-                // {value: 19, malus: 1},
-                // {value: 20, malus: 3},
-                // {value: 21, malus: 1}
-            ],
-            [
-                // {value: 30, malus: 2},
-                // {value: 38, malus: 2}
-            ],
-            [
-                {value: 40, malus: 2},
-                {value: 41, malus: 1},
-                {value: 42, malus: 1},
-                {value: 43, malus: 1},
-                {value: 44, malus: 5}
-            ]
-        ],
-        currentHand: [
-            {value: 55, malus: 7},
-            {value: 10, malus: 3},
-            {value: 104, malus: 1},
-            {value: 22, malus: 5},
-            {value: 78, malus: 1},
-            {value: 1, malus: 1},
-            {value: 24, malus: 1}
-        ],
-        players: [
-            {username: 'Gabriela', card: {}},
-            {username: 'Azadeh', card: {}},
-            {username: 'Vincent', card: {}},
-            {username: 'Hugo', card: {}},
-            {username: 'Samuel', card: {}},
-            {username: 'Julian'},
-            {username: 'Arnaud', card: {}}
-        ],
-        maxPlayers: 10,
-        status: 'playing',
-        isProtected: false
+function getGame(id) {
+    return emitAction({
+        type: 'GET_GAME',
+        id
     });
 }
 
@@ -149,6 +107,6 @@ export default {
 
     createGame,
     fetchGames,
-    fetchCurrentGame,
+    getGame,
     joinGame
 };

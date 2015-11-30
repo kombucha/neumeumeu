@@ -12,7 +12,7 @@ export class LoginStatus extends PureRenderComponent {
     renderLoggedIn() {
         return (
             <span>
-                <span>{this.props.user.name}</span>
+                <span>{this.props.player.name}</span>
                 <a href="#" onClick={() => this.handleLogout()}>Log out</a>
             </span>
         );
@@ -36,7 +36,7 @@ export class LoginStatus extends PureRenderComponent {
 function mapStateToProps(state) {
     const auth = state.authentication;
     return {
-        user: auth.user,
+        player: auth.player,
         token: auth.token
     };
 }
