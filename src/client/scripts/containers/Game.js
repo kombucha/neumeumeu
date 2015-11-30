@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import PureRenderComponent from 'client/components/PureRenderComponent';
-import {updateCurrentGame, startRound, joinRoom, leaveRoom} from 'client/actions';
+import {updateCurrentGame, startRound, joinRoom, leaveRoom, playCard} from 'client/actions';
 
 import GameStatus from 'common/constants/game-status';
 import Players from 'client/components/Players';
@@ -68,5 +68,5 @@ function mapStateToProps(state) {
 
 export const GameContainer = connect(
     mapStateToProps,
-    {updateCurrentGame, startRound, joinRoom, leaveRoom}
+    {updateCurrentGame, startRound, joinRoom, leaveRoom, playCard}
 )(Game);

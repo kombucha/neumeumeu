@@ -1,4 +1,4 @@
-export default ({game, onJoin, onSpectate}) => {
+export default ({game, canJoin, onJoin, onSpectate}) => {
     return (
         <span className="game-item">
             <span className="game-item__name">{game.name}</span>
@@ -6,6 +6,7 @@ export default ({game, onJoin, onSpectate}) => {
                 Players {game.players.length} / {game.maxPlayers}
             </span>
             <button className="game-item__action"
+                disabled={!canJoin}
                 onClick={() => onJoin(game)}>Join</button>
             <button className="game-item__action"
                 onClick={() => onSpectate(game)}>Spectate</button>

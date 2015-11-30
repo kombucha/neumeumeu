@@ -96,7 +96,7 @@ function getGame(gameId) {
 
 function getCurrentGames() {
     return r.table('game')
-        .filter({status: GameStatus.WAITING_FOR_PLAYERS})
+        .filter(r.row('status').ne(GameStatus.ENDED))
         .run()
         .then(games => games.map(simpleGame));
 }
