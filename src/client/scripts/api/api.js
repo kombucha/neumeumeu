@@ -55,16 +55,16 @@ function fetchCurrentGame(gameId) {
         name: 'IWN',
         cardsInPlay: [
             [
-                {value: 60, malus: 3}
+                // {value: 60, malus: 3}
             ],
             [
-                {value: 19, malus: 1},
-                {value: 20, malus: 3},
-                {value: 21, malus: 1}
+                // {value: 19, malus: 1},
+                // {value: 20, malus: 3},
+                // {value: 21, malus: 1}
             ],
             [
-                {value: 30, malus: 2},
-                {value: 38, malus: 2}
+                // {value: 30, malus: 2},
+                // {value: 38, malus: 2}
             ],
             [
                 {value: 40, malus: 2},

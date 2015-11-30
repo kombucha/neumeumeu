@@ -6,7 +6,9 @@ export default ({piles}) => (
             {
                 piles.map((pile, index) => (
                     <li className="cards-in-play__pile" key={index}>
-                        <CardPile className="card-pile--in-play" cards={pile} />
+                        <div className="cards-in-play__placeholder">
+                            <CardPile className="card-pile--in-play" cards={pile} />
+                        </div>
                     </li>
                 ))
             }
