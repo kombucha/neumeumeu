@@ -29,13 +29,6 @@ function handleAction(socket, action) {
         return authService.getUserFromToken(action.token)
             .then(player => {
                 return gameService.joinGame(player.id, action.id, action.password);
-            })
-            .then(something => {
-                log.info('JOIN DOIE', something);
-                return something;
-            }, somethingElse => {
-                log.error('JOIN DONT', somethingElse);
-                throw somethingElse;
             });
     case 'CREATE_GAME':
         return gameService.createGame(action.game)
