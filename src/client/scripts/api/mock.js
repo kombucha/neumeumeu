@@ -1,5 +1,14 @@
 
+const noOpPromise = () => Promise.resolve({});
+
 function init() {}
+
+function login() {
+    return Promise.resolve({
+        user: {id: 0, name: 'kombu'},
+        token: 'super-token'
+    });
+}
 
 function createGame() {
     return Promise.resolve({});
@@ -35,9 +44,9 @@ function getGame(gameId) {
                 {value: 60, malus: 3}
             ],
             [
-                {value: 19, malus: 1},
-                {value: 20, malus: 3},
-                {value: 21, malus: 1}
+                // {value: 19, malus: 1},
+                // {value: 20, malus: 3},
+                // {value: 21, malus: 1}
             ],
             [
                 {value: 30, malus: 2},
@@ -61,23 +70,34 @@ function getGame(gameId) {
             {value: 24, malus: 1}
         ],
         players: [
-            {username: 'Gabriela'},
-            {username: 'Azadeh'},
-            {username: 'Vincent'},
-            {username: 'Hugo'},
-            {username: 'Samuel'},
-            {username: 'Julian'},
-            {username: 'Arnaud'}
+            {id:7, username: 'Gabriela', hand: []},
+            {id:1, username: 'Azadeh', hand: []},
+            {id:0, username: 'Vincent', hand: []},
+            {id:3, username: 'Hugo', hand: []},
+            {id:4, username: 'Samuel', hand: []},
+            {id:5, username: 'Julian', hand: []},
+            {id:6, username: 'Arnaud', hand: []}
         ],
         maxPlayers: 10,
-        status: 'playing',
+        status: 'waiting_for_players',
         isProtected: false
     });
 }
 
 export default {
     init,
+
+    login,
+    logout: noOpPromise,
+    register: noOpPromise,
+
+    joinRoom: noOpPromise,
+    leaveRoom: noOpPromise,
+
     createGame,
     fetchGames,
-    getGame
+    getGame,
+    joinGame: noOpPromise,
+
+    startRound: noOpPromise
 };
