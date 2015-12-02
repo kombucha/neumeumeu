@@ -1,4 +1,4 @@
-export default ({game, canJoin, onJoin, onSpectate}) => {
+export default ({game, canJoin, onJoin}) => {
     return (
         <button className="game-item"
                 disabled={!canJoin}
