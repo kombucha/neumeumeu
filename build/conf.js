@@ -2,7 +2,7 @@ var args = require('yargs').argv,
     path = require('path'),
     gUtil = require('gulp-util');
 
-var env = args.env || 'development',
+var env = process.env.NODE_ENV || args.env || 'development',
     pkg = require('../package.json'),
     isDevMode = args._.indexOf('dev') >= 0,
     paths = {
