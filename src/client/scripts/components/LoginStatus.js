@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import {login,logout} from 'client/actions';
+import StrokedText from 'client/components/strokedText';
 
 export class LoginStatus extends PureRenderComponent {
 
@@ -11,15 +12,21 @@ export class LoginStatus extends PureRenderComponent {
 
     renderLoggedIn() {
         return (
-            <span>
-                <span>{this.props.player.name}</span>
-                <a href="#" onClick={() => this.handleLogout()}>Log out</a>
-            </span>
+            <div>
+                <p>{this.props.player.name}</p>
+                <button type="button" className="btn" onClick={() => this.handleLogout()}>
+                    <StrokedText text="Log out"/>
+                </button>
+            </div>
         );
     }
 
     renderLoggedOut() {
-        return (<Link to="/register">Connect</Link>);
+        return (
+            <Link className="btn" to="/register">
+                <StrokedText text="Connect"/>
+            </Link>
+        );
     }
 
     render() {

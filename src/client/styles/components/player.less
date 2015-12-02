@@ -25,6 +25,8 @@
 }
 
 .player__card {
+    position: relative;
+
     display: inline-block;
 
     width: @card-width/2;
@@ -34,5 +36,9 @@
 }
 
 .card--small {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: top left;
     transform: scale(0.52) translate(-50%, -50%);
 }

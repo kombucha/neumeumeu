@@ -1,0 +1,21 @@
+.stroked-text {
+    line-height: 1;
+    position: relative;
+    word-spacing: 1rem;
+}
+
+.stroked-text__fill {
+    position: relative;
+}
+
+.stroked-text__stroke {
+    -webkit-text-stroke-width: 1rem;
+    -webkit-text-stroke-color: @color-white;
+    text-shadow: -5px -5px 18px rgba(0, 0, 0, .7);
+
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

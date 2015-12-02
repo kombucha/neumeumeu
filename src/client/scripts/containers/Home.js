@@ -4,6 +4,7 @@ import PureRenderComponent from 'client/components/PureRenderComponent';
 import GameList from 'client/components/GameList';
 import {LoginStatusContainer} from 'client/components/LoginStatus';
 import {register, fetchGames, joinRoom, leaveRoom} from 'client/actions';
+import StrokedText from 'client/components/strokedText';
 
 export default class Home extends PureRenderComponent {
 
@@ -19,9 +20,15 @@ export default class Home extends PureRenderComponent {
     render() {
         return (
             <div className="home">
-                <LoginStatusContainer/>
-                <Link to="/games/create">Create Game</Link>
-                <GameList games={this.props.games}/>
+                <div className="center-col">
+                    <div className="center-col__inner">
+                        <LoginStatusContainer/>
+                        <Link className="btn" to="/games/create">
+                            <StrokedText text="Create Game"/>
+                        </Link>
+                        <GameList games={this.props.games}/>
+                    </div>
+                </div>
             </div>
         );
     }

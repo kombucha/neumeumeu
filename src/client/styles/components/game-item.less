@@ -1,0 +1,46 @@
+@game-item-padding: .6rem;
+@game-item-radius: 2rem;
+
+.game-item {
+    position: relative;
+    white-space: nowrap;
+    background: white;
+    width: 100%;
+    border-radius: @game-item-radius;
+    text-align: left;
+    padding: @game-item-padding;
+    box-shadow: @shadow-l2;
+}
+
+.game-item__name {
+    transition: color .2s ease-out;
+    display: block;
+    font-size: 3.6rem;
+    color: @color-purple;
+    border: @game-item-padding solid @color-cyan;
+    border-radius: @game-item-radius;
+    padding: @game-item-padding (3 * @game-item-padding + 5rem) @game-item-padding @game-item-padding;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.game-item__players {
+    letter-spacing: -.1rem;
+    position: absolute;
+    font-size: 2.4rem;
+    color: @color-blue;
+    right: 5 * @game-item-padding;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.game-item:hover,
+.game-item:focus {
+
+    .game-item__name {
+        transition: color .2s ease-out, border-color .2s ease-out;
+        color: @color-dark-blue;
+        border-color: @color-blue;
+    }
+
+}

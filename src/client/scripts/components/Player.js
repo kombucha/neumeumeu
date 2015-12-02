@@ -9,7 +9,7 @@ export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'})
             <div className="player__username">
                 {player.name}
             </div>
-            <div className="player__card">
+            <div className="player__card"><Card className="card--small" card={{value:1,malus:2}}/>
             {
                 player.card ? (
                     <Card className="card--small" card={player.card}/>

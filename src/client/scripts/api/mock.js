@@ -18,7 +18,7 @@ function fetchGames() {
     return Promise.resolve([
         {
             id: 0,
-            name: 'IWN',
+            name: 'El chico',
             players: [],
             maxPlayers: 10,
             status: 'waiting_for_players',
@@ -26,9 +26,57 @@ function fetchGames() {
         },
         {
             id: 1,
-            name: 'VIP',
+            name: 'Angels Room',
             players: [],
             maxPlayers: 4,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 2,
+            name: 'Bigmac',
+            players: [],
+            maxPlayers: 6,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 3,
+            name: 'Super room',
+            players: [],
+            maxPlayers: 8,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 4,
+            name: 'Steevie Wonder',
+            players: [],
+            maxPlayers: 8,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 5,
+            name: 'Pinocchio',
+            players: [],
+            maxPlayers: 10,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 6,
+            name: 'My room',
+            players: [],
+            maxPlayers: 10,
+            status: 'waiting_for_players',
+            isProtected: true
+        },
+        {
+            id: 7,
+            name: 'A B C',
+            players: [],
+            maxPlayers: 5,
             status: 'waiting_for_players',
             isProtected: true
         }

@@ -1,5 +1,31 @@
 .app {
     background: @color-bg;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+}
+
+.center-col {
+    color: @color-yellow;
+    position: relative;
+    width: @s-center-col;
+    margin: 0 auto;
+    min-height: 100vh;
+    text-align: center;
+    padding: 24px;
+    box-sizing: border-box;
+
+    &::before {
+        content: "";
+        background-color: @color-purple;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: @s-center-col;
+        margin-left: -@s-center-col/2;
+        transform: skewX(3deg);
+    }
+}
+
+.center-col__inner {
+    position: relative;
 }
