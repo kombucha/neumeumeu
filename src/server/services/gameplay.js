@@ -3,7 +3,7 @@ import {generateGameCards} from 'common/deck';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
 
-export function startRound(playerId, gameId) {
+function startRound(playerId, gameId) {
     const gameCards = generateGameCards();
     // TODO: Check game status before updating
     // AND that there's at least two players
@@ -13,22 +13,16 @@ export function startRound(playerId, gameId) {
         .update({
             status: GameStatus.WAITING_FOR_CARDS,
             cardsInPlay: gameCards.cardsInPlay,
-            // FIXME: Seems convoluted to me, search if there's a better way...
             players: r.row('players')
-                .values()
-                .map(gameCards.hands, (player, hand) => [
-                    player('id'),
-                    player.merge({
-                        hand,
-                        status: PlayerStatus.CHOOSING_CARD
-                    })
-                ])
-                .coerceTo('object')
+                .map(gameCards.hands, (player, hand) => player.merge({
+                    hand,
+                    status: PlayerStatus.CHOOSING_CARD
+                }))
         })
         .run();
 }
 
-export function playCard(playerId, gameId, cardId) {
+function playCard(playerId, gameId, cardId) {
     return r.table('game')
         .get(gameId)
         .update(game => {
@@ -44,13 +38,13 @@ export function playCard(playerId, gameId, cardId) {
         .run();
 }
 
-export function choosePile(playerId, gameId, columnIdx) {
+function choosePile(playerId, gameId, columnIdx) {
     // TODO
     return false;
 }
 
 // All players have played... time to resolve the game (which card goes where)
-export function resolveTurn(gameId) {
+function resolveTurn(gameId) {
     // TODO:
     // - Resolve where cards should go
     // - Use player choice first, then automatic resolution
@@ -60,6 +54,27 @@ export function resolveTurn(gameId) {
     return false;
 }
 
+function onGameplayUpdate(id, cb) {
+    return r.table('game')
+        .get(id)
+        // Disable updates when games end
+        .filter(r.row('status').ne(GameStatus.ENDED))
+        .changes()
+        .run()
+        .then(cursor => {
+            cursor.on(data => {
+                if (data.new === null) {
+                    data.old.status = GameStatus.ENDED;
+                    cb(data.old);
+                    return cursor.close();
+                }
+
+                cb(data.new);
+            });
+        });
+}
+
 export default {
-    startRound
+    startRound,
+    onGameplayUpdate
 };

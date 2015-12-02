@@ -1,5 +1,5 @@
-import startSocket from 'server/socket';
+import startServer from 'server/socket';
 import log from 'server/log';
 
-startSocket();
+startServer();
 log.info('Server started');

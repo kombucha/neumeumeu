@@ -31,16 +31,7 @@ function handleAction(socket, action) {
             .then(player => gameService.joinGame(player.id, action.id, action.password));
     case 'CREATE_GAME':
         return authService.getUserFromToken(action.token)
-            .then(player => gameService.createGame(player.id, action.game))
-            .then(game => {
-                gameService.getCurrentGames()
-                    .then(games => broadCastToRoom(socket.server, 'lobby', {
-                        type: 'UPDATE_GAMES',
-                        games
-                    }));
-
-                return game;
-            });
+            .then(player => gameService.createGame(player.id, action.game));
     case 'GET_GAME':
         return gameService.getGame(action.id);
     case 'UPDATE_GAMES':
@@ -65,13 +56,21 @@ function leaveRoom(socket, roomId) {
 }
 
 function broadCastToRoom(io, roomId, action) {
-    io.sockets.in(roomId).emit('action', action);
+    io.sockets.to(roomId).emit('action', action);
 }
 
-export default function startSocket(config = DEFAULT_CONFIG) {
+export default function startServer(config = DEFAULT_CONFIG) {
     const io = new Server().attach(config.port);
 
     io.on('connection', socket => {
+        // Broadcast lobby updates :)
+        gameService.onLobbyUpdate(games => {
+            broadCastToRoom(io, 'lobby', {
+                type: 'UPDATE_GAMES',
+                games
+            });
+        });
+
         socket.on('action', (action, sendBack) => {
             sendBack = sendBack || (() => null);
 
