@@ -111,7 +111,7 @@ gulp.task('watch', function() {
     gulp.watch(buildConf.files.clientJs, ['lint']);
     gulp.watch(buildConf.files.clientStyles, ['styles']);
     gulp.watch([
-        path.join(buildConf.paths.srcBase, 'assets', '**'),
+        path.join(buildConf.paths.clientAssetsBase, '**'),
         buildConf.paths.clientIndex
     ], ['assets']);
 });
