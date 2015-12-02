@@ -25,7 +25,7 @@ export default class LoginForm extends FormComponent {
                     required
                     onChange={this.onChange('password')}/>
 
-                <button className="btn" type="submit">
+                <button className="button" type="submit">
                     <StrokedText text="Login"/>
                 </button>
             </form>

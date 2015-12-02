@@ -65,10 +65,10 @@ export default class GameCreationForm extends FormComponent {
                 </label>
 
                 <div className="form__actions">
-                    <Link className="btn" to="/">
+                    <Link className="button" to="/">
                         <StrokedText text="Cancel"/>
                     </Link>
-                    <button className="btn" type="submit">
+                    <button className="button" type="submit">
                         <StrokedText text="Create"/>
                     </button>
                 </div>

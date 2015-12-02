@@ -14,7 +14,7 @@ export class LoginStatus extends PureRenderComponent {
         return (
             <div>
                 <p>{this.props.player.name}</p>
-                <button type="button" className="btn" onClick={() => this.handleLogout()}>
+                <button type="button" className="button" onClick={() => this.handleLogout()}>
                     <StrokedText text="Log out"/>
                 </button>
             </div>
@@ -23,7 +23,7 @@ export class LoginStatus extends PureRenderComponent {
 
     renderLoggedOut() {
         return (
-            <Link className="btn" to="/register">
+            <Link className="button" to="/register">
                 <StrokedText text="Connect"/>
             </Link>
         );

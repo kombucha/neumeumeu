@@ -48,7 +48,7 @@ export default class RegisterForm extends FormComponent {
                     required
                     onChange={this.onChange('confirmPassword')}/>
 
-                <button className="btn" type="submit">
+                <button className="button" type="submit">
                     <StrokedText text="Create account"/>
                 </button>
             </form>

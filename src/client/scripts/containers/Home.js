@@ -23,7 +23,7 @@ export default class Home extends PureRenderComponent {
                 <div className="center-col">
                     <div className="center-col__inner">
                         <LoginStatusContainer/>
-                        <Link className="btn" to="/games/create">
+                        <Link className="button" to="/games/create">
                             <StrokedText text="Create Game"/>
                         </Link>
                         <GameList games={this.props.games}/>
