@@ -4,7 +4,7 @@ import PureRenderComponent from 'client/components/PureRenderComponent';
 import GameList from 'client/components/GameList';
 import {LoginStatusContainer} from 'client/components/LoginStatus';
 import {register, fetchGames, joinRoom, leaveRoom} from 'client/actions';
-import StrokedText from 'client/components/strokedText';
+import StrokedText from 'client/components/StrokedText';
 
 export default class Home extends PureRenderComponent {
 

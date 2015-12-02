@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import {login,logout} from 'client/actions';
-import StrokedText from 'client/components/strokedText';
+import StrokedText from 'client/components/StrokedText';
 
 export class LoginStatus extends PureRenderComponent {
 

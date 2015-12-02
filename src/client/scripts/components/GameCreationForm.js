@@ -1,6 +1,6 @@
 import {Link} from 'react-router';
 import FormComponent from 'client/components/FormComponent';
-import StrokedText from 'client/components/strokedText';
+import StrokedText from 'client/components/StrokedText';
 
 export default class GameCreationForm extends FormComponent {
     constructor(props) {

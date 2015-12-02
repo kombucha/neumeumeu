@@ -1,6 +1,6 @@
 import FormComponent from 'client/components/FormComponent';
 import {PropTypes} from 'react';
-import StrokedText from 'client/components/strokedText';
+import StrokedText from 'client/components/StrokedText';
 
 export default class LoginForm extends FormComponent {
 
