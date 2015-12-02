@@ -33,6 +33,7 @@ function startServer() {
                 history()
             ]
         },
+        ghostMode: false,
         online: false,
         notify: false
     });
