@@ -1,5 +1,6 @@
 import {Link} from 'react-router';
 import FormComponent from 'client/components/FormComponent';
+import StrokedText from 'client/components/strokedText';
 
 export default class GameCreationForm extends FormComponent {
     constructor(props) {
@@ -28,35 +29,48 @@ export default class GameCreationForm extends FormComponent {
         const {name, isProtected, password, maxPlayers} = this.state;
 
         return (
-            <form className="game-creation-form"
-                  onSubmit={this.handleSubmit.bind(this)}>
-                <div className="game-creation-form__group">
-                    <label htmlFor="game-name">Name:</label>
-                    <input id="game-name" type="text" value={name} onChange={this.onChange('name')} required/>
-                </div>
+            <form onSubmit={this.handleSubmit.bind(this)}>
+                <p className="form__text">New game</p>
+                <input type="text"
+                    placeholder="Name"
+                    value={name}
+                    onChange={this.onChange('name')} required/>
 
-                <div className="game-creation-form__group">
-                    <label htmlFor="game-protected">Protected ?:</label>
-                    <input id="game-protected" type="checkbox" value={isProtected} onChange={this.onCheckboxChange('isProtected')}/>
-                    <input id="game-password"
-                           disabled={!isProtected}
-                           type="password"
-                           value={password}
-                           onChange={this.onChange('password')}/>
-                </div>
+                <label className="form__label">
+                    <span className="form__text">Protected ?</span>
+                    <span className="form__checkbox">
+                        <input type="checkbox"
+                            value={isProtected}
+                            onChange={this.onCheckboxChange('isProtected')}/>
+                        <span className="form__checkbox__placeholder"></span>
+                    </span>
+                </label>
 
-                <div className="game-creation-form__group">
-                    <label>Max Players:</label>
-                    <input type="range"
-                           min="2" max="10" step="1"
-                           value={maxPlayers}
-                           onChange={this.onChange('maxPlayers')}/>
-                    <span>{maxPlayers}</span>
-                </div>
+                <input disabled={!isProtected}
+                       type="password"
+                       value={password}
+                       onChange={this.onChange('password')}/>
 
-                <div className="game-creation-form__group game-creation-form__group--footer">
-                    <button type="submit">Create</button>
-                    <Link to="/">Cancel</Link>
+                <label className="form__label">
+                    <span className="form__text">Max Players</span>
+                    <div className="form__range">
+                        <span className="form__range__value">{maxPlayers}</span>
+                        <input type="range"
+                               min="2"
+                               max="10"
+                               step="1"
+                               value={maxPlayers}
+                               onChange={this.onChange('maxPlayers')}/>
+                    </div>
+                </label>
+
+                <div className="form__actions">
+                    <Link className="btn" to="/">
+                        <StrokedText text="Cancel"/>
+                    </Link>
+                    <button className="btn" type="submit">
+                        <StrokedText text="Create"/>
+                    </button>
                 </div>
             </form>
         );

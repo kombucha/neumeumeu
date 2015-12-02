@@ -1,5 +1,6 @@
 import FormComponent from 'client/components/FormComponent';
 import {PropTypes} from 'react';
+import StrokedText from 'client/components/strokedText';
 
 export default class LoginForm extends FormComponent {
 
@@ -12,19 +13,21 @@ export default class LoginForm extends FormComponent {
     render() {
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
-                <div className="register-form__group">
-                    <label htmlFor="username">Username:</label>
-                    <input id="username" type="text"
-                        required
-                        onChange={this.onChange('username')}/>
-                </div>
+                <input id="username"
+                    type="text"
+                    placeholder="Username"
+                    required
+                    onChange={this.onChange('username')}/>
 
-                <div className="register-form__group">
-                    <label htmlFor="password">Password:</label>
-                    <input id="password" type="password" required onChange={this.onChange('password')}/>
-                </div>
+                <input id="password"
+                    placeholder="Password"
+                    type="password"
+                    required
+                    onChange={this.onChange('password')}/>
 
-                <button type="submit">Login</button>
+                <button className="btn" type="submit">
+                    <StrokedText text="Login"/>
+                </button>
             </form>
         );
     }

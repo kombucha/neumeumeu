@@ -1,5 +1,6 @@
 import FormComponent from 'client/components/FormComponent';
 import {PropTypes} from 'react';
+import StrokedText from 'client/components/strokedText';
 
 export default class RegisterForm extends FormComponent {
 
@@ -22,32 +23,34 @@ export default class RegisterForm extends FormComponent {
         const {email} = this.state;
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
-                <div className="register-form__group">
-                    <label htmlFor="email">Email:</label>
-                    <input id="email" type="email"
-                        value={email}
-                        required
-                        onChange={this.onChange('email')}/>
-                </div>
+                <input id="email"
+                    placeholder="Email"
+                    type="email"
+                    value={email}
+                    required
+                    onChange={this.onChange('email')}/>
 
-                <div className="register-form__group">
-                    <label htmlFor="username">Username:</label>
-                    <input id="username" type="text"
-                        required
-                        onChange={this.onChange('username')}/>
-                </div>
+                <input id="username"
+                    type="text"
+                    placeholder="Username"
+                    required
+                    onChange={this.onChange('username')}/>
 
-                <div className="register-form__group">
-                    <label htmlFor="password">Password:</label>
-                    <input id="password" type="password" required onChange={this.onChange('password')}/>
-                </div>
+                <input id="password"
+                    type="password"
+                    placeholder="Password"
+                    required
+                    onChange={this.onChange('password')}/>
 
-                <div className="register-form__group">
-                    <label htmlFor="confirmPassword">Confirm password:</label>
-                    <input id="confirmPassword" type="password" required onChange={this.onChange('confirmPassword')}/>
-                </div>
+                <input id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm password"
+                    required
+                    onChange={this.onChange('confirmPassword')}/>
 
-                <button type="submit">Create account</button>
+                <button className="btn" type="submit">
+                    <StrokedText text="Create account"/>
+                </button>
             </form>
         );
     }

@@ -11,8 +11,12 @@ export default class GameCreation extends PureRenderComponent {
     }
     render() {
         return (
-            <div className="game-creation">
-                <GameCreationForm onCreateGame={this.onCreateGame.bind(this)}/>
+            <div className="center-col">
+                <div className="center-col__inner">
+                    <div className="game-creation">
+                        <GameCreationForm onCreateGame={this.onCreateGame.bind(this)}/>
+                    </div>
+                </div>
             </div>
         );
     }

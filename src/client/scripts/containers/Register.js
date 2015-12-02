@@ -8,9 +8,13 @@ export default class Register extends PureRenderComponent {
     render() {
         return (
             <div>
-                <LoginForm handleLogin={this.props.login}/>
-                <div>Don't have an account ?</div>
-                <RegisterForm handleRegistration={this.props.register}/>
+                <div className="center-col">
+                    <div className="center-col__inner">
+                        <LoginForm handleLogin={this.props.login}/>
+                        <p className="form__text">Don't have an account ?</p>
+                        <RegisterForm handleRegistration={this.props.register}/>
+                    </div>
+                </div>
             </div>
         );
     }
