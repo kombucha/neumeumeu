@@ -4,7 +4,7 @@ import {promisify} from 'common/utils';
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
-function getUserFromToken(token) {
+function getPlayerFromToken(token) {
     if (!token) {
         return Promise.resolve(null);
     }
@@ -22,10 +22,10 @@ function getUserFromToken(token) {
         });
 }
 
-function simpleUser(user) {
+function simplePlayer(player) {
     return {
-        id: user.id,
-        name: user.name
+        id: player.id,
+        name: player.name
     };
 }
 
@@ -56,24 +56,24 @@ function login(username, password) {
             }
 
             return Promise.all([
-                simpleUser(player),
+                simplePlayer(player),
                 createTokenForPlayer(player.id)
             ]);
         })
-        .then(([user, token]) => {
+        .then(([player, token]) => {
             return {
-                user,
+                player,
                 token
             };
         });
 }
 
-function register(newUser) {
-    return isNameAvailable(newUser.username)
+function register(newPlayer) {
+    return isNameAvailable(newPlayer.username)
         .then((available) => {
             if (!available) {
                 return Promise.reject({
-                    errors:[`Username ${newUser.username} is already taken !`]
+                    errors:[`Username ${newPlayer.username} is already taken !`]
                 });
             }
 
@@ -81,14 +81,14 @@ function register(newUser) {
 
             return Promise.all([
                 Promise.resolve(salt),
-                hashAndSaltPassword(newUser.password, salt)
+                hashAndSaltPassword(newPlayer.password, salt)
             ]);
         })
         .then(([salt, hashedPassword]) => {
             return r.table('player')
                 .insert({
-                    name: newUser.username,
-                    email: newUser.email,
+                    name: newPlayer.username,
+                    email: newPlayer.email,
                     password: hashedPassword,
                     salt,
                     tokens: []
@@ -96,12 +96,29 @@ function register(newUser) {
                 .run();
         })
         // Not really efficient...
-        .then(() => login(newUser.username, newUser.password));
+        .then(() => login(newPlayer.username, newPlayer.password));
 }
 
 function logout(token) {
     return r.table('player')
         .update({tokens: r.row('tokens').difference([token])})
+        .run();
+}
+
+function associateWithSocket(playerId, socketId) {
+    return r.table('player')
+        .get(playerId)
+        .update({
+            sockets: r.row('sockets').default([]).setInsert(socketId)
+        })
+        .run();
+}
+
+function dissociateFromSocket(socketId) {
+    return r.table('player')
+        .update({
+            sockets: r.row('sockets').default([]).setDifference([socketId])
+        })
         .run();
 }
 
@@ -143,8 +160,10 @@ function hashAndSaltPassword(password, salt) {
 }
 
 export default {
-    getUserFromToken,
+    getPlayerFromToken,
     register,
     login,
-    logout
+    logout,
+    associateWithSocket,
+    dissociateFromSocket
 };

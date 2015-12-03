@@ -147,5 +147,5 @@ export default {
     getGame,
     joinGame: noOpPromise,
 
-    startRound: noOpPromise
+    startGame: noOpPromise
 };

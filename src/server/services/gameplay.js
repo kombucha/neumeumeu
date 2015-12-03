@@ -2,6 +2,7 @@ import r from 'server/database';
 import {generateGameCards} from 'common/deck';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
+import log from 'server/log';
 
 function startRound(playerId, gameId) {
     const gameCards = generateGameCards();
@@ -57,19 +58,17 @@ function resolveTurn(gameId) {
 function onGameplayUpdate(id, cb) {
     return r.table('game')
         .get(id)
-        // Disable updates when games end
-        .filter(r.row('status').ne(GameStatus.ENDED))
         .changes()
         .run()
         .then(cursor => {
-            cursor.on(data => {
-                if (data.new === null) {
-                    data.old.status = GameStatus.ENDED;
-                    cb(data.old);
+            cursor.on('data', data => {
+                if (data.new_val && data.new_val.status === GameStatus.ENDED) {
+                    log.info("ENDING REALTIME UPDATES FOR GAME ", id);
+                    cb(data.new_val);
                     return cursor.close();
                 }
 
-                cb(data.new);
+                cb(data.new_val);
             });
         });
 }

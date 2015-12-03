@@ -27,7 +27,10 @@ function createGame(playerId, options) {
         owner: playerId,
         cardsInPlay: [[], [], [], []]
     });
-    return r.table('game').insert(newGame).run();
+    return r.table('game')
+        .insert(newGame)
+        .run()
+        .then(gameCreation => gameCreation['generated_keys'][0]);
 }
 
 function joinGame(playerId, gameId, password = '') {

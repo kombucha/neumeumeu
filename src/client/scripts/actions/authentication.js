@@ -4,7 +4,7 @@ import {updatePath} from 'redux-simple-router';
 function loginSuccessful(dispatch, loginData) {
     dispatch({
         type: 'LOGIN',
-        user: loginData.user,
+        player: loginData.player,
         token: loginData.token
     });
 
@@ -34,7 +34,6 @@ function register(newUser) {
             .then(loginData => loginSuccessful(dispatch, loginData));
     };
 }
-
 
 export default {
     login,

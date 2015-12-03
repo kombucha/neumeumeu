@@ -49,6 +49,14 @@ function register(newUser) {
     });
 }
 
+function associateSocketToPlayer(playerId, socketId) {
+    return emitAction({
+        type: 'ASSOCIATE_PLAYER_TO_SOCKET',
+        playerId,
+        socketId
+    });
+}
+
 function getGame(id) {
     return emitAction({
         type: 'GET_GAME',
@@ -79,9 +87,9 @@ function joinGame(id, password) {
     });
 }
 
-function startRound(id) {
+function startGame(id) {
     return emitAction({
-        type: 'START_ROUND',
+        type: 'START_GAME',
         token: getAuthToken(),
         id
     });
@@ -109,6 +117,7 @@ export default {
     login,
     logout,
     register,
+    associateSocketToPlayer,
 
     joinRoom,
     leaveRoom,
@@ -118,5 +127,5 @@ export default {
     getGame,
     joinGame,
 
-    startRound
+    startGame
 };

@@ -1,13 +1,24 @@
 import io from 'socket.io-client';
+import api from 'client/api';
 import {updateRemoteStatus, joinRoom} from 'client/actions';
 
 function bindSocketToStore(socket, store) {
-    socket.on('connect', () => store.dispatch(updateRemoteStatus(true)));
-    socket.on('reconnect', () => {
-        // Restore rooms on reconnect
-        const rooms = store.getState().remote.rooms;
+    socket.on('connect', () => {
+        const state = store.getState(),
+            currentPlayer = state.authentication.player,
+            rooms = state.remote.rooms;
+
+        // Set remote connected
+        store.dispatch(updateRemoteStatus(true));
+        // Reconnect to rooms
         rooms.forEach(room => store.dispatch(joinRoom(room)));
+
+        // If loggedin, request socket / player association
+        if (currentPlayer) {
+            api.associateSocketToPlayer(currentPlayer.id, socket.id);
+        }
     });
+
     socket.on('disconnect', () => store.dispatch(updateRemoteStatus(false)));
     socket.on('action', action => store.dispatch(action));
 }
