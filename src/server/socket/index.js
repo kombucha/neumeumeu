@@ -46,11 +46,15 @@ function handleAction(socket, action) {
                 startGameRealtimeUpdate(socket.server, gameId);
                 return gameId;
             });
-    case 'GET_GAME':
-        return gameService.getGame(action.id);
     case 'UPDATE_GAMES':
         return gameService.getCurrentGames(action);
 
+    case 'GET_GAMEPLAY':
+    case 'GET_GAME':
+        return authService.getPlayerFromToken(action.token)
+            .then(player => {
+                return gameplayService.getGameplayForPlayer(player.id, action.id);
+            });
     case 'START_GAME':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameplayService.startRound(player.id, action.id));
@@ -86,15 +90,26 @@ function startRealtimeLobbyUpdate(io) {
     });
 }
 
+
 function startGameRealtimeUpdate(io, gameId) {
     log.info('STARTING REALTIME UPDATES FOR GAME', gameId);
+
     gameplayService.onGameplayUpdate(gameId, game => {
-        // TODO: DONT UPDATE INDISCRIMENATELY:
-        // Send custom update to each player (ie: hide other players played card and hand)
-        broadCastToRoom(io, gameId, {
-            type: 'UPDATE_CURRENT_GAME',
-            game
-        });
+        const interestingSockets = Object.keys(io.sockets.connected)
+            .filter(socketId => {
+                return io.sockets.connected[socketId].rooms.indexOf(gameId) !== -1;
+            });
+
+        Promise.all(interestingSockets.map(authService.getPlayerFromSocket))
+            .then(players => {
+                players.forEach((player, idx) => {
+                    const socketId = interestingSockets[idx];
+                    io.sockets.connected[socketId].emit('action', {
+                        type: 'UPDATE_CURRENT_GAME',
+                        game: gameplayService.transformGameplayForPlayer(player.id, game)
+                    });
+                });
+            });
     });
 }
 

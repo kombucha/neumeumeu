@@ -59,12 +59,6 @@ function joinGame(playerId, gameId, password = '') {
         });
 }
 
-function getGame(gameId) {
-    return r.table('game')
-        .get(gameId)
-        .run();
-}
-
 function getCurrentGames() {
     return r.table('game')
         .pluck(...simpleGameProjection)
@@ -88,7 +82,6 @@ function onLobbyUpdate(cb) {
 export default {
     createGame,
     joinGame,
-    getGame,
     getCurrentGames,
     onLobbyUpdate
 };

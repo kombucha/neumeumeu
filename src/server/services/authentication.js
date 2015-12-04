@@ -22,6 +22,13 @@ function getPlayerFromToken(token) {
         });
 }
 
+function getPlayerFromSocket(socketId) {
+    return r.table('player')
+        .filter(player => player('sockets').contains(socketId))
+        .run()
+        .then(players => players[0]);
+}
+
 function simplePlayer(player) {
     return {
         id: player.id,
@@ -161,6 +168,7 @@ function hashAndSaltPassword(password, salt) {
 
 export default {
     getPlayerFromToken,
+    getPlayerFromSocket,
     register,
     login,
     logout,

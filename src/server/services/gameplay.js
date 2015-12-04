@@ -4,6 +4,13 @@ import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
 import log from 'server/log';
 
+function getGameplayForPlayer(playerId, gameId) {
+    return r.table('game')
+        .get(gameId)
+        .run()
+        .then(game => transformGameplayForPlayer(playerId, game));
+}
+
 function startRound(playerId, gameId) {
     const gameCards = generateGameCards();
     // TODO: Check game status before updating
@@ -24,7 +31,6 @@ function startRound(playerId, gameId) {
 }
 
 function playCard(playerId, gameId, cardValue) {
-    log.info('HANDLING PLAY CARD', playerId, gameId, cardValue);
     return r.table('game')
         .get(gameId)
         .run()
@@ -62,20 +68,36 @@ function playCard(playerId, gameId, cardValue) {
         .then(null, err => log.info(err));
 }
 
-function choosePile(playerId, gameId, columnIdx) {
-    // TODO
-    return false;
-}
+// function choosePile(playerId, gameId, columnIdx) {
+//     // TODO
+//     return false;
+// }
 
 // All players have played... time to resolve the game (which card goes where)
-function resolveTurn(gameId) {
+// function resolveTurn(gameId) {
     // TODO:
     // - Resolve where cards should go
     // - Use player choice first, then automatic resolution
     // - If a card can't be placed automatically and there's no player choice, halt and request for player choice
     // - Else resolve cards, start a new turn and return the final state + actions that lead to it
     // ie. describe cards movement {value: cardValue, to: columnIdx} or {player: playerId, to: columnIdx}
-    return false;
+//     return false;
+// }
+
+function transformGameplayForPlayer(playerId, game) {
+    // TODO: Only filter chosenCard when gameStatus should not be revealed
+    return Object.assign({}, game, {
+        players: game.players.map(player => {
+            return player.id === playerId
+                ? player
+                : {
+                    id: player.id,
+                    name: player.name,
+                    status: player.status,
+                    chosenCard: {}
+                };
+        })
+    });
 }
 
 function onGameplayUpdate(id, cb) {
@@ -86,7 +108,7 @@ function onGameplayUpdate(id, cb) {
         .then(cursor => {
             cursor.on('data', data => {
                 if (data.new_val && data.new_val.status === GameStatus.ENDED) {
-                    log.info("ENDING REALTIME UPDATES FOR GAME ", id);
+                    log.info('ENDING REALTIME UPDATES FOR GAME ', id);
                     cb(data.new_val);
                     return cursor.close();
                 }
@@ -97,8 +119,10 @@ function onGameplayUpdate(id, cb) {
 }
 
 export default {
+    getGameplayForPlayer,
     startRound,
     playCard,
 
-    onGameplayUpdate
+    onGameplayUpdate,
+    transformGameplayForPlayer
 };

@@ -60,6 +60,7 @@ function associateSocketToPlayer(playerId, socketId) {
 function getGame(id) {
     return emitAction({
         type: 'GET_GAME',
+        token: getAuthToken(),
         id
     });
 }
