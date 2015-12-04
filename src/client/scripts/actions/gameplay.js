@@ -13,11 +13,8 @@ function startedGame() {
     };
 }
 
-function playCard(card) {
-    return {
-        type: 'PLAY_CARD',
-        card
-    };
+function playCard(gameId, cardValue) {
+    return () => api.playCard(gameId, cardValue);
 }
 
 function updateCurrentGame(gameId) {

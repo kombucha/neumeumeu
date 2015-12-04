@@ -23,12 +23,16 @@ export default class Game extends PureRenderComponent {
         this.props.startGame(this.props.game.id);
     }
 
+    playCard(card) {
+        this.props.playCard(this.props.game.id, card.value);
+    }
+
     renderLoadingGame() {
         return (<div>Chargement du jeu en cours...</div>);
     }
 
     renderPlayerHUD(player) {
-        return (<PlayerHud player={player} onCardSelected={this.props.playCard}/>);
+        return (<PlayerHud player={player} onCardSelected={this.playCard.bind(this)}/>);
     }
 
     renderStartGame() {

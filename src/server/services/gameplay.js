@@ -23,20 +23,43 @@ function startRound(playerId, gameId) {
         .run();
 }
 
-function playCard(playerId, gameId, cardId) {
+function playCard(playerId, gameId, cardValue) {
+    log.info('HANDLING PLAY CARD', playerId, gameId, cardValue);
     return r.table('game')
         .get(gameId)
-        .update(game => {
-            return r.branch(
-                // Status is waiting_for_cards
-                game('status').eq(GameStatus.WAITING_FOR_CARDS)
-                // AND cards in is in players' hand
-                .and(game('players').filter({id: playerId})('hand')('value').contains(cardId)),
-                {},
-                {}
-            );
+        .run()
+        .then(game => {
+            const newPlayer = game.players.find(player => player.id === playerId),
+                cardIdx = newPlayer.hand.findIndex(card => card.value === cardValue),
+                userOwnsCard = cardIdx !== -1;
+
+            if (game.status !== GameStatus.WAITING_FOR_CARDS) {
+                return Promise.reject('You cant play right meow');
+            } else if (!userOwnsCard) {
+                return Promise.reject('Invalid Move');
+            }
+
+            if (newPlayer.chosenCard) {
+                newPlayer.hand.push(newPlayer.chosenCard);
+            }
+
+            newPlayer.status = PlayerStatus.PLAYED_CARD;
+            newPlayer.chosenCard = newPlayer.hand[cardIdx];
+            newPlayer.hand.splice(cardIdx, 1);
+
+            return r.table('game')
+                .get(gameId)
+                // DAMN that's convoluted....
+                .update(game => {
+                    return game('players')
+                        .offsetsOf(player => player('id').eq(playerId))(0)
+                        .do(playerIdx => ({
+                            players: game('players').changeAt(playerIdx, newPlayer)
+                        }));
+                })
+                .run();
         })
-        .run();
+        .then(null, err => log.info(err));
 }
 
 function choosePile(playerId, gameId, columnIdx) {
@@ -75,5 +98,7 @@ function onGameplayUpdate(id, cb) {
 
 export default {
     startRound,
+    playCard,
+
     onGameplayUpdate
 };

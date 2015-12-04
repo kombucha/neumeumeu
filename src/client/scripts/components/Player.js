@@ -11,8 +11,8 @@ export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'})
             </div>
             <div className="player__card">
             {
-                player.card ? (
-                    <Card className="card--small" card={player.card}/>
+                player.chosenCard ? (
+                    <Card className="card--small" card={player.chosenCard}/>
                 ) : null
             }
             </div>

@@ -1,5 +1,5 @@
 .malus {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     right: 0;
     width: @card-width;
@@ -26,14 +26,13 @@
 
 .malus__value,
 .malus__border {
+    display: block;
     position: absolute;
     bottom: 0;
     right: 0;
     left: -12px;
-    font-family: 'Bangers';
     z-index: 1;
     font-size: 120px;
-    display: block;
     text-align: center;
     color: @color-red;
 }

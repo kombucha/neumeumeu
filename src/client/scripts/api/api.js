@@ -95,6 +95,15 @@ function startGame(id) {
     });
 }
 
+function playCard(gameId, cardValue) {
+    return emitAction({
+        type: 'PLAY_CARD',
+        token: getAuthToken(),
+        gameId,
+        cardValue
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -127,5 +136,6 @@ export default {
     getGame,
     joinGame,
 
-    startGame
+    startGame,
+    playCard
 };

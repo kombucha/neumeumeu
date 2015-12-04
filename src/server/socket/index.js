@@ -54,6 +54,9 @@ function handleAction(socket, action) {
     case 'START_GAME':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameplayService.startRound(player.id, action.id));
+    case 'PLAY_CARD':
+        return authService.getPlayerFromToken(action.token)
+            .then(player => gameplayService.playCard(player.id, action.gameId, action.cardValue));
     default:
         return Promise.reject('Unhandled action: ' + action.type);
     }
