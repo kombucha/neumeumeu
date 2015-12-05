@@ -3,7 +3,7 @@ import Card from 'client/components/Card';
 import Malus from 'client/components/Malus';
 import {sort} from 'common/utils';
 
-export default({player, onCardSelected}) => {
+export default({player, onHandCardClicked, onSelectedCardClicked}) => {
     const sortedCards = sort(player.hand, (a, b) => a.value - b.value);
 
     return (
@@ -11,11 +11,11 @@ export default({player, onCardSelected}) => {
             <div className="player-hud__card-placeholder">
                 {
                     player.chosenCard
-                    ? <Card card={player.chosenCard}/>
+                    ? <Card card={player.chosenCard} onClick={onSelectedCardClicked}/>
                     : null
                 }
             </div>
-            <Hand cards={sortedCards} onCardSelected={onCardSelected}/>
+            <Hand cards={sortedCards} onCardSelected={onHandCardClicked}/>
             <Malus malus={player.malus}/>
         </div>
     );

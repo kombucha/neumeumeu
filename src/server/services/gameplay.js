@@ -30,6 +30,20 @@ function startRound(playerId, gameId) {
         .run();
 }
 
+function updatePlayerInGame(gameId, player) {
+    return r.table('game')
+        .get(gameId)
+        // DAMN that's convoluted....
+        .update(game => {
+            return game('players')
+                .offsetsOf(p => p('id').eq(player.id))(0)
+                .do(playerIdx => ({
+                    players: game('players').changeAt(playerIdx, player)
+                }));
+        })
+        .run();
+}
+
 function playCard(playerId, gameId, cardValue) {
     return r.table('game')
         .get(gameId)
@@ -53,17 +67,29 @@ function playCard(playerId, gameId, cardValue) {
             newPlayer.chosenCard = newPlayer.hand[cardIdx];
             newPlayer.hand.splice(cardIdx, 1);
 
-            return r.table('game')
-                .get(gameId)
-                // DAMN that's convoluted....
-                .update(game => {
-                    return game('players')
-                        .offsetsOf(player => player('id').eq(playerId))(0)
-                        .do(playerIdx => ({
-                            players: game('players').changeAt(playerIdx, newPlayer)
-                        }));
-                })
-                .run();
+            return updatePlayerInGame(gameId, newPlayer);
+        })
+        .then(null, err => log.info(err));
+}
+
+function cancelCard(playerId, gameId) {
+    return r.table('game')
+        .get(gameId)
+        .run()
+        .then(game => {
+            const player = game.players.find(player => player.id === playerId);
+
+            if (game.status !== GameStatus.WAITING_FOR_CARDS) {
+                return Promise.reject('You cant play right meow');
+            } else if (!player.chosenCard) {
+                return Promise.reject('Invalid Move');
+            }
+
+            player.hand.push(player.chosenCard);
+            player.chosenCard = null;
+            player.status = PlayerStatus.CHOOSING_CARD;
+
+            return updatePlayerInGame(gameId, player);
         })
         .then(null, err => log.info(err));
 }
@@ -166,7 +192,7 @@ function simplePlayer(player) {
         status: player.status,
         chosenCard: player.chosenCard ? {} : null,
         malus: computeMalus(player.malusCards)
-    }
+    };
 }
 
 function computeMalus(cards) {
@@ -199,8 +225,8 @@ export default {
     getGameplayForPlayer,
     startRound,
     playCard,
+    cancelCard,
     resolveTurn,
-
     onGameplayUpdate,
     transformGameplayForPlayer
 };

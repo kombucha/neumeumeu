@@ -105,6 +105,14 @@ function playCard(gameId, cardValue) {
     });
 }
 
+function cancelCard(gameId) {
+    return emitAction({
+        type: 'CANCEL_CARD',
+        token: getAuthToken(),
+        gameId
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -138,5 +146,6 @@ export default {
     joinGame,
 
     startGame,
-    playCard
+    playCard,
+    cancelCard
 };

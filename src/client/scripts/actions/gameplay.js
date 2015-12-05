@@ -17,6 +17,10 @@ function playCard(gameId, cardValue) {
     return () => api.playCard(gameId, cardValue);
 }
 
+function cancelCard(gameId) {
+    return () => api.cancelCard(gameId);
+}
+
 function updateCurrentGame(gameId) {
     return dispatch => {
         return api.getGame(gameId)
@@ -32,5 +36,6 @@ function startGame(gameId) {
 export default {
     updateCurrentGame,
     startGame,
-    playCard
+    playCard,
+    cancelCard
 };

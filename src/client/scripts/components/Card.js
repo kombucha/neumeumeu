@@ -2,7 +2,7 @@
 import classNames from 'classnames/dedupe';
 import {range} from 'common/utils';
 
-export default ({card, className}) => {
+export default ({card, className, onClick}) => {
     const isFlipped = !!card.value,
         classes = classNames(
         'card',
@@ -10,7 +10,7 @@ export default ({card, className}) => {
         isFlipped ? 'card--malus-' + card.malus : 'card--flipped');
 
     return (
-        <div className={classes}>
+        <div className={classes} onClick={onClick}>
             <div className="card__top">
                 <div className="card__value card__value--top">{card.value}</div>
                 <div className="card__malus">
