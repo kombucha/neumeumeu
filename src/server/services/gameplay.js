@@ -120,7 +120,7 @@ function resolveTurn(gameId) {
             if (playerWithTooSmallCard && !hasChosenPile(playerWithTooSmallCard)) {
                 game.status = GameStatus.WAITING_FOR_PILE_CHOICE;
                 playerWithTooSmallCard.status = PlayerStatus.HAS_TO_CHOOSE_PILE;
-                return r.table('game').get(gameId).merge(game).run();
+                return r.table('game').get(gameId).update(game).run();
             }
 
             // Resolve turn
