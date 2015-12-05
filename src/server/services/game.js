@@ -15,7 +15,7 @@ function createGamePlayer(player) {
         hand: [],
         chosenCard: null,
         status: PlayerStatus.IDLE,
-        malus: 0
+        malusCards: []
     };
 }
 

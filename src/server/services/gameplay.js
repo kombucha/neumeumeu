@@ -68,36 +68,109 @@ function playCard(playerId, gameId, cardValue) {
         .then(null, err => log.info(err));
 }
 
-// function choosePile(playerId, gameId, columnIdx) {
-//     // TODO
-//     return false;
-// }
+function resolveTurn(gameId) {
+    return r.table('game')
+        .get(gameId)
+        .run()
+        .then(game => {
+            const everyoneHasPlayed = game.players.every(p => !!p.chosenCard);
 
-// All players have played... time to resolve the game (which card goes where)
-// function resolveTurn(gameId) {
-    // TODO:
-    // - Resolve where cards should go
-    // - Use player choice first, then automatic resolution
-    // - If a card can't be placed automatically and there's no player choice, halt and request for player choice
-    // - Else resolve cards, start a new turn and return the final state + actions that lead to it
-    // ie. describe cards movement {value: cardValue, to: columnIdx} or {player: playerId, to: columnIdx}
-//     return false;
-// }
+            // Abort, turn doesn't end until everyone has played
+            if (!everyoneHasPlayed) {
+                return Promise.reject('Still waiting for card');
+            }
+
+            const someoneHasChosenPile = game.players.some(hasChosenPile),
+                pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]),
+                playerHasToChoosePile = player => pilesTopCards.every(topCard => player.chosenCard.value < topCard.value),
+                playerWithTooSmallCard = game.players.find(playerHasToChoosePile);
+
+            // Abort, can't resolve turn until player has chosen which piles to take
+            if (game.status === GameStatus.WAITING_FOR_PILE_CHOICE && !someoneHasChosenPile) {
+                return Promise.reject('Waiting for pile choice');
+            }
+
+            // Abort, can't resolve turn. Asks player to chose a pile to take
+            if (playerWithTooSmallCard && !hasChosenPile(playerWithTooSmallCard)) {
+                game.status = GameStatus.WAITING_FOR_PILE_CHOICE;
+                playerWithTooSmallCard.status = PlayerStatus.HAS_TO_CHOOSE_PILE;
+                return r.table('game').get(gameId).merge(game).run();
+            }
+
+            // Resolve turn
+            let sortedPlayers = game.players.slice()
+                .sort((p1, p2) => p1.chosenCard.value - p2.chosenCard.value);
+
+            // Turn must be solved from lowest card value to biggest
+            sortedPlayers.forEach(player => {
+                player.malusCards = player.malusCards || [];
+
+                if (hasChosenPile(player)) {
+                    // Player played a card smaller than any of the piles
+                    let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
+                    player.malusCards = player.malusCards.concat(pileCards);
+                } else {
+                    // Regular play
+                    const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
+                    game.cardsInPlay[destinationPile].push(player.chosenCard);
+
+                    // Oh noes !
+                    if (game.cardsInPlay[destinationPile].length > 5) {
+                        player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
+                    }
+                }
+
+                player.status = PlayerStatus.IDLE;
+                player.chosenPile = null;
+                player.chosenCard = null;
+            });
+
+            log.info('Mergin in', game.players, game.cardsInPlay);
+
+            return r.table('game').get(gameId).update(game).run();
+        });
+}
+
+function hasChosenPile(player) {
+    return player.chosenPile !== null && player.chosenPile !== undefined;
+}
+
+function destinationPileIdx(card, piles) {
+    return piles.reduce((resultIdx, pile, idx, piles) => {
+        const currentTopCard = pile[pile.length - 1],
+            resultPile = piles[resultIdx],
+            resultTopCard = resultPile ? resultPile[resultPile.length - 1] : {value: -1};
+        return (currentTopCard.value < card.value && currentTopCard.value >= resultTopCard.value) ? idx : resultIdx;
+    }, -1);
+}
 
 function transformGameplayForPlayer(playerId, game) {
-    // TODO: Only filter chosenCard when gameStatus should not be revealed
     return Object.assign({}, game, {
         players: game.players.map(player => {
-            return player.id === playerId
-                ? player
-                : {
-                    id: player.id,
-                    name: player.name,
-                    status: player.status,
-                    chosenCard: {}
-                };
+            const shouldReturnFullPlayer = (player.id === playerId || game.status !== GameStatus.WAITING_FOR_CARDS);
+            return shouldReturnFullPlayer ? fullPlayer(player) : simplePlayer(player);
         })
     });
+}
+
+function fullPlayer(player) {
+    return Object.assign({}, player, {
+        malus: computeMalus(player.malusCards)
+    });
+}
+
+function simplePlayer(player) {
+    return {
+        id: player.id,
+        name: player.name,
+        status: player.status,
+        chosenCard: player.chosenCard ? {} : null,
+        malus: computeMalus(player.malusCards)
+    }
+}
+
+function computeMalus(cards) {
+    return cards.reduce((sum, card) => sum + card.malus, 0);
 }
 
 function onGameplayUpdate(id, cb) {
@@ -107,13 +180,17 @@ function onGameplayUpdate(id, cb) {
         .run()
         .then(cursor => {
             cursor.on('data', data => {
-                if (data.new_val && data.new_val.status === GameStatus.ENDED) {
+                if (!data.new_val || data.new_val.status === GameStatus.ENDED) {
                     log.info('ENDING REALTIME UPDATES FOR GAME ', id);
                     cb(data.new_val);
                     return cursor.close();
                 }
 
+                // Notify listeners
                 cb(data.new_val);
+
+                // Automatically try to resolve turn on each update
+                resolveTurn(id);
             });
         });
 }
@@ -122,6 +199,7 @@ export default {
     getGameplayForPlayer,
     startRound,
     playCard,
+    resolveTurn,
 
     onGameplayUpdate,
     transformGameplayForPlayer
