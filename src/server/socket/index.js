@@ -64,6 +64,10 @@ function handleAction(socket, action) {
     case 'CANCEL_CARD':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameplayService.cancelCard(player.id, action.gameId));
+    case 'CHOOSE_PILE':
+        return authService.getPlayerFromToken(action.token)
+            .then(player => gameplayService.choosePile(player.id, action.gameId, action.pile));
+
     default:
         return Promise.reject('Unhandled action: ' + action.type);
     }

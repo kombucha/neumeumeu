@@ -94,6 +94,25 @@ function cancelCard(playerId, gameId) {
         .then(null, err => log.info(err));
 }
 
+function choosePile(playerId, gameId, pileIdx) {
+    return r.table('game')
+        .get(gameId)
+        .run().then(game => {
+            const player = game.players.find(p => p.id === playerId);
+            if (game.status !== GameStatus.WAITING_FOR_PILE_CHOICE || player.status !== PlayerStatus.HAS_TO_CHOOSE_PILE) {
+                return Promise.reject('Invalid move');
+            }
+
+            // TODO: probably another status
+            game.status = GameStatus.WAITING_FOR_CARDS;
+            player.status = PlayerStatus.CHOOSED_PILE;
+            player.chosenPile = pileIdx;
+
+            return r.table('game').get(gameId).update(game).run();
+        })
+        .run();
+}
+
 function resolveTurn(gameId) {
     return r.table('game')
         .get(gameId)
@@ -222,11 +241,14 @@ function onGameplayUpdate(id, cb) {
 }
 
 export default {
-    getGameplayForPlayer,
     startRound,
+
     playCard,
     cancelCard,
+    choosePile,
+
     resolveTurn,
-    onGameplayUpdate,
-    transformGameplayForPlayer
+    getGameplayForPlayer,
+    transformGameplayForPlayer,
+    onGameplayUpdate
 };

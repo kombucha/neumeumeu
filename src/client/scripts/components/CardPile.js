@@ -1,11 +1,11 @@
 import classNames from 'classnames/dedupe';
 import Card from './Card';
 
-export default ({cards, className}) => {
+export default ({cards, className, onClick}) => {
     const classes = classNames('card-pile', className);
 
     return (
-        <ul className={classes}>
+        <ul className={classes} onClick={onClick}>
             {
                 cards.map(card => (
                     <li className="card-pile__item" key={card.value}>

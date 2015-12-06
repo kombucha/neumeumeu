@@ -113,6 +113,15 @@ function cancelCard(gameId) {
     });
 }
 
+function choosePile(gameId, pile) {
+    return emitAction({
+        type: 'CHOOSE_PILE',
+        token: getAuthToken(),
+        gameId,
+        pile
+    })
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -147,5 +156,6 @@ export default {
 
     startGame,
     playCard,
-    cancelCard
+    cancelCard,
+    choosePile
 };

@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import PureRenderComponent from 'client/components/PureRenderComponent';
-import {updateCurrentGame, startGame, joinRoom, leaveRoom, playCard, cancelCard} from 'client/actions';
+import actionCreators from 'client/actions';
 
 import GameStatus from 'common/constants/game-status';
 import Players from 'client/components/Players';
@@ -31,6 +31,14 @@ export default class Game extends PureRenderComponent {
         this.props.cancelCard(this.props.game.id);
     }
 
+    handlePileSelected(pile) {
+        if (this.props.game.status !== GameStatus.WAITING_FOR_PILE_CHOICE) {
+            return;
+        }
+
+        this.props.choosePile(this.props.game.id, pile);
+    }
+
     renderLoadingGame() {
         return (<div>Chargement du jeu en cours...</div>);
     }
@@ -56,7 +64,7 @@ export default class Game extends PureRenderComponent {
         return (
             <div className="game">
                 <Players players={topPlayers} />
-                <CardsInPlay piles={game.cardsInPlay} />
+                <CardsInPlay piles={game.cardsInPlay} onPileSelected={this.handlePileSelected.bind(this)} />
                 {gameStarted ? this.renderPlayerHUD(currentPlayer) : null}
                 {!gameStarted && isOwner ? this.renderStartGame() : null}
             </div>
@@ -80,5 +88,5 @@ function mapStateToProps(state) {
 
 export const GameContainer = connect(
     mapStateToProps,
-    {updateCurrentGame, startGame, joinRoom, leaveRoom, playCard, cancelCard}
+    actionCreators
 )(Game);
