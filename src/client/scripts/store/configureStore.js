@@ -3,6 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import {routeReducer} from 'redux-simple-router';
 import persistState from 'redux-localstorage';
 import reducers from 'client/reducers';
+import gameInflaterMiddleware from 'client/middlewares/gameInflater';
 
 export default function configureStore(initialState) {
     const combinedReducers = combineReducers(Object.assign({},
@@ -10,7 +11,7 @@ export default function configureStore(initialState) {
         {routing: routeReducer}
     ));
 
-    let middlewares = [thunkMiddleware],
+    let middlewares = [thunkMiddleware, gameInflaterMiddleware],
         storeEnhancers = [
             persistState('authentication', {key: 'card-game-auth'})
         ];

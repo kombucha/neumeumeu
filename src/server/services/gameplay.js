@@ -1,5 +1,5 @@
 import r from 'server/database';
-import {generateGameCards} from 'common/deck';
+import {generateGameCards, computeMalus} from 'common/deck';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
 import log from 'server/log';
@@ -196,6 +196,7 @@ function destinationPileIdx(card, piles) {
 
 function transformGameplayForPlayer(playerId, game) {
     return Object.assign({}, game, {
+        cardsInPlay: game.cardsInPlay.map(pile => pile.map(simpleCard)),
         players: game.players.map(player => {
             const shouldReturnFullPlayer = (player.id === playerId || game.status !== GameStatus.WAITING_FOR_CARDS);
             return shouldReturnFullPlayer ? fullPlayer(player) : simplePlayer(player);
@@ -205,7 +206,9 @@ function transformGameplayForPlayer(playerId, game) {
 
 function fullPlayer(player) {
     return Object.assign({}, player, {
-        malus: computeMalus(player.malusCards)
+        hand: player.hand.map(simpleCard),
+        chosenCard: simpleCard(player.chosenCard),
+        malus: computePlayerMalus(player.malusCards)
     });
 }
 
@@ -214,12 +217,16 @@ function simplePlayer(player) {
         id: player.id,
         name: player.name,
         status: player.status,
-        chosenCard: player.chosenCard ? {} : null,
-        malus: computeMalus(player.malusCards)
+        chosenCard: simpleCard(player.chosenCard),
+        malus: computePlayerMalus(player.malusCards)
     };
 }
 
-function computeMalus(cards) {
+function simpleCard(card) {
+    return card ? card.value : null;
+}
+
+function computePlayerMalus(cards) {
     return cards.reduce((sum, card) => sum + card.malus, 0);
 }
 

@@ -5,11 +5,11 @@ const NUMBER_OF_CARDS = 104;
 function generateCard(cardNumber) {
     return {
         value: cardNumber,
-        malus: computePenality(cardNumber)
+        malus: computeMalus(cardNumber)
     };
 }
 
-function computePenality(cardNumber) {
+function computeMalus(cardNumber) {
     if (cardNumber === 55) {
         return 7;
     } else if (cardNumber % 10 === 0) {
@@ -21,7 +21,7 @@ function computePenality(cardNumber) {
     return 1;
 }
 
-export function generateDeck() {
+function generateDeck() {
     let deck = [], cardNumber;
 
     for (cardNumber = 1; cardNumber <= NUMBER_OF_CARDS; cardNumber++) {
@@ -31,7 +31,7 @@ export function generateDeck() {
     return deck;
 }
 
-export function generateGameCards() {
+function generateGameCards() {
     const deck = shuffle(generateDeck());
 
     return {
@@ -40,8 +40,16 @@ export function generateGameCards() {
     };
 }
 
+function fullCardFromId(cardId) {
+    return {
+        value: cardId,
+        malus: computeMalus(cardId)
+    };
+}
+
 export default {
     generateDeck,
-    generateGameCards
-
+    generateGameCards,
+    computeMalus,
+    fullCardFromId
 };
