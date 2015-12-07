@@ -17,6 +17,7 @@ export default class Game extends PureRenderComponent {
     componentWillUnmount() {
         const gameId = this.props.params.gameId;
         this.props.leaveRoom(gameId);
+        this.props.clearCurrentGame();
     }
 
     startGame() {

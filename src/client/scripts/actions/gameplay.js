@@ -37,8 +37,15 @@ function startGame(gameId) {
         .then(() => dispatch(startedGame()));
 }
 
+function clearCurrentGame() {
+    return {
+        type: 'CLEAR_CURRENT_GAME'
+    };
+}
+
 export default {
     updateCurrentGame,
+    clearCurrentGame,
     startGame,
     playCard,
     cancelCard,
