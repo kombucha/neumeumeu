@@ -59,14 +59,15 @@ export default class Game extends PureRenderComponent {
         const {currentPlayer} = this.props,
             isOwner = (game.owner === currentPlayer.id),
             gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
-            topPlayers = game.players.filter(player => player.id !== currentPlayer.id);
+            topPlayers = game.players.filter(player => player.id !== currentPlayer.id),
+            canStartGame = !gameStarted && isOwner && game.players.length >= 2;
 
         return (
             <div className="game">
                 <Players players={topPlayers} />
                 <CardsInPlay piles={game.cardsInPlay} onPileSelected={this.handlePileSelected.bind(this)} />
                 {gameStarted ? this.renderPlayerHUD(currentPlayer) : null}
-                {!gameStarted && isOwner ? this.renderStartGame() : null}
+                {canStartGame ? this.renderStartGame() : null}
             </div>
         );
     }

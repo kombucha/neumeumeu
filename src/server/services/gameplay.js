@@ -13,19 +13,24 @@ function getGameplayForPlayer(playerId, gameId) {
 
 function startRound(playerId, gameId) {
     const gameCards = generateGameCards();
-    // TODO: Check game status before updating
-    // AND that there's at least two players
-    // AND that the actual owner started the round (maybe ? maybe not...)
+
     return r.table('game')
         .get(gameId)
-        .update({
-            status: GameStatus.WAITING_FOR_CARDS,
-            cardsInPlay: gameCards.cardsInPlay,
-            players: r.row('players')
-                .map(gameCards.hands, (player, hand) => player.merge({
-                    hand,
-                    status: PlayerStatus.CHOOSING_CARD
-                }))
+        .update(game => {
+            return r.branch(
+                game('players').count().gt(1)
+                .and(game('owner').eq(playerId)),
+                {
+                    status: GameStatus.WAITING_FOR_CARDS,
+                    cardsInPlay: gameCards.cardsInPlay,
+                    players: game('players')
+                        .map(gameCards.hands, (player, hand) => player.merge({
+                            hand,
+                            status: PlayerStatus.CHOOSING_CARD
+                        }))
+                },
+                {}
+            );
         })
         .run();
 }
