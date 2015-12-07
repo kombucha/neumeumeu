@@ -41,10 +41,10 @@ function generateGameCards() {
 }
 
 function fullCardFromId(cardId) {
-    return {
+    return cardId ? {
         value: cardId,
         malus: computeMalus(cardId)
-    };
+    } : null;
 }
 
 export default {
