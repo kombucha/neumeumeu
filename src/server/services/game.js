@@ -22,6 +22,7 @@ function createGamePlayer(player) {
 function createGame(playerId, options) {
     // TODO: cleanup game options
     const newGame = Object.assign({}, options, {
+        creationDate: r.now(),
         status: GameStatus.WAITING_FOR_PLAYERS,
         players: [],
         owner: playerId,
@@ -63,6 +64,7 @@ function getCurrentGames() {
     return r.table('game')
         .pluck(...simpleGameProjection)
         .filter(r.row('status').ne(GameStatus.ENDED))
+        .orderBy(r.desc('creationDate'))
         .run();
 }
 

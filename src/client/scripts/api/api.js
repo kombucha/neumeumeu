@@ -119,7 +119,7 @@ function choosePile(gameId, pile) {
         token: getAuthToken(),
         gameId,
         pile
-    })
+    });
 }
 
 function joinRoom(id) {

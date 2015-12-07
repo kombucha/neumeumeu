@@ -47,7 +47,7 @@ function handleAction(socket, action) {
                 return gameId;
             });
     case 'UPDATE_GAMES':
-        return gameService.getCurrentGames(action);
+        return gameService.getCurrentGames();
 
     case 'GET_GAMEPLAY':
     case 'GET_GAME':
