@@ -218,7 +218,7 @@ function otherPlayer(player) {
         id: player.id,
         name: player.name,
         status: player.status,
-        chosenCard: simpleCard({value: UNKNOWN_CARD_VALUE}),
+        chosenCard: simpleCard(player.chosenCard ? {value: UNKNOWN_CARD_VALUE} : null),
         malus: computePlayerMalus(player.malusCards)
     };
 }
