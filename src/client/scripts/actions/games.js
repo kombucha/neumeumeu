@@ -1,4 +1,5 @@
 import api from 'client/api';
+import Errors from 'common/constants/errors';
 import {updatePath} from 'redux-simple-router';
 
 function updateGames(games) {
@@ -20,9 +21,16 @@ function createGame(game) {
 function joinGame(gameId, password) {
     return dispatch => {
         return api.joinGame(gameId, password)
-            .then(() => {
-                return dispatch(updatePath(`/games/${gameId}`));
-            });
+            .then(
+                () => dispatch(updatePath(`/games/${gameId}`)),
+                (error) => {
+                    if (error === Errors.INVALID_TOKEN) {
+                        return dispatch(updatePath('/register'));
+                    }
+
+                    return Promise.reject(error);
+                }
+            );
     };
 }
 

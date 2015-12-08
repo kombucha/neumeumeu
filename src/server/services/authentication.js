@@ -1,12 +1,13 @@
 import crypto from 'crypto';
 import r from 'server/database';
+import Errors from 'common/constants/errors';
 import {promisify} from 'common/utils';
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
 function getPlayerFromToken(token) {
     if (!token) {
-        return Promise.resolve(null);
+        return Promise.reject(Errors.INVALID_TOKEN);
     }
 
     return r.table('player')
@@ -15,7 +16,7 @@ function getPlayerFromToken(token) {
         .run()
         .then(players => {
             if (players.length !== 1) {
-                return Promise.reject('Invalid token');
+                return Promise.reject(Errors.INVALID_TOKEN);
             }
 
             return players[0];

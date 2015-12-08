@@ -127,7 +127,7 @@ function handleNewSocket(socket) {
 
         handleAction(socket, action)
             .then((result) => sendBack(result),
-                  (error) => sendBack({errors: [error]}));
+                  (error) => sendBack({error: error}));
     });
     socket.on('disconnect', () => authService.dissociateFromSocket(socket.id));
 }

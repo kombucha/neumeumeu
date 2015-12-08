@@ -18,8 +18,8 @@ function emitAction(action) {
         }
 
         socket.emit('action', action, (result) => {
-            if (result.errors) {
-                return reject(result.errors);
+            if (result.error) {
+                return reject(result.error);
             }
 
             return resolve(result);
