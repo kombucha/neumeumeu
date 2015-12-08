@@ -1,4 +1,5 @@
 import r from 'server/database';
+import Errors from 'common/constants/errors';
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
@@ -26,6 +27,7 @@ function startRound(playerId, gameId) {
                     players: game('players')
                         .map(gameCards.hands, (player, hand) => player.merge({
                             hand,
+                            chosenCard: null,
                             status: PlayerStatus.CHOOSING_CARD
                         }))
                 },
@@ -59,9 +61,9 @@ function playCard(playerId, gameId, cardValue) {
                 userOwnsCard = cardIdx !== -1;
 
             if (game.status !== GameStatus.WAITING_FOR_CARDS) {
-                return Promise.reject('You cant play right meow');
+                return Promise.reject(Errors.INVALID_MOVE);
             } else if (!userOwnsCard) {
-                return Promise.reject('Invalid Move');
+                return Promise.reject(Errors.INVALID_MOVE);
             }
 
             if (newPlayer.chosenCard) {
@@ -73,8 +75,7 @@ function playCard(playerId, gameId, cardValue) {
             newPlayer.hand.splice(cardIdx, 1);
 
             return updatePlayerInGame(gameId, newPlayer);
-        })
-        .then(null, err => log.info(err));
+        });
 }
 
 function cancelCard(playerId, gameId) {
@@ -85,9 +86,9 @@ function cancelCard(playerId, gameId) {
             const player = game.players.find(player => player.id === playerId);
 
             if (game.status !== GameStatus.WAITING_FOR_CARDS) {
-                return Promise.reject('You cant play right meow');
+                return Promise.reject(Errors.INVALID_MOVE);
             } else if (!player.chosenCard) {
-                return Promise.reject('Invalid Move');
+                return Promise.reject(Errors.INVALID_MOVE);
             }
 
             player.hand.push(player.chosenCard);
@@ -105,7 +106,7 @@ function choosePile(playerId, gameId, pileIdx) {
         .run().then(game => {
             const player = game.players.find(p => p.id === playerId);
             if (game.status !== GameStatus.WAITING_FOR_PILE_CHOICE || player.status !== PlayerStatus.HAS_TO_CHOOSE_PILE) {
-                return Promise.reject('Invalid move');
+                return Promise.reject(Errors.INVALID_MOVE);
             }
 
             // TODO: probably another status
@@ -127,7 +128,7 @@ function resolveTurn(gameId) {
 
             // Abort, turn doesn't end until everyone has played
             if (!everyoneHasPlayed) {
-                return Promise.reject('Still waiting for card');
+                return Promise.resolve('Still waiting for card');
             }
 
             const someoneHasChosenPile = game.players.some(hasChosenPile),
@@ -137,14 +138,14 @@ function resolveTurn(gameId) {
 
             // Abort, can't resolve turn until player has chosen which piles to take
             if (game.status === GameStatus.WAITING_FOR_PILE_CHOICE && !someoneHasChosenPile) {
-                return Promise.reject('Waiting for pile choice');
+                return Promise.resolve('Waiting for pile choice');
             }
 
             // Abort, can't resolve turn. Asks player to chose a pile to take
             if (playerWithTooSmallCard && !hasChosenPile(playerWithTooSmallCard)) {
                 game.status = GameStatus.WAITING_FOR_PILE_CHOICE;
                 playerWithTooSmallCard.status = PlayerStatus.HAS_TO_CHOOSE_PILE;
-                return r.table('game').get(gameId).update(game).run();
+                return r.table('game').get(gameId).update(game, {returnChanges: true}).run();
             }
 
             // Resolve turn
@@ -177,7 +178,20 @@ function resolveTurn(gameId) {
 
             log.info('Mergin in', game.players, game.cardsInPlay);
 
-            return r.table('game').get(gameId).update(game).run();
+            return r.table('game').get(gameId).update(game, {returnChanges: true}).run();
+        }).then(result => {
+            // Aborted early, iz not a game !
+            if (!result || !result.changes || result.changes.length === 0) {
+                return {};
+            }
+
+            const game = result.changes[0]['new_val'],
+                canStartNextTurn = game.players.every(p => p.hand.length === 0);
+
+            if (canStartNextTurn) {
+                // TODO: change function signature
+                return startRound(game.owner, game.id);
+            }
         });
 }
 

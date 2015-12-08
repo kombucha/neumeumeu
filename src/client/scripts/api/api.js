@@ -18,6 +18,9 @@ function emitAction(action) {
         }
 
         socket.emit('action', action, (result) => {
+            if (!result) {
+                debugger;
+            }
             if (result.error) {
                 return reject(result.error);
             }
