@@ -2,7 +2,6 @@ var browserSync = require('browser-sync'),
     webpack = require('webpack'),
     webpackDevMiddleware = require('webpack-dev-middleware'),
     webpackHotMiddleware = require('webpack-hot-middleware'),
-    history = require('connect-history-api-fallback'),
     buildConf = require('./conf'),
     webpackConf = require('./webpack.conf'),
     path = require('path');
@@ -25,12 +24,11 @@ function startServer() {
             interval: 500
         },
         reloadDebounce: 1000,
-        server: {
-            baseDir: buildConf.paths.distBase,
+        proxy: {
+            target: 'localhost:8000',
             middleware: [
                 devMiddleware,
-                hotMiddleware,
-                history()
+                hotMiddleware
             ]
         },
         ghostMode: false,

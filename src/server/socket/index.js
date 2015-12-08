@@ -4,12 +4,7 @@ import gameService from 'server/services/game';
 import gameplayService from 'server/services/gameplay';
 import authService from 'server/services/authentication';
 
-const DEFAULT_CONFIG = {
-    port: 8090
-};
 
-// TODO: Something more similar to Sails
-// (ie: use express routes, and have both regular requests and websockets working)
 function handleAction(socket, action) {
     log.info({action: action}, 'Handled action');
 
@@ -97,7 +92,6 @@ function startRealtimeLobbyUpdate(io) {
     });
 }
 
-
 function startGameRealtimeUpdate(io, gameId) {
     log.info('STARTING REALTIME UPDATES FOR GAME', gameId);
 
@@ -140,8 +134,8 @@ function handleNewSocket(socket) {
 
 // TODO: On startup
 // - Clean up old sockets from db
-export default function startServer(config = DEFAULT_CONFIG) {
-    const io = new Server().attach(config.port);
+export default function attachRealtimeServer(server, config) {
+    const io = Server(server, config);
 
     startRealtimeLobbyUpdate(io);
     startRunningGamesRealtimeUpdate(io);

@@ -1,6 +1,7 @@
 var args = require('yargs').argv,
     path = require('path'),
-    gUtil = require('gulp-util');
+    gUtil = require('gulp-util'),
+    globalConf = require('../src/config');
 
 var env = process.env.NODE_ENV || args.env || 'development',
     pkg = require('../package.json'),
@@ -49,6 +50,7 @@ module.exports = {
         'classnames',
         'socket.io-client'
     ],
+    serverPort: globalConf.port,
     paths: paths,
     files: files,
     env: env,

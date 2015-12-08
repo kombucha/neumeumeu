@@ -24,7 +24,7 @@ function bindSocketToStore(socket, store) {
 }
 
 function configureSocket() {
-    return io(`${location.protocol}//${location.hostname}:8090`);
+    return io(`${location.protocol}//${location.hostname}:${__SERVER_PORT__}`);
 }
 
 export default {

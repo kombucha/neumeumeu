@@ -4,12 +4,11 @@
   "description": "",
   "main": "src/scripts/index.js",
   "scripts": {
+    "start": "gulp build && node src/index.js | bunyan --",
     "build": "gulp build",
-    "dev": "gulp dev",
     "test": "gulp test",
-    "server": "node src/server/index.js | bunyan --",
-    "serverdev": "nodemon --delay 2 --watch src/server --watch src/common  src/server/index.js | ./node_modules/.bin/bunyan",
-    "serverdb": "rethinkdb"
+    "clientdev": "gulp dev",
+    "serverdev": "nodemon --delay 2 src/index.js | ./node_modules/.bin/bunyan"
   },
   "repository": {
     "type": "git",
@@ -28,9 +27,11 @@
     "bunyan": "^1.5.1",
     "chai": "^3.3.0",
     "classnames": "^2.2.0",
+    "compression": "^1.6.0",
     "connect-history-api-fallback": "^1.1.0",
     "del": "^2.0.2",
     "eslint-plugin-react": "^3.6.3",
+    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-eslint": "^1.0.0",
