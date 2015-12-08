@@ -6,6 +6,7 @@ function inflateGame(game) {
         players: game.players.map(p => {
             p.chosenCard = fullCardFromId(p.chosenCard);
             p.hand = p.hand ? p.hand.map(fullCardFromId) : undefined;
+            p.malusCards = p.malusCards ? p.malusCards.map(fullCardFromId) : undefined;
             return p;
         })
     });

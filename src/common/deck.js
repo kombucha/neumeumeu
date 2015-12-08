@@ -1,6 +1,7 @@
 import {shuffle, chunk} from 'common/utils';
 
 const NUMBER_OF_CARDS = 104;
+const UNKNOWN_CARD_VALUE = -1;
 
 function generateCard(cardNumber) {
     return {
@@ -41,13 +42,22 @@ function generateGameCards() {
 }
 
 function fullCardFromId(cardId) {
-    return cardId ? {
+    if (!cardId) {
+        return null;
+    } else if (cardId === UNKNOWN_CARD_VALUE) {
+        return {};
+    }
+
+    return {
         value: cardId,
         malus: computeMalus(cardId)
-    } : null;
+    };
 }
 
 export default {
+    NUMBER_OF_CARDS,
+    UNKNOWN_CARD_VALUE,
+
     generateDeck,
     generateGameCards,
     computeMalus,
