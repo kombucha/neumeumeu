@@ -12,7 +12,7 @@ export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'})
 
             {
                 player.chosenCard
-                    ? (<Card className="card--small" card={player.chosenCard}/>)
+                    ? (<Card className="card--player" card={player.chosenCard}/>)
                     : (<div className="player__card-placeholder"></div>)
             }
 
