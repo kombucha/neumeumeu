@@ -9,13 +9,13 @@ export default ({player, defaultAvatarURL='/images/players/avatar-default.svg'})
             <div className="player__username">
                 {player.name}
             </div>
-            <div className="player__card">
+
             {
-                player.chosenCard ? (
-                    <Card className="card--small" card={player.chosenCard}/>
-                ) : null
+                player.chosenCard
+                    ? (<Card className="card--small" card={player.chosenCard}/>)
+                    : (<div className="player__card-placeholder"></div>)
             }
-            </div>
+
         </div>
     );
 };
