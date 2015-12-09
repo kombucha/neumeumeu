@@ -1,4 +1,3 @@
-// TODO: handle upside down ("undefined") cards
 import classNames from 'classnames/dedupe';
 import {range} from 'common/utils';
 

@@ -1,28 +1,11 @@
 @cards-in-play-width: 800px;
 
-.cards-in-play {
-    margin: 50px 0;
-}
-
 .cards-in-play__piles {
-    display: flex;
-    flex-direction: row;
     max-width: @cards-in-play-width;
     margin: auto;
-}
-
-.cards-in-play__pile {
-    flex: 1;
-    text-align: center;
-}
-
-.card-pile--in-play {
     display: flex;
-    flex-direction: column;
-
-    .card-pile__item:not(:first-child) {
-        margin-top: -(4/5*@card-height);
-    }
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .cards-in-play__placeholder {

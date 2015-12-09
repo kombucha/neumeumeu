@@ -1,15 +1,6 @@
-@hand-width: 800px;
-@hand-offset: -60px;
-@card-raise: @s-game-gutter - @hand-offset;
-
-.hand {
-    margin-bottom: @hand-offset;
-}
-
 .hand__cards {
     display: flex;
-    max-width: @hand-width;
-    margin: auto;
+    padding: @s-game-gutter;
 }
 
 .hand__item {
@@ -19,13 +10,4 @@
 // Card modifier
 .card--hand {
     cursor: pointer;
-}
-
-// Raising the card
-.hand__item {
-    transition: margin-top 0.1s ease-in;
-}
-
-.hand__item:hover {
-    margin-top: -@card-raise;
 }

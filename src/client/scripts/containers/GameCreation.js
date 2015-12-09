@@ -9,6 +9,7 @@ export default class GameCreation extends PureRenderComponent {
         this.props.createGame(game);
         // TODO: redirect on successful game creation somehow
     }
+
     render() {
         return (
             <div className="center-col">

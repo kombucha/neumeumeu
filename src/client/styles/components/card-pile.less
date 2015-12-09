@@ -1,0 +1,16 @@
+.card-pile {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-pile__item {
+    display: inline-block;
+}
+
+.card-pile__item:not(:first-child) {
+    margin-top: -(4/5*@card-height);
+}
+
+.card-pile--selectable {
+    cursor: pointer;
+}
