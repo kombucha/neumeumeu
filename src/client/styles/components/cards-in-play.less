@@ -1,4 +1,5 @@
 @cards-in-play-width: 800px;
+@selector-size: 20px;
 
 .cards-in-play {
     min-height: @card-height + (4/5*@card-height);
@@ -10,6 +11,26 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+.cards-in-play--selectable {
+    .cards-in-play__pile:hover {
+        position: relative;
+        cursor: pointer;
+
+        &::before {
+            display: block;
+            position: absolute;
+            top: -(@selector-size + 5px);
+            left: (@card-width - 2*@selector-size) / 2;
+            content: ' ';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: @selector-size @selector-size 0 @selector-size;
+            border-color: white transparent transparent transparent;
+        }
+    }
 }
 
 .cards-in-play__placeholder {

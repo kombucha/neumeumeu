@@ -1,9 +1,17 @@
 import classNames from 'classnames/dedupe';
+import PlayerStatus from 'common/constants/player-status';
 import Card from './Card';
 
 export default ({className, player, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
     const avatarURL = player.avatarURL || defaultAvatarURL,
-        classes = classNames('player', className);
+        classes = classNames(
+            'player',
+            {
+                'player--played-card': player.status === PlayerStatus.PLAYED_CARD,
+                'player--choosing-pile': player.status === PlayerStatus.HAS_TO_CHOOSE_PILE
+            },
+            className
+        );
 
     return (
         <div className={classes}>

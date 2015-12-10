@@ -3,6 +3,7 @@ import PureRenderComponent from 'client/components/PureRenderComponent';
 import actionCreators from 'client/actions';
 
 import GameStatus from 'common/constants/game-status';
+import PlayerStatus from 'common/constants/player-status';
 import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
 import PlayerHud from 'client/components/PlayerHUD';
@@ -73,7 +74,10 @@ export default class Game extends PureRenderComponent {
         return (
             <div className="game">
                 <Players players={topPlayers} highlightIdx={currentPlayerIdx} />
-                <CardsInPlay piles={game.cardsInPlay} onPileSelected={this.handlePileSelected.bind(this)} />
+                <CardsInPlay
+                    piles={game.cardsInPlay}
+                    canSelectPiles={currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
+                    onPileSelected={this.handlePileSelected.bind(this)} />
                 {gameStarted ? this.renderPlayerHUD(currentPlayer) : this.renderPreGameHUD(canStartGame)}
             </div>
         );
