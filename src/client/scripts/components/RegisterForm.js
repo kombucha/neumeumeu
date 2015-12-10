@@ -36,6 +36,11 @@ export default class RegisterForm extends FormComponent {
                     required
                     onChange={this.onChange('username')}/>
 
+                <select id="avatar">
+                    <option value="">cat</option>
+                    <option value="">cat</option>
+                </select>
+
                 <input id="password"
                     type="password"
                     placeholder="Password"

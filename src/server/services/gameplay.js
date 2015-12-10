@@ -1,68 +1,45 @@
 import r from 'server/database';
-import Errors from 'common/constants/errors';
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
+import {copyArray} from 'common/utils';
+import Errors from 'common/constants/errors';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
 import log from 'server/log';
 
 function getGameplayForPlayer(playerId, gameId) {
-    return r.table('game')
-        .get(gameId)
-        .run()
-        .then(game => transformGameplayForPlayer(playerId, game));
+    return getGame(gameId).then(game => transformGameplayForPlayer(playerId, game));
 }
 
 function startRound(playerId, gameId) {
-    const gameCards = generateGameCards();
+    return getGame(gameId)
+        .then(game => {
+            if (game.players.length < 2 || game.owner !== playerId) {
+                return Promise.reject(game);
+            }
 
-    return r.table('game')
-        .get(gameId)
-        .update(game => {
-            return r.branch(
-                game('players').count().gt(1)
-                .and(game('owner').eq(playerId)),
-                {
-                    status: GameStatus.WAITING_FOR_CARDS,
-                    cardsInPlay: gameCards.cardsInPlay,
-                    players: game('players')
-                        .map(gameCards.hands, (player, hand) => player.merge({
-                            hand,
-                            chosenCard: null,
-                            status: PlayerStatus.CHOOSING_CARD
-                        }))
-                },
-                {}
-            );
-        })
-        .run();
-}
+            const gameCards = generateGameCards();
 
-function updatePlayerInGame(gameId, player) {
-    return r.table('game')
-        .get(gameId)
-        // DAMN that's convoluted....
-        .update(game => {
-            return game('players')
-                .offsetsOf(p => p('id').eq(player.id))(0)
-                .do(playerIdx => ({
-                    players: game('players').changeAt(playerIdx, player)
-                }));
-        })
-        .run();
+            game.status = GameStatus.WAITING_FOR_CARDS;
+            game.cardsInPlay = gameCards.cardsInPlay;
+            game.players = game.players.map((player, idx) => Object.assign({}, player, {
+                hand: gameCards.hands[idx],
+                chosenCard: null,
+                chosenPile: null,
+                status: PlayerStatus.CHOOSING_CARD
+            }));
+
+            return updateGame(game);
+        });
 }
 
 function playCard(playerId, gameId, cardValue) {
-    return r.table('game')
-        .get(gameId)
-        .run()
+    return getGame(gameId)
         .then(game => {
             const newPlayer = game.players.find(player => player.id === playerId),
                 cardIdx = newPlayer.hand.findIndex(card => card.value === cardValue),
                 userOwnsCard = cardIdx !== -1;
 
-            if (game.status !== GameStatus.WAITING_FOR_CARDS) {
-                return Promise.reject(Errors.INVALID_MOVE);
-            } else if (!userOwnsCard) {
+            if (game.status !== GameStatus.WAITING_FOR_CARDS || !userOwnsCard) {
                 return Promise.reject(Errors.INVALID_MOVE);
             }
 
@@ -74,20 +51,17 @@ function playCard(playerId, gameId, cardValue) {
             newPlayer.chosenCard = newPlayer.hand[cardIdx];
             newPlayer.hand.splice(cardIdx, 1);
 
-            return updatePlayerInGame(gameId, newPlayer);
-        });
+            return updateGame(game);
+        })
+        .then(game => transformGameplayForPlayer(playerId, game));
 }
 
 function cancelCard(playerId, gameId) {
-    return r.table('game')
-        .get(gameId)
-        .run()
+    return getGame(gameId)
         .then(game => {
             const player = game.players.find(player => player.id === playerId);
 
-            if (game.status !== GameStatus.WAITING_FOR_CARDS) {
-                return Promise.reject(Errors.INVALID_MOVE);
-            } else if (!player.chosenCard) {
+            if (game.status !== GameStatus.WAITING_FOR_CARDS || !player.chosenCard) {
                 return Promise.reject(Errors.INVALID_MOVE);
             }
 
@@ -95,15 +69,14 @@ function cancelCard(playerId, gameId) {
             player.chosenCard = null;
             player.status = PlayerStatus.CHOOSING_CARD;
 
-            return updatePlayerInGame(gameId, player);
+            return updateGame(game);
         })
-        .then(null, err => log.info(err));
+        .then(game => transformGameplayForPlayer(playerId, game));
 }
 
 function choosePile(playerId, gameId, pileIdx) {
-    return r.table('game')
-        .get(gameId)
-        .run().then(game => {
+    return getGame(gameId)
+        .then(game => {
             const player = game.players.find(p => p.id === playerId);
             if (game.status !== GameStatus.WAITING_FOR_PILE_CHOICE || player.status !== PlayerStatus.HAS_TO_CHOOSE_PILE) {
                 return Promise.reject(Errors.INVALID_MOVE);
@@ -114,84 +87,109 @@ function choosePile(playerId, gameId, pileIdx) {
             player.status = PlayerStatus.CHOOSED_PILE;
             player.chosenPile = pileIdx;
 
-            return r.table('game').get(gameId).update(game).run();
+            return updateGame(game);
         })
-        .run();
+        .then(game => transformGameplayForPlayer(playerId, game));
 }
 
 function resolveTurn(gameId) {
+    return getGame(gameId)
+        .then(solve)
+        .then(solveEnd);
+}
+
+function solve(game) {
+    const everyoneHasPlayed = game.players.every(p => p.chosenCard);
+
+    // Not everyone has played
+    if (game.status === GameStatus.SOLVED ||
+        (game.status === GameStatus.WAITING_FOR_CARDS && !everyoneHasPlayed)) {
+        return Promise.resolve(game);
+    }
+
+    const sortedPlayers = copyArray(game.players).sort((p1, p2) => p1.chosenCard.value - p2.chosenCard.value),
+        pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]),
+        playerHasToChoosePile = player => pilesTopCards.every(topCard => player.chosenCard.value < topCard.value),
+        playerWithTooSmallCard = sortedPlayers.find(playerHasToChoosePile),
+        someoneHasChosenPile = sortedPlayers.some(hasChosenPile);
+
+    // Wait for player to chose pile
+    if (game.status === GameStatus.WAITING_FOR_PILE_CHOICE && !someoneHasChosenPile) {
+        return Promise.resolve(game);
+    }
+
+    // Ask player to chose a pile
+    if (playerWithTooSmallCard && !hasChosenPile(playerWithTooSmallCard)) {
+        game.status = GameStatus.WAITING_FOR_PILE_CHOICE;
+        playerWithTooSmallCard.status = PlayerStatus.HAS_TO_CHOOSE_PILE;
+        return updateGame(game);
+    }
+
+    // Solve
+    game.status = GameStatus.SOLVED;
+    sortedPlayers.forEach(player => {
+        player.malusCards = player.malusCards || [];
+
+        if (hasChosenPile(player)) {
+            // Player played a card smaller than any of the piles
+            let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
+            player.malusCards = player.malusCards.concat(pileCards);
+        } else {
+            // Regular play
+            const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
+            game.cardsInPlay[destinationPile].push(player.chosenCard);
+
+            // Oh noes !
+            if (game.cardsInPlay[destinationPile].length > 5) {
+                player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
+            }
+        }
+
+        player.status = PlayerStatus.IDLE;
+        player.chosenPile = null;
+        player.chosenCard = null;
+    });
+
+    return updateGame(game);
+}
+
+function solveEnd(game) {
+    const stillCardsToPlay = game.players.some(p => p.hand.length > 0),
+        endReached = isEndReached(game);
+
+    if (game.status !== GameStatus.SOLVED) {
+        return Promise.resolve(game);
+    } else if (stillCardsToPlay) {
+        game.status = GameStatus.WAITING_FOR_CARDS;
+        return updateGame(game);
+    } else if (endReached) {
+        game.status = GameStatus.ENDED;
+        return updateGame(game);
+    } else {
+        return startRound(game.owner, game.id);
+    }
+}
+
+function isEndReached() {
+    // TODO
+    return false;
+}
+
+function getGame(id) {
+    return r.table('game').get(id).run();
+}
+
+function updateGame(game) {
     return r.table('game')
-        .get(gameId)
+        .get(game.id)
+        .update(game, {returnChanges: true})
         .run()
-        .then(game => {
-            const everyoneHasPlayed = game.players.every(p => !!p.chosenCard);
-
-            // Abort, turn doesn't end until everyone has played
-            if (!everyoneHasPlayed) {
-                return Promise.resolve('Still waiting for card');
+        .then(result => {
+            if (result.changes.length === 0) {
+                return game;
             }
 
-            const someoneHasChosenPile = game.players.some(hasChosenPile),
-                pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]),
-                playerHasToChoosePile = player => pilesTopCards.every(topCard => player.chosenCard.value < topCard.value),
-                playerWithTooSmallCard = game.players.find(playerHasToChoosePile);
-
-            // Abort, can't resolve turn until player has chosen which piles to take
-            if (game.status === GameStatus.WAITING_FOR_PILE_CHOICE && !someoneHasChosenPile) {
-                return Promise.resolve('Waiting for pile choice');
-            }
-
-            // Abort, can't resolve turn. Asks player to chose a pile to take
-            if (playerWithTooSmallCard && !hasChosenPile(playerWithTooSmallCard)) {
-                game.status = GameStatus.WAITING_FOR_PILE_CHOICE;
-                playerWithTooSmallCard.status = PlayerStatus.HAS_TO_CHOOSE_PILE;
-                return r.table('game').get(gameId).update(game, {returnChanges: true}).run();
-            }
-
-            // Resolve turn
-            let sortedPlayers = game.players.slice()
-                .sort((p1, p2) => p1.chosenCard.value - p2.chosenCard.value);
-
-            // Turn must be solved from lowest card value to biggest
-            sortedPlayers.forEach(player => {
-                player.malusCards = player.malusCards || [];
-
-                if (hasChosenPile(player)) {
-                    // Player played a card smaller than any of the piles
-                    let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
-                    player.malusCards = player.malusCards.concat(pileCards);
-                } else {
-                    // Regular play
-                    const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
-                    game.cardsInPlay[destinationPile].push(player.chosenCard);
-
-                    // Oh noes !
-                    if (game.cardsInPlay[destinationPile].length > 5) {
-                        player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
-                    }
-                }
-
-                player.status = PlayerStatus.IDLE;
-                player.chosenPile = null;
-                player.chosenCard = null;
-            });
-
-            log.info('Mergin in', game.players, game.cardsInPlay);
-
-            return r.table('game').get(gameId).update(game, {returnChanges: true}).run();
-        }).then(result => {
-            // Aborted early, iz not a game !
-            if (!result || !result.changes || result.changes.length === 0) {
-                return {};
-            }
-
-            const game = result.changes[0]['new_val'],
-                canStartNextTurn = game.players.every(p => p.hand.length === 0);
-
-            if (canStartNextTurn) {
-                // TODO: change function signature
-                return startRound(game.owner, game.id);
-            }
+            return result.changes[0]['new_val'];
         });
 }
 

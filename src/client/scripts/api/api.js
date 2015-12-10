@@ -11,22 +11,25 @@ function getAuthToken() {
     return store.getState().authentication.token;
 }
 
-function emitAction(action) {
+function emitAction(action, waitForResponse = true) {
     return new Promise((resolve, reject) => {
         if (!socket) {
             return reject('Api was not initialized');
         }
 
-        socket.emit('action', action, (result) => {
-            if (!result) {
-                debugger;
-            }
+        const cb = waitForResponse ? (result) => {
             if (result.error) {
                 return reject(result.error);
             }
 
             return resolve(result);
-        });
+        } : undefined;
+
+        socket.emit('action', action, cb);
+
+        if (!waitForResponse) {
+            return Promise.resolve(action);
+        }
     });
 }
 

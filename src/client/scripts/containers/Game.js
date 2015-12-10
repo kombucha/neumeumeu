@@ -67,13 +67,14 @@ export default class Game extends PureRenderComponent {
             isOwner = (game.owner === currentPlayer.id),
             gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
             topPlayers = game.players,
+            currentPlayerIdx = game.players.findIndex(p => p.id === currentPlayer.id),
             canStartGame = !gameStarted && isOwner && game.players.length >= 2;
 
         return (
             <div className="game">
-                <Players players={topPlayers} />
+                <Players players={topPlayers} highlightIdx={currentPlayerIdx} />
                 <CardsInPlay piles={game.cardsInPlay} onPileSelected={this.handlePileSelected.bind(this)} />
-                {gameStarted ? this.renderPlayerHUD(currentPlayer) : this.renderPreGameHUD()}
+                {gameStarted ? this.renderPlayerHUD(currentPlayer) : this.renderPreGameHUD(canStartGame)}
             </div>
         );
     }

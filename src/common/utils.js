@@ -1,3 +1,7 @@
+function copyArray(arr) {
+    return arr.slice();
+}
+
 function range(size) {
     return Array.apply(null, Array(size)).map((_, i) => i);
 }
@@ -52,6 +56,7 @@ function promisify(fn) {
 }
 
 export default {
+    copyArray,
     range,
     sort,
     shuffle,
