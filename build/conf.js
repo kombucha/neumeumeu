@@ -50,7 +50,7 @@ module.exports = {
         'classnames',
         'socket.io-client'
     ],
-    serverPort: globalConf.port,
+    serverPort: (env === 'production') ? 80 : globalConf.port,
     paths: paths,
     files: files,
     env: env,

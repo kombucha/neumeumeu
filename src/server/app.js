@@ -16,4 +16,4 @@ app.use(html5History())
     .use(express.static(staticAssetsPath));
 
 attachRealtimeServer(server);
-server.listen(config.port, () => log.info('Server started on port', config.port));
+server.listen(config.port, 'localhost', () => log.info('Server started on port', config.port));
