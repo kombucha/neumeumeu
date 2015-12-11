@@ -20,7 +20,7 @@ function startRound(playerId, gameId) {
             const gameCards = generateGameCards();
 
             game.status = GameStatus.WAITING_FOR_CARDS;
-            game.cardsInPlay = gameCards.cardsInPlay;
+            game.cardsInPlay = gameCards.cardsInPlay.sort((pile1, pile2) => pile1[0].value - pile2[0].value);
             game.players = game.players.map((player, idx) => Object.assign({}, player, {
                 hand: gameCards.hands[idx],
                 chosenCard: null,
