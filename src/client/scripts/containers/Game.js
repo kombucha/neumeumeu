@@ -42,13 +42,13 @@ export default class Game extends PureRenderComponent {
     }
 
     renderLoadingGame() {
-        return (<div>Chargement du jeu en cours...</div>);
+        return (<div>Loading game...</div>);
     }
 
     renderPreGameHUD(canStartGame) {
         return canStartGame
             ? this.renderStartGame()
-            : (<div>En attente de joueurs</div>);
+            : (<div>Waiting for players</div>);
     }
 
     renderPlayerHUD(player) {
