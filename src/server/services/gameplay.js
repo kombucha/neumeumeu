@@ -101,8 +101,8 @@ function resolveTurn(gameId) {
 function solve(game) {
     const everyoneHasPlayed = game.players.every(p => p.chosenCard);
 
-    // Not everyone has played
     if (game.status === GameStatus.SOLVED ||
+        game.status === GameStatus.WAITING_FOR_PLAYERS ||
         (game.status === GameStatus.WAITING_FOR_CARDS && !everyoneHasPlayed)) {
         return Promise.resolve(game);
     }
