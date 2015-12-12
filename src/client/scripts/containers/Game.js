@@ -11,6 +11,7 @@ import PlayerHud from 'client/components/PlayerHUD';
 export default class Game extends PureRenderComponent {
     componentWillMount() {
         const gameId = this.props.params.gameId;
+
         this.props.joinRoom(gameId);
         this.props.updateCurrentGame(gameId);
     }
@@ -19,6 +20,12 @@ export default class Game extends PureRenderComponent {
         const gameId = this.props.params.gameId;
         this.props.leaveRoom(gameId);
         this.props.clearCurrentGame();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.game && nextProps.game.status === GameStatus.ENDED) {
+            return nextProps.updatePath(`/games/${nextProps.game.id}/results`);
+        }
     }
 
     startGame() {

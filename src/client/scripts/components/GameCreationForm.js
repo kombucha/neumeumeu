@@ -7,6 +7,7 @@ export default class GameCreationForm extends FormComponent {
         super(props);
         this.state = {
             isProtected: false,
+            maxMalus: 66,
             maxPlayers: 4
         };
     }
@@ -26,7 +27,7 @@ export default class GameCreationForm extends FormComponent {
     }
 
     render() {
-        const {name, isProtected, password, maxPlayers} = this.state;
+        const {name, isProtected, password, maxMalus, maxPlayers} = this.state;
 
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -61,6 +62,19 @@ export default class GameCreationForm extends FormComponent {
                                step="1"
                                value={maxPlayers}
                                onChange={this.onChange('maxPlayers')}/>
+                    </div>
+                </label>
+
+                <label className="form__label">
+                    <span className="form__text">Max Malus</span>
+                    <div className="form__range">
+                        <span className="form__range__value">{maxMalus}</span>
+                        <input type="range"
+                               min="20"
+                               max="200"
+                               step="1"
+                               value={maxMalus}
+                               onChange={this.onChange('maxMalus')}/>
                     </div>
                 </label>
 

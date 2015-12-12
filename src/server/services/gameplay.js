@@ -170,9 +170,10 @@ function solveEnd(game) {
     }
 }
 
-function isEndReached() {
-    // TODO
-    return false;
+function isEndReached(game) {
+    return game.players
+        .map(p => computePlayerMalus(p.malusCards))
+        .some(malus => malus >= game.maxMalus);
 }
 
 function getGame(id) {

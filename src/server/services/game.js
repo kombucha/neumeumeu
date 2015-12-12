@@ -20,14 +20,19 @@ function createGamePlayer(player) {
 }
 
 function createGame(playerId, options) {
-    // TODO: cleanup game options
-    const newGame = Object.assign({}, options, {
+    const newGame = {
+        name: options.name,
+        password: options.password,
+        maxMalus: options.maxMalus || 66,
+        maxPlayers: options.maxPlayers || 10,
+
         creationDate: r.now(),
         status: GameStatus.WAITING_FOR_PLAYERS,
         players: [],
         owner: playerId,
         cardsInPlay: [[], [], [], []]
-    });
+    };
+
     return r.table('game')
         .insert(newGame)
         .run()
