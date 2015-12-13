@@ -22,7 +22,11 @@ function handleAction(socket, action) {
                 return result;
             });
     case 'REGISTER':
-        return authService.register(action.user);
+        return authService.register(action.user)
+            .then(result => {
+                authService.associateWithSocket(result.player.id, socket.id);
+                return result;
+            });
     case 'ASSOCIATE_PLAYER_TO_SOCKET':
         return authService.associateWithSocket(action.playerId, action.socketId);
 
