@@ -25,6 +25,10 @@ function choosePile(gameId, pile) {
     return () => api.choosePile(gameId, pile);
 }
 
+function toggleAI(gameId, playerId, enable) {
+    return () => api.toggleAI(gameId, playerId, enable);
+}
+
 function updateCurrentGame(gameId) {
     return dispatch => {
         return api.getGame(gameId)
@@ -49,5 +53,6 @@ export default {
     startGame,
     playCard,
     cancelCard,
-    choosePile
+    choosePile,
+    toggleAI
 };

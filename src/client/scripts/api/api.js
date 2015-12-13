@@ -128,6 +128,16 @@ function choosePile(gameId, pile) {
     });
 }
 
+function toggleAI(gameId, playerId, enable) {
+    return emitAction({
+        type: 'TOGGLE_AI',
+        token: getAuthToken(),
+        gameId,
+        playerId,
+        enable
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -163,5 +173,6 @@ export default {
     startGame,
     playCard,
     cancelCard,
-    choosePile
+    choosePile,
+    toggleAI
 };

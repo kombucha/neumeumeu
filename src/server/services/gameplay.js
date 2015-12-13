@@ -1,6 +1,6 @@
 import r from 'server/database';
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
-import {copyArray} from 'common/utils';
+import {copyArray, pickRandom, randomInt} from 'common/utils';
 import Errors from 'common/constants/errors';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
@@ -92,8 +92,21 @@ function choosePile(playerId, gameId, pileIdx) {
         .then(game => transformGameplayForPlayer(playerId, game));
 }
 
-function resolveTurn(gameId) {
+function toggleAI(playerId, gameId, enable) {
     return getGame(gameId)
+        .then(game => {
+            const player = game.players.find(p => p.id === playerId);
+            player.AIEnabled = enable;
+            return updateGame(game);
+        })
+        .then(game => transformGameplayForPlayer(playerId, game));
+}
+
+function resolveTurn(gameId) {
+    // FIXME: Game fetched many times :/
+    return getGame(gameId)
+        .then(playAIs)
+        .then(() => getGame(gameId))
         .then(solve)
         .then(solveEnd);
 }
@@ -161,6 +174,10 @@ function solveEnd(game) {
         return Promise.resolve(game);
     } else if (stillCardsToPlay) {
         game.status = GameStatus.WAITING_FOR_CARDS;
+        game.players = game.players.map(p => {
+            p.status = PlayerStatus.CHOOSING_CARD;
+            return p;
+        });
         return updateGame(game);
     } else if (endReached) {
         game.status = GameStatus.ENDED;
@@ -168,6 +185,21 @@ function solveEnd(game) {
     } else {
         return startRound(game.owner, game.id);
     }
+}
+
+function playAIs(game) {
+    const aiActions = game.players
+        .filter(p => p.AIEnabled)
+        .map(p => {
+            if (p.status === PlayerStatus.CHOOSING_CARD) {
+                const randomCardValue = pickRandom(p.hand).value;
+                return playCard(p.id, game.id, randomCardValue);
+            } else if (p.status === PlayerStatus.HAS_TO_CHOOSE_PILE) {
+                return choosePile(p.id, game.id, randomInt(0, 3));
+            }
+        });
+
+    return Promise.all(aiActions);
 }
 
 function isEndReached(game) {
@@ -232,7 +264,8 @@ function otherPlayer(player) {
         name: player.name,
         status: player.status,
         chosenCard: simpleCard(player.chosenCard ? {value: UNKNOWN_CARD_VALUE} : null),
-        malus: computePlayerMalus(player.malusCards)
+        malus: computePlayerMalus(player.malusCards),
+        AIEnabled: player.AIEnabled
     };
 }
 
@@ -272,6 +305,7 @@ export default {
     playCard,
     cancelCard,
     choosePile,
+    toggleAI,
 
     resolveTurn,
     getGameplayForPlayer,

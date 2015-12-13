@@ -11,6 +11,14 @@ function sort(arr, compareFn) {
     return arr.concat().sort(compareFn);
 }
 
+function randomInt(min, max) {
+    return min + Math.floor((max - min + 1) * Math.random());
+}
+
+function pickRandom(arr) {
+    return arr[randomInt(0, arr.length - 1)];
+}
+
 // http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
 function shuffle(arr) {
     let arrCopy = arr.slice(),
@@ -57,6 +65,8 @@ function promisify(fn) {
 
 export default {
     copyArray,
+    randomInt,
+    pickRandom,
     range,
     sort,
     shuffle,
