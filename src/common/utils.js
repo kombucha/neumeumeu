@@ -1,5 +1,5 @@
 function copyArray(arr) {
-    return arr.slice();
+    return arr.concat();
 }
 
 function range(size) {
@@ -8,7 +8,7 @@ function range(size) {
 
 // Returns a sorted COPY of an array
 function sort(arr, compareFn) {
-    return arr.concat().sort(compareFn);
+    return copyArray(arr).sort(compareFn);
 }
 
 function randomInt(min, max) {
