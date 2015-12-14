@@ -20,10 +20,10 @@ export default class GameResults extends PureRenderComponent {
             <div className="game-results">
                 <ul>
                     {
-                        rankedPlayers.map((p, idx) => (
+                        rankedPlayers.map(p => (
                             <li key={p.id} className="game-result">
                                 <span className="game-result__malus">
-                                    <StrokedText text={p.malus + "pts"}/>
+                                    <StrokedText text={p.malus + 'pts'}/>
                                 </span>
                                 <span className="game-result__name">
                                     <StrokedText text={p.name}/>
@@ -44,14 +44,7 @@ export default class GameResults extends PureRenderComponent {
 
 function mapStateToProps(state) {
     return {
-        game: {
-            players: [
-                {id: 0, name: 'John', malus: 17},
-                {id: 1, name: 'Jack', malus: 45},
-                {id: 2, name: 'Marie', malus: 12},
-                {id: 3, name: 'Steve', malus: 29},
-                {id: 4, name: 'Laura', malus: 34}
-            ]}
+        game: state.gameplay
     };
 }
 

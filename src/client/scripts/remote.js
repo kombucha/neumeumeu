@@ -24,6 +24,10 @@ function bindSocketToStore(socket, store) {
 }
 
 function configureSocket() {
+    if (__USE_MOCKS__) {
+        return {on: () => null};
+    }
+
     return io(`${location.protocol}//${location.hostname}:${__SERVER_PORT__}`);
 }
 

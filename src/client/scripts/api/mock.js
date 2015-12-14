@@ -111,18 +111,18 @@ function getGame(gameId) {
         ],
 
         players: [
-            {id:7, username: 'Gabriela', hand: []},
-            {id:1, username: 'Azadeh', hand: []},
+            {id:7, name: 'Gabriela', hand: [], malus: 20},
+            {id:1, name: 'Azadeh', hand: [], malus: 22},
             {
-                id:0,
-                username: 'Vincent',
+                id: 0,
+                name: 'Vincent',
                 malus: 17,
                 hand: [ 55, 10, 104, 22, 78, 1, 24 ]
             },
-            {id:3, username: 'Hugo', hand: []},
-            {id:4, username: 'Samuel', hand: []},
-            {id:5, username: 'Julian', hand: []},
-            {id:6, username: 'Arnaud', hand: []}
+            {id:3, name: 'Hugo', hand: [], malus: 2},
+            {id:4, name: 'Samuel', hand: [], malus: 40},
+            {id:5, name: 'Julian', hand: [], malus: 200},
+            {id:6, name: 'Arnaud', hand: [], malus: 4}
         ],
         maxPlayers: 10,
         status: 'waiting_for_cards',

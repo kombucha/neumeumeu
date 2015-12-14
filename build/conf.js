@@ -4,6 +4,7 @@ var args = require('yargs').argv,
     globalConf = require('../src/config');
 
 var env = process.env.NODE_ENV || args.env || 'development',
+    serverPort = process.env.PORT || globalConf.port,
     pkg = require('../package.json'),
     isDevMode = args._.indexOf('dev') >= 0,
     paths = {
@@ -50,7 +51,7 @@ module.exports = {
         'classnames',
         'socket.io-client'
     ],
-    serverPort: (env === 'production') ? 80 : globalConf.port,
+    serverPort: serverPort,
     paths: paths,
     files: files,
     env: env,
