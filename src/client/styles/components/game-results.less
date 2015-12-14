@@ -1,0 +1,61 @@
+.game-results {
+    color: darken(@color-red, 20%);
+    text-align: center;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 100%;
+        min-height: 100vh;
+    }
+}
+
+.game-result {
+    display: flex;
+    align-items: baseline;
+
+    .game-result__malus {
+        flex: 1;
+        display: inline-block;
+        font-size: .7em;
+        text-align: right;
+        margin-right: 5rem;
+    }
+
+    .game-result__name {
+        flex: 1;
+        display: inline-block;
+        min-width: 18rem;
+        text-align: left;
+    }
+
+    + .game-result {
+        margin-top: 24px;
+    }
+}
+
+.game-result:first-child {
+    color: @color-yellow;
+    text-align: center;
+
+    .game-result__name {
+        font-size: 1.8em;
+    }
+}
+
+.game-result:nth-child(2)  {
+    color: @color-blue;
+
+    .game-result__name {
+        font-size: 1.4em;
+    }
+}
+
+.game-result:nth-child(3)  {
+    color: @color-purple;
+
+    .game-result__name {
+        font-size: 1.2em;
+    }
+}
