@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {sort} from 'common/utils';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import actionCreators from 'client/actions';
+import StrokedText from 'client/components/StrokedText';
 
 export default class GameResults extends PureRenderComponent {
     componentWillMount() {
@@ -20,7 +21,14 @@ export default class GameResults extends PureRenderComponent {
                 <ul>
                     {
                         rankedPlayers.map((p, idx) => (
-                            <li key={p.id}>{idx + 1} - {p.name} - {p.malus}pts</li>
+                            <li key={p.id} className="game-result">
+                                <span className="game-result__malus">
+                                    <StrokedText text={p.malus + "pts"}/>
+                                </span>
+                                <span className="game-result__name">
+                                    <StrokedText text={p.name}/>
+                                </span>
+                            </li>
                         ))
                     }
                 </ul>
@@ -36,10 +44,14 @@ export default class GameResults extends PureRenderComponent {
 
 function mapStateToProps(state) {
     return {
-        game: state.gameplay,
-        currentPlayer: state.gameplay ?
-            state.gameplay.players.find(player => player.id === state.authentication.player.id)
-            : null
+        game: {
+            players: [
+                {id: 0, name: 'John', malus: 17},
+                {id: 1, name: 'Jack', malus: 45},
+                {id: 2, name: 'Marie', malus: 12},
+                {id: 3, name: 'Steve', malus: 29},
+                {id: 4, name: 'Laura', malus: 34}
+            ]}
     };
 }
 
