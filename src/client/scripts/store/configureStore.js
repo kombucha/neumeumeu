@@ -18,7 +18,7 @@ export default function configureStore(initialState) {
 
     if (process.env.NODE_ENV !== 'production') {
         middlewares = [require('redux-immutable-state-invariant')(), ...middlewares];
-        storeEnhancers = [...storeEnhancers, require('client/containers/DevTools').instrument()];
+        // storeEnhancers = [...storeEnhancers, require('client/containers/DevTools').instrument()];
     }
 
     const finalCreateStore = compose(

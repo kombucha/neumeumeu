@@ -1,6 +1,6 @@
 let App;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && false) {
     let DevTools = require('client/containers/DevTools');
 
     App = (props) => (
