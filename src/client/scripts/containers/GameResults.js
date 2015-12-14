@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {sort} from 'common/utils';
 import PureRenderComponent from 'client/components/PureRenderComponent';
+import Fireworks from 'client/components/Fireworks';
 import actionCreators from 'client/actions';
 import StrokedText from 'client/components/StrokedText';
 
@@ -20,12 +21,13 @@ export default class GameResults extends PureRenderComponent {
             <div className="game-results">
                 <ul>
                     {
-                        rankedPlayers.map(p => (
+                        rankedPlayers.map((p, idx) => (
                             <li key={p.id} className="game-result">
                                 <span className="game-result__malus">
                                     <StrokedText text={p.malus + 'pts'}/>
                                 </span>
                                 <span className="game-result__name">
+                                    {idx === 0 ? <Fireworks/> : null}
                                     <StrokedText text={p.name}/>
                                 </span>
                             </li>
