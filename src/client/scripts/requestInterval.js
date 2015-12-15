@@ -38,7 +38,7 @@ function requestInterval(fn, delay) {
  * @param {int|object} fn The callback function
  */
 function clearRequestInterval(handle) {
-    if (cancelAnimationFrame) {
+    if (cancelAnimationFrame && handle) {
         handle.cancelled = true;
         return cancelAnimationFrame(handle.value);
     }
