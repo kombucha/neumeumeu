@@ -5,7 +5,19 @@ import {requestInterval, clearRequestInterval} from 'client/requestInterval';
 import {range, pickRandom, randomInt} from 'common/utils';
 
 
-const COLORS = ['red', 'green', 'yellow', 'blue'];
+const COLORS = ['#FFFFFF', // @color-white
+                '#610C68', // @color-purple
+                '#D797DC', // @color-pink
+                '#E9A810', // @color-orange
+                '#EB4110', // @color-red
+                '#ffc618', // @color-yellow
+                '#A5BEF8', // @color-blue
+                '#5C3E9E', // @color-purple-light
+                '#281C27', // @color-blue-dark
+                '#48a98f', // @color-cyan
+                '#8dd00c', // @color-green
+                '#378511'];// @color-green-dark
+
 const PARTICLES_COUNT = 500;
 const DEFAULT_MAX_RADIUS = 1500;
 const GRAVITY = 5;

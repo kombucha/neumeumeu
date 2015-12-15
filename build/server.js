@@ -44,7 +44,8 @@ function startServer() {
             target: 'localhost:8000',
             middleware: [
                 devMiddleware,
-                hotMiddleware
+                hotMiddleware,
+                history()
             ]
         };
     }
