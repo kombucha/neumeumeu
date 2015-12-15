@@ -1,4 +1,5 @@
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import {sort} from 'common/utils';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import Fireworks from 'client/components/Fireworks';
@@ -34,6 +35,9 @@ export default class GameResults extends PureRenderComponent {
                         ))
                     }
                 </ul>
+                <Link className="game-results__back button" to="/">
+                    <StrokedText text="Back to home"/>
+                </Link>
             </div>
         );
     }
