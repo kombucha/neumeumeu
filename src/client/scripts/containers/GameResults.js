@@ -19,14 +19,14 @@ export default class GameResults extends PureRenderComponent {
         const rankedPlayers = sort(game.players, (p1, p2) => p1.malus - p2.malus);
         return (
             <div className="game-results">
-                <ul>
+                <ul className="game-results__players">
                     {
                         rankedPlayers.map((p, idx) => (
-                            <li key={p.id} className="game-result">
-                                <span className="game-result__malus">
+                            <li key={p.id} className="game-results__player">
+                                <span className="game-results__player__malus">
                                     <StrokedText text={p.malus + 'pts'}/>
                                 </span>
-                                <span className="game-result__name">
+                                <span className="game-results__player__name">
                                     {idx === 0 ? <Fireworks/> : null}
                                     <StrokedText text={p.name}/>
                                 </span>
