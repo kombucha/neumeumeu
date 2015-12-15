@@ -15,11 +15,11 @@ form {
     width: @form-width;
 
     .button {
-        margin-top: 30px;
+        margin-top: @u-medium;
     }
 
     &:first-child {
-        margin-top: 50px;
+        margin-top: @u-large;
     }
 }
 
@@ -55,20 +55,20 @@ select {
     }
 
     + input, + select {
-        margin-top: 20px;
+        margin-top: @u-medium;
     }
 }
 
 .form__text {
     font-size: 3rem;
     width: @form-width;
-    margin: 50px auto 20px;
+    margin: @u-large auto @u-medium;
     text-align: left;
     line-height: 1;
 }
 
 .form__label {
-    margin: 20px 0;
+    margin: @u-medium 0;
     text-align: left;
     display: table;
     width: 100%;
