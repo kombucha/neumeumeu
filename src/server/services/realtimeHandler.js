@@ -25,15 +25,27 @@ function startGameRealtimeUpdate(gameId) {
     return gameplayService.listenToGameplayUpdates(gameId, onGameUpdate);
 }
 
-function onGameUpdate(game, end) {
-    broadcastGameUpdate(game);
-    gameplayService.resolveTurn(game.id)
-        .then(resolvedGame => {
-            broadcastGameUpdate(resolvedGame);
-            if (resolvedGame.status === GameStatus.ENDED) {
-                end();
-            }
+function onGameUpdate(newGame, oldGame, end) {
+    if (!newGame || (newGame.status === GameStatus.ENDED)) {
+        return end();
+    }
+
+    log.info('GAME UPDATE', newGame.status);
+    // When game is solved, send a special game object
+    // With details as to how to solve the game
+    // So that we can play super duper animations
+    if (newGame.status === GameStatus.SOLVED) {
+        log.info('YIPPY');
+        const hybridGame = Object.assign({}, oldGame, {
+            status: GameStatus.SOLVED,
+            resolutionSteps: newGame.resolutionSteps
         });
+        return broadcastGameUpdate(hybridGame);
+    }
+
+
+    broadcastGameUpdate(newGame);
+    gameplayService.resolveTurn(newGame.id);
 }
 
 function broadcastGameUpdate(game) {

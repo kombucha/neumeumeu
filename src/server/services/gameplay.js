@@ -27,6 +27,7 @@ function startRound(playerId, gameId) {
                 chosenPile: null,
                 status: PlayerStatus.CHOOSING_CARD
             }));
+            game.resolutionSteps = null;
 
             return updateGame(game);
         });
@@ -139,7 +140,7 @@ function solve(game) {
     }
 
     // Solve
-    const actions = [];
+    const resolutionSteps = [];
 
     game.status = GameStatus.SOLVED;
     sortedPlayers.forEach(player => {
@@ -149,8 +150,8 @@ function solve(game) {
             // Player played a card smaller than any of the piles
             let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
             player.malusCards = player.malusCards.concat(pileCards);
-            actions.push({fromPile: player.chosenPile, toPlayer: player.id});
-            actions.push({fromPlayer: player.id, toPile: player.chosenPile});
+            resolutionSteps.push({fromPile: player.chosenPile, toPlayer: player.id});
+            resolutionSteps.push({fromPlayer: player.id, toPile: player.chosenPile});
         } else {
             // Regular play
             const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
@@ -159,10 +160,10 @@ function solve(game) {
             // Oh noes !
             if (game.cardsInPlay[destinationPile].length > 5) {
                 player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
-                actions.push({fromPile: destinationPile, toPlayer: player.id});
+                resolutionSteps.push({fromPile: destinationPile, toPlayer: player.id});
             }
 
-            actions.push({fromPlayer: player.id, toPile: destinationPile});
+            resolutionSteps.push({fromPlayer: player.id, toPile: destinationPile});
         }
 
         player.status = PlayerStatus.IDLE;
@@ -170,16 +171,18 @@ function solve(game) {
         player.chosenCard = null;
     });
 
-    log.info('ACTIONS ->', actions);
+    log.info('RESOLUTION STEPS', resolutionSteps);
+    game.resolutionSteps = resolutionSteps;
 
     return updateGame(game);
 }
 
 function solveEnd(game) {
     const stillCardsToPlay = game.players.some(p => p.hand.length > 0),
+        everyoneReadyForNextTurn = game.players.every(p => p.status === PlayerStatus.READY_FOR_NEXT_ROUND),
         endReached = isEndReached(game);
 
-    if (game.status !== GameStatus.SOLVED) {
+    if (game.status !== GameStatus.SOLVED || !everyoneReadyForNextTurn) {
         return Promise.resolve(game);
     } else if (stillCardsToPlay) {
         game.status = GameStatus.WAITING_FOR_CARDS;
@@ -293,7 +296,7 @@ function listenToGameplayUpdates (id, updateCallback) {
         .run()
         .then(cursor => {
             cursor.on('data', data => {
-                updateCallback(data.new_val, cursor.close);
+                updateCallback(data.new_val, data.old_val, cursor.close);
             });
         });
 }
