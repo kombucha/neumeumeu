@@ -7,7 +7,8 @@ export default ({className, player, defaultAvatarURL='/images/players/avatar-def
         classes = classNames(
             'player',
             {
-                'player--played-card': player.status === PlayerStatus.PLAYED_CARD,
+                'player--played-card': player.status === PlayerStatus.PLAYED_CARD
+                    || player.status === PlayerStatus.CHOOSED_PILE,
                 'player--choosing-pile': player.status === PlayerStatus.HAS_TO_CHOOSE_PILE,
                 'player--ai': !!player.AIEnabled
             },
