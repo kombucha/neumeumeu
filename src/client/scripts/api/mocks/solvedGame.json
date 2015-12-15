@@ -1,0 +1,58 @@
+{
+    "id": 0,
+    "name": "IWN",
+    "cardsInPlay": [
+        [
+            3,
+            4,
+            5,
+            6
+        ],
+        [
+            19,
+            20,
+            21
+        ],
+        [
+            30,
+            38
+        ],
+        [
+            40,
+            41,
+            42,
+            43,
+            44
+        ]
+    ],
+
+    "players": [{
+        "id": "0",
+        "name": "Hugo",
+        "status": "played_card",
+        "malus": 2,
+        "chosenCard": 7,
+        "hand": [55, 10, 104, 22, 78, 1, 24]
+    }, {
+        "id": "1",
+        "name": "Vincent",
+        "status": "played_card",
+        "malus": 0,
+        "chosenCard": 8,
+        "hand": [55, 10, 104, 22, 78, 1, 24]
+    }],
+    "maxPlayers": 10,
+    "owner": 0,
+    "status": "solved",
+    "isProtected": false,
+    "resolutionSteps": [{
+        "fromPlayer": "0",
+        "toPile": 0
+    }, {
+        "fromPile": 0,
+        "toPlayer": "1"
+    }, {
+        "fromPlayer": "1",
+        "toPile": 0
+    }]
+}

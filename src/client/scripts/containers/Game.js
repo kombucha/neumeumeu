@@ -17,6 +17,22 @@ export default class Game extends PureRenderComponent {
         this.props.updateCurrentGame(gameId);
     }
 
+    componentDidUpdate() {
+        const step = this.props.resolutionStep,
+            applyResolutionStep = this.props.applyResolutionStep,
+            shouldAnimate = !!step;
+
+        if (shouldAnimate) {
+            console.log('ANIMATING', step);
+            setTimeout(() =>{
+                applyResolutionStep(step);
+            }, 1000);
+        }
+
+        // TODO: Check if status === solved && resolutionSteps.length === 0
+        // --> update player.status to READY_FOR_NEXT_TURN
+    }
+
     componentWillUnmount() {
         const gameId = this.props.params.gameId;
         this.props.leaveRoom(gameId);
@@ -113,11 +129,18 @@ export default class Game extends PureRenderComponent {
 }
 
 function mapStateToProps(state) {
-    return {
-        game: state.gameplay,
-        currentPlayer: state.gameplay ?
+    const game = state.gameplay,
+        resolutionStep = game && game.resolutionSteps && game.resolutionSteps.length > 0
+            ? game.resolutionSteps[0]
+            : null,
+        currentPlayer = game ?
             state.gameplay.players.find(player => player.id === state.authentication.player.id)
-            : null
+            : null;
+
+    return {
+        game,
+        resolutionStep,
+        currentPlayer
     };
 }
 

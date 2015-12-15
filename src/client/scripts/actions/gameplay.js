@@ -47,6 +47,13 @@ function clearCurrentGame() {
     };
 }
 
+function applyResolutionStep(step) {
+    return {
+        type: 'APPLY_RESOLUTION_STEP',
+        step
+    };
+}
+
 export default {
     updateCurrentGame,
     clearCurrentGame,
@@ -54,5 +61,6 @@ export default {
     playCard,
     cancelCard,
     choosePile,
-    toggleAI
+    toggleAI,
+    applyResolutionStep
 };
