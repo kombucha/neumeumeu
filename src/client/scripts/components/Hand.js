@@ -1,7 +1,7 @@
 import classNames from 'classnames/dedupe';
 import Card from './Card';
 
-export default ({cards, className, onClick}) => {
+export default ({cards, className, onCardSelected}) => {
     const classes = classNames('hand', className);
 
     return (
@@ -20,4 +20,3 @@ export default ({cards, className, onClick}) => {
         </div>
     );
 };
-
