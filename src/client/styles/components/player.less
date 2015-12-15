@@ -3,26 +3,27 @@
 @player-avatar-space: 8px;
 
 .player {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .player--current {
-    position: relative;
 
     &::before {
         display: block;
         position: absolute;
-        top: -10px;
-        left: 3px;
+        top: -@s-game-gutter;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: -1;
         content: ' ';
         width: 0;
         height: 0;
         border-style: solid;
         border-width: 30px 30px 0 30px;
-        border-color: #ffffff transparent transparent transparent;
+        border-color: @color-blue transparent transparent transparent;
     }
 }
 
@@ -63,18 +64,27 @@
     letter-spacing: .1em;
     text-transform: uppercase;
 
-    color: white;
-}
+    white-space: nowrap;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-.player__card-placeholder {
-    .card--placeholder;
-    width: @card-width/2;
-    height: @card-height/2;
+    color: white;
 }
 
 .player__card {
     width: @card-width/2;
     height: @card-height/2;
+}
+
+.player__malus {
+    position: absolute;
+    top: @u-small;
+    left: 100%;
+    font-size: 1.8rem;
+    color: @color-yellow;
+    letter-spacing: .1em;
+    text-shadow: @shadow-l1;
 }
 
 .card--player {

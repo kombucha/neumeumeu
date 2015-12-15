@@ -13,6 +13,8 @@ function generateCard(cardNumber) {
 function computeMalus(cardNumber) {
     if (cardNumber === 55) {
         return 7;
+    } else if (cardNumber % 11 === 0) {
+        return 5;
     } else if (cardNumber % 10 === 0) {
         return 3;
     } else if (cardNumber % 5 === 0) {

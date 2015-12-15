@@ -7,6 +7,7 @@ import PlayerStatus from 'common/constants/player-status';
 import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
 import PlayerHud from 'client/components/PlayerHUD';
+import StrokedText from 'client/components/StrokedText';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -68,8 +69,24 @@ export default class Game extends PureRenderComponent {
         );
     }
 
+    renderGameHUD(game, player) {
+        return (
+            <div>
+                <CardsInPlay
+                    piles={game.cardsInPlay}
+                    canSelectPiles={player.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
+                    onPileSelected={this.handlePileSelected.bind(this)} />
+                {this.renderPlayerHUD(game, player)}
+            </div>
+        )
+    }
+
     renderStartGame() {
-        return (<button onClick={this.startGame.bind(this)}>Start Game</button>);
+        return (
+            <button className="game__start button" type="button" onClick={this.startGame.bind(this)}>
+                <StrokedText text="Start game"/>
+            </button>
+        );
     }
 
     renderGame(game) {
@@ -83,11 +100,12 @@ export default class Game extends PureRenderComponent {
         return (
             <div className="game">
                 <Players players={topPlayers} highlightIdx={currentPlayerIdx} />
-                <CardsInPlay
-                    piles={game.cardsInPlay}
-                    canSelectPiles={currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
-                    onPileSelected={this.handlePileSelected.bind(this)} />
-                {gameStarted ? this.renderPlayerHUD(game, currentPlayer) : this.renderPreGameHUD(canStartGame)}
+
+                {
+                    gameStarted
+                    ? this.renderGameHUD(game, currentPlayer)
+                    : this.renderPreGameHUD(canStartGame)
+                }
             </div>
         );
     }

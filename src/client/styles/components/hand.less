@@ -1,10 +1,18 @@
+@hand-offset: -60px;
+
 .hand__cards {
     display: flex;
-    padding: @s-game-gutter;
+    margin-bottom: @hand-offset;
 }
 
 .hand__item {
+    transition: transform .2s ease-out;
     flex: 1;
+
+    &:hover,
+    &:focus {
+        transform: translateY(@hand-offset - @s-game-gutter);
+    }
 }
 
 // Card modifier

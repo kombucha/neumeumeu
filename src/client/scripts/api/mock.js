@@ -117,6 +117,7 @@ function getGame(gameId) {
                 id: 0,
                 name: 'Vincent',
                 malus: 17,
+                chosenCard: 11,
                 hand: [ 55, 10, 104, 22, 78, 1, 24 ]
             },
             {id:3, name: 'Hugo', hand: [], malus: 2},
@@ -125,7 +126,9 @@ function getGame(gameId) {
             {id:6, name: 'Arnaud', hand: [], malus: 4}
         ],
         maxPlayers: 10,
-        status: 'waiting_for_cards',
+        owner: 0,
+        status: 'waiting_for_players',
+        // status: 'waiting_for_cards',
         isProtected: false
     });
 }

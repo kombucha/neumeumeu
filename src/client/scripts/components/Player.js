@@ -16,10 +16,11 @@ export default ({className, player, defaultAvatarURL='/images/players/avatar-def
 
     return (
         <div className={classes}>
-            <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
+            <div className="player__malus">{player.malus}</div>
             <div className="player__username">
                 {player.name}
             </div>
+            <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
             <div className="player__card">
                 {
                     player.chosenCard
