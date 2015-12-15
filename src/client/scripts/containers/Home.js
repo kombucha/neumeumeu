@@ -21,6 +21,14 @@ export default class Home extends PureRenderComponent {
         this.props.leaveRoom('lobby');
     }
 
+    renderEmptyGamesPlaceholder() {
+        return (
+            <div className="home__section">
+                <p className="home__placeholder">No game in progress :(</p>
+            </div>
+        );
+    }
+
     renderPlayersGames(games) {
         return (
             <div className="home__section">
@@ -53,11 +61,22 @@ export default class Home extends PureRenderComponent {
                             <StrokedText text="Create Game"/>
                         </Link>
 
-                        {isAuthenticated ? this.renderPlayersGames(playersGames) : null}
+                        {
+                            isAuthenticated && playersGames.length
+                                ? this.renderPlayersGames(playersGames)
+                                : this.renderEmptyGamesPlaceholder()
+                        }
 
                         <div className="home__section">
                             <h2 className="home__section-title">Current Games</h2>
-                            <GameList games={currentGames} onSelectGame={this.onSelectCurrentGame.bind(this)}/>
+                            {
+                                currentGames.length === 0
+                                    ? this.renderEmptyGamesPlaceholder()
+                                    : (
+                                        <GameList games={currentGames} onSelectGame={this.onSelectCurrentGame.bind(this)}/>
+                                    )
+                            }
+
                         </div>
                     </div>
                 </div>

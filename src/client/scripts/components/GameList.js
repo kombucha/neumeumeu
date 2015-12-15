@@ -5,7 +5,7 @@ export default ({games, onSelectGame}) => {
         <ul className="game-list">
             {
                 games.length === 0
-                    ? (<li>Aucune partie ouverte</li>)
+                    ? (<li>No game in progress :(</li>)
                     : games.map((game) => (
                         <li className="game-list__item" key={game.id}>
                             <GameItem game={game} onClick={onSelectGame} />
