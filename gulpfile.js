@@ -125,7 +125,7 @@ gulp.task('clean', function() {
 // serve-build is the same as build, except it doesn't handle scripts
 // (handled by wepback-dev-server)
 gulp.task('serve-build', function(cb) {
-    return runSequence('clean', ['styles', 'assets'], cb);
+    return runSequence('clean', ['styles', 'assets', 'lint'], cb);
 });
 
 gulp.task('build', function(cb) {
