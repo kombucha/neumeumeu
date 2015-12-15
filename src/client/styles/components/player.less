@@ -46,6 +46,7 @@
 }
 
 .player__avatar {
+    position: relative;
     width: @player-avatar-size;
     height: @player-avatar-size;
     margin-bottom: @player-avatar-space;
@@ -53,6 +54,7 @@
     border: @player-avatar-border solid #fff;
     border-radius: 50%;
     box-shadow: @shadow-l1;
+    z-index: 1;
 }
 
 .player__username {
@@ -73,8 +75,12 @@
 }
 
 .player__card {
-    width: @card-width/2;
-    height: @card-height/2;
+    position: absolute;
+    margin-top: -3px;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) scale(.4);
+    transform-origin: 50% 0 0;
 }
 
 .player__malus {
@@ -82,11 +88,15 @@
     top: @u-small;
     left: 100%;
     font-size: 1.8rem;
-    color: @color-yellow;
     letter-spacing: .1em;
     text-shadow: @shadow-l1;
 }
 
 .card--player {
-    transform: scale(0.5) translate(-50%, -50%);
+    transform: rotate(-7Deg);
+    /*
+    position: absolute;
+    transform: scale(0.3);
+    transform-origin: 50% 50%;
+    */
 }

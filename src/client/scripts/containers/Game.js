@@ -69,18 +69,6 @@ export default class Game extends PureRenderComponent {
         );
     }
 
-    renderGameHUD(game, player) {
-        return (
-            <div>
-                <CardsInPlay
-                    piles={game.cardsInPlay}
-                    canSelectPiles={player.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
-                    onPileSelected={this.handlePileSelected.bind(this)} />
-                {this.renderPlayerHUD(game, player)}
-            </div>
-        )
-    }
-
     renderStartGame() {
         return (
             <button className="game__start button" type="button" onClick={this.startGame.bind(this)}>
@@ -101,9 +89,17 @@ export default class Game extends PureRenderComponent {
             <div className="game">
                 <Players players={topPlayers} highlightIdx={currentPlayerIdx} />
 
+                { gameStarted
+                    ? <CardsInPlay
+                        piles={game.cardsInPlay}
+                        canSelectPiles={currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
+                        onPileSelected={this.handlePileSelected.bind(this)} />
+                    : null
+                }
+
                 {
                     gameStarted
-                    ? this.renderGameHUD(game, currentPlayer)
+                    ? this.renderPlayerHUD(game, currentPlayer)
                     : this.renderPreGameHUD(canStartGame)
                 }
             </div>

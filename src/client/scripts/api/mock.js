@@ -93,9 +93,9 @@ function getGame(gameId) {
                 3
             ],
             [
-                // [19,1],
-                // [20,3],
-                // [21,1]
+                19,
+                20,
+                21
             ],
             [
                 30,
@@ -116,6 +116,8 @@ function getGame(gameId) {
             {
                 id: 0,
                 name: 'Vincent',
+                status: 'choosing_card',
+                //status: 'choosing_pile',
                 malus: 17,
                 chosenCard: 11,
                 hand: [ 55, 10, 104, 22, 78, 1, 24 ]
@@ -127,8 +129,9 @@ function getGame(gameId) {
         ],
         maxPlayers: 10,
         owner: 0,
-        status: 'waiting_for_players',
-        // status: 'waiting_for_cards',
+        //status: 'waiting_for_players',
+        //status: 'waiting_for_cards',
+        status: 'waiting_for_pile_choice',
         isProtected: false
     });
 }

@@ -6,8 +6,19 @@
 }
 
 .hand__item {
-    transition: transform .2s ease-out;
     flex: 1;
+
+    .card--hand {
+        cursor: default;
+    }
+}
+
+.hand.choosing-card .hand__item {
+    transition: transform .2s ease-out;
+
+    .card--hand {
+        cursor: pointer;
+    }
 
     &:hover,
     &:focus {

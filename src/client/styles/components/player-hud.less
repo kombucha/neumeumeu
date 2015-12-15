@@ -1,14 +1,53 @@
 @hand-width: 800px;
 
 .player-hud {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
     position: relative;
     overflow: hidden;
     min-height: @card-height + 2 * @s-game-gutter;
+    z-index: @z-playerHud;
+}
+
+.player-hud__main {
+    display: flex;
+    justify-content: baseline;
+    align-items: flex-end;
+    flex-direction: row;
 }
 
 .player-hud {
     .hand {
         max-width: @hand-width;
         margin: auto;
+        padding-right: @s-player-menu;
     }
+}
+
+.player-hud__info {
+    flex: 1 100%;
+    text-align: center;
+
+    text-shadow: @shadow-l1;
+}
+
+.player-hud__info {
+
+    &::before {
+        content: "";
+        position: fixed;
+        background-color: rgba(0, 0, 0, .8);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: @z-hudInfo;
+    }
+}
+
+.player-hud__info-text {
+    position: relative;
+    z-index: @z-hudInfoOverlay;
 }

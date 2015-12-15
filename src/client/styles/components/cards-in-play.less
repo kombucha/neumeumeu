@@ -1,8 +1,11 @@
 @cards-in-play-width: 800px;
 @selector-size: 20px;
+@cards-selection-padding: @u-small;
 
 .cards-in-play {
     min-height: @card-height + (4/5*@card-height);
+    position: relative;
+    z-index: @z-carsInPlay;
 }
 
 .cards-in-play__piles {
@@ -15,20 +18,24 @@
 
 .cards-in-play--selectable {
     .cards-in-play__pile:hover {
-        position: relative;
-        cursor: pointer;
 
-        &::before {
-            display: block;
-            position: absolute;
-            top: -(@selector-size + 5px);
-            left: (@card-width - 2*@selector-size) / 2;
-            content: ' ';
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: @selector-size @selector-size 0 @selector-size;
-            border-color: white transparent transparent transparent;
+        .card-pile {
+            position: relative;
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                margin: -@cards-selection-padding;
+
+                border-radius: 3px;
+                background: @color-green;
+
+            }
         }
     }
 }
