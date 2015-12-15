@@ -139,6 +139,8 @@ function solve(game) {
     }
 
     // Solve
+    const actions = [];
+
     game.status = GameStatus.SOLVED;
     sortedPlayers.forEach(player => {
         player.malusCards = player.malusCards || [];
@@ -147,6 +149,8 @@ function solve(game) {
             // Player played a card smaller than any of the piles
             let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
             player.malusCards = player.malusCards.concat(pileCards);
+            actions.push({fromPile: player.chosenPile, toPlayer: player.id});
+            actions.push({fromPlayer: player.id, toPile: player.chosenPile});
         } else {
             // Regular play
             const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
@@ -155,13 +159,18 @@ function solve(game) {
             // Oh noes !
             if (game.cardsInPlay[destinationPile].length > 5) {
                 player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
+                actions.push({fromPile: destinationPile, toPlayer: player.id});
             }
+
+            actions.push({fromPlayer: player.id, toPile: destinationPile});
         }
 
         player.status = PlayerStatus.IDLE;
         player.chosenPile = null;
         player.chosenCard = null;
     });
+
+    log.info('ACTIONS ->', actions);
 
     return updateGame(game);
 }
@@ -277,24 +286,14 @@ function computePlayerMalus(cards) {
     return cards.reduce((sum, card) => sum + card.malus, 0);
 }
 
-function onGameplayUpdate(id, cb) {
+function listenToGameplayUpdates (id, updateCallback) {
     return r.table('game')
         .get(id)
-        .changes()
+        .changes({squash: 0.2})
         .run()
         .then(cursor => {
             cursor.on('data', data => {
-                if (!data.new_val || data.new_val.status === GameStatus.ENDED) {
-                    log.info('ENDING REALTIME UPDATES FOR GAME ', id);
-                    cb(data.new_val);
-                    return cursor.close();
-                }
-
-                // Notify listeners
-                cb(data.new_val);
-
-                // Automatically try to resolve turn on each update
-                resolveTurn(id);
+                updateCallback(data.new_val, cursor.close);
             });
         });
 }
@@ -310,5 +309,5 @@ export default {
     resolveTurn,
     getGameplayForPlayer,
     transformGameplayForPlayer,
-    onGameplayUpdate
+    listenToGameplayUpdates
 };

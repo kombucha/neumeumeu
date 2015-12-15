@@ -1,13 +1,15 @@
-import Server from 'socket.io';
 import log from 'server/log';
+import socketService from 'server/services/socket';
 import gameService from 'server/services/game';
 import gameplayService from 'server/services/gameplay';
 import authService from 'server/services/authentication';
+import realtimeHandler from 'server/services/realtimeHandler';
 
+function start() {
+    socketService.on('connection', handleNewClient);
+}
 
 function handleAction(socket, action) {
-    log.info({action: action}, 'Handled action');
-
     switch (action.type) {
     case 'LOGIN':
         return authService.login(action.username, action.password)
@@ -31,9 +33,9 @@ function handleAction(socket, action) {
         return authService.associateWithSocket(action.playerId, action.socketId);
 
     case 'JOIN_ROOM':
-        return joinRoom(socket, action.id);
+        return socketService.joinRoom(socket, action.id);
     case 'LEAVE_ROOM':
-        return leaveRoom(socket, action.id);
+        return socketService.leaveRoom(socket, action.id);
 
     case 'JOIN_GAME':
         return authService.getPlayerFromToken(action.token)
@@ -42,7 +44,7 @@ function handleAction(socket, action) {
         return authService.getPlayerFromToken(action.token)
             .then(player => gameService.createGame(player.id, action.game))
             .then(gameId => {
-                startGameRealtimeUpdate(socket.server, gameId);
+                realtimeHandler.startGameRealtimeUpdate(gameId);
                 return gameId;
             });
     case 'UPDATE_GAMES':
@@ -75,79 +77,22 @@ function handleAction(socket, action) {
     }
 }
 
-function joinRoom(socket, roomId) {
-    socket.join(roomId);
-    return Promise.resolve(roomId);
-}
-
-function leaveRoom(socket, roomId) {
-    socket.leave(roomId);
-    return Promise.resolve(roomId);
-}
-
-function broadCastToRoom(io, roomId, action) {
-    io.sockets.to(roomId).emit('action', action);
-}
-
-function startRealtimeLobbyUpdate(io) {
-    log.info('STARTING REALTIME UPDATES FOR LOBBY');
-    gameService.onLobbyUpdate(games => {
-        broadCastToRoom(io, 'lobby', {
-            type: 'UPDATE_GAMES',
-            games
-        });
-    });
-}
-
-function startGameRealtimeUpdate(io, gameId) {
-    log.info('STARTING REALTIME UPDATES FOR GAME', gameId);
-
-    gameplayService.onGameplayUpdate(gameId, game => {
-        const interestingSockets = Object.keys(io.sockets.connected)
-            .filter(socketId => {
-                return io.sockets.connected[socketId].rooms.indexOf(gameId) !== -1;
-            });
-
-        Promise.all(interestingSockets.map(authService.getPlayerFromSocket))
-            .then(players => {
-                players.forEach((player, idx) => {
-                    const socketId = interestingSockets[idx];
-                    io.sockets.connected[socketId].emit('action', {
-                        type: 'UPDATE_CURRENT_GAME',
-                        game: gameplayService.transformGameplayForPlayer(player.id, game)
-                    });
-                });
-            });
-    });
-}
-
-function startRunningGamesRealtimeUpdate(io) {
-    return gameService.getCurrentGames()
-        .then(games => {
-            games.forEach(game => startGameRealtimeUpdate(io, game.id));
-        });
-}
-
-function handleNewSocket(socket) {
+function handleNewClient(socket) {
     socket.on('action', (action, sendBack) => {
         sendBack = sendBack || (() => null);
 
         handleAction(socket, action)
+            .then(result => {
+                log.info({action: action}, 'OK');
+                // log.info({result: result});
+                return result;
+            })
             .then((result) => sendBack(result),
                   (error) => sendBack({error: error}));
     });
     socket.on('disconnect', () => authService.dissociateFromSocket(socket.id));
 }
 
-// TODO: On startup
-// - Clean up old sockets from db
-export default function attachRealtimeServer(server, config) {
-    const io = Server(server, config);
-
-    startRealtimeLobbyUpdate(io);
-    startRunningGamesRealtimeUpdate(io);
-
-    io.on('connection', handleNewSocket);
-
-    return io;
-}
+export default {
+    start
+};

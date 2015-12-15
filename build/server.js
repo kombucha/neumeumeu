@@ -41,11 +41,10 @@ function startServer() {
         };
     } else {
         bsConf.proxy = {
-            target: 'localhost:8000',
+            target: 'localhost:' + buildConf.serverPort,
             middleware: [
                 devMiddleware,
-                hotMiddleware,
-                history()
+                hotMiddleware
             ]
         };
     }

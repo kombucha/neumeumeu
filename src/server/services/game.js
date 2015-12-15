@@ -70,6 +70,7 @@ function getCurrentGames() {
         .pluck(...simpleGameProjection)
         .filter(r.row('status').ne(GameStatus.ENDED))
         .orderBy(r.desc('creationDate'))
+        .limit(10)
         .run();
 }
 
