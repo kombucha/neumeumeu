@@ -1,6 +1,6 @@
 [
     {
-        "id": 0,
+        "id": "0",
         "name": "El chico",
         "players": [],
         "maxPlayers": 10,
@@ -8,7 +8,7 @@
         "isProtected": false
     },
     {
-        "id": 1,
+        "id": "1",
         "name": "Angels Room",
         "players": [],
         "maxPlayers": 4,
@@ -16,7 +16,7 @@
         "isProtected": true
     },
     {
-        "id": 2,
+        "id": "2",
         "name": "Bigmac",
         "players": [],
         "maxPlayers": 6,
@@ -24,7 +24,7 @@
         "isProtected": true
     },
     {
-        "id": 3,
+        "id": "3",
         "name": "Super room",
         "players": [],
         "maxPlayers": 8,
@@ -32,7 +32,7 @@
         "isProtected": true
     },
     {
-        "id": 4,
+        "id": "4",
         "name": "Steevie Wonder",
         "players": [],
         "maxPlayers": 8,
@@ -40,7 +40,7 @@
         "isProtected": true
     },
     {
-        "id": 5,
+        "id": "5",
         "name": "Pinocchio",
         "players": [],
         "maxPlayers": 10,
@@ -48,7 +48,7 @@
         "isProtected": true
     },
     {
-        "id": 6,
+        "id": "6",
         "name": "My room",
         "players": [],
         "maxPlayers": 10,
@@ -56,7 +56,7 @@
         "isProtected": true
     },
     {
-        "id": 7,
+        "id": "7",
         "name": "A B C",
         "players": [],
         "maxPlayers": 5,

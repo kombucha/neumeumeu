@@ -1,6 +1,6 @@
 {
     "player": {
-        "id": 0,
+        "id": "0",
         "name": "kombu"
     },
     "token": "super-token"
