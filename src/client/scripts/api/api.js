@@ -32,7 +32,7 @@ function emitAction(action, waitForResponse = true) {
         }
     })
     .catch((result) => {
-        console.warn('Received error', result, 'for action', action);
+        console.warn('Received error', result, 'for action', action); // eslint-disable-line no-console
     });
 }
 

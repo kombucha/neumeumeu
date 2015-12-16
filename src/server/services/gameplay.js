@@ -25,6 +25,29 @@ function updateGame(game) {
         });
 }
 
+function updatePlayerInGame(gameId, player) {
+    log.info('UPDATING PLAYER ', gameId, player);
+    return r.table('game')
+        .get(gameId)
+        // DAMN that's convoluted...
+        .update(game => {
+            return game('players')
+                .offsetsOf(p => p('id').eq(player.id))(0)
+                .do(playerIdx => ({
+                    players: game('players')
+                        .changeAt(playerIdx, game('players')(playerIdx).merge(player))
+                }));
+        }, {returnChanges: true})
+        .run()
+        .then(result => {
+            if (result.changes.length === 0) {
+                return {}; // FIXME: :/
+            }
+
+            return result.changes[0]['new_val'];
+        });
+}
+
 function getGameplayForPlayer(playerId, gameId) {
     return getGame(gameId).then(game => transformGameplayForPlayer(playerId, game));
 }
@@ -62,7 +85,8 @@ function startRound(playerId, gameId) {
             game.resolutionSteps = null;
 
             return updateGame(game);
-        });
+        })
+        .then(returnEmptyObject);
 }
 
 function playCard(playerId, gameId, cardValue) {
@@ -84,9 +108,9 @@ function playCard(playerId, gameId, cardValue) {
             newPlayer.chosenCard = newPlayer.hand[cardIdx];
             newPlayer.hand.splice(cardIdx, 1);
 
-            return updateGame(game);
+            return updatePlayerInGame(game.id, newPlayer);
         })
-        .then(game => transformGameplayForPlayer(playerId, game));
+        .then(returnEmptyObject);
 }
 
 function cancelCard(playerId, gameId) {
@@ -102,9 +126,9 @@ function cancelCard(playerId, gameId) {
             player.chosenCard = null;
             player.status = PlayerStatus.CHOOSING_CARD;
 
-            return updateGame(game);
+            return updatePlayerInGame(game.id, player);
         })
-        .then(game => transformGameplayForPlayer(playerId, game));
+        .then(returnEmptyObject);
 }
 
 function choosePile(playerId, gameId, pileIdx) {
@@ -115,24 +139,17 @@ function choosePile(playerId, gameId, pileIdx) {
                 return Promise.reject(Errors.INVALID_MOVE);
             }
 
-            // TODO: probably another status
-            game.status = GameStatus.WAITING_FOR_CARDS;
             player.status = PlayerStatus.CHOOSED_PILE;
             player.chosenPile = pileIdx;
 
-            return updateGame(game);
+            return updatePlayerInGame(game.id, player);
         })
-        .then(game => transformGameplayForPlayer(playerId, game));
+        .then(returnEmptyObject);
 }
 
 function toggleAI(playerId, gameId, enable) {
-    return getGame(gameId)
-        .then(game => {
-            const player = game.players.find(p => p.id === playerId);
-            player.AIEnabled = enable;
-            return updateGame(game);
-        })
-        .then(game => transformGameplayForPlayer(playerId, game));
+    return updatePlayerInGame(gameId, {id: playerId, AIEnabled: enable})
+        .then(returnEmptyObject);
 }
 
 function playerReady(playerId, gameId) {
@@ -147,7 +164,7 @@ function playerReady(playerId, gameId) {
 
             return updateGame(game);
         })
-        .then(game => transformGameplayForPlayer(playerId, game));
+        .then(returnEmptyObject);
 }
 
 // Game rules
@@ -322,6 +339,10 @@ function simpleCard(card) {
 
 function computePlayerMalus(cards) {
     return cards.reduce((sum, card) => sum + card.malus, 0);
+}
+
+function returnEmptyObject() {
+    return {};
 }
 
 

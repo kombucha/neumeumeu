@@ -35,6 +35,7 @@ function onGameUpdate(newGame, oldGame, end) {
     const shouldSendResolutionSteps = (newGame.status === GameStatus.SOLVED)
         && oldGame && oldGame.status !== newGame.status,
         shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;
+
     // When game is solved, send a special game object
     // With details as to how to solve the game
     // So that we can play super duper animations
