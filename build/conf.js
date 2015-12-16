@@ -49,7 +49,8 @@ module.exports = {
         'redux-thunk',
         'history',
         'classnames',
-        'socket.io-client'
+        'socket.io-client',
+        'velocity-animate'
     ],
     serverPort: serverPort,
     paths: paths,

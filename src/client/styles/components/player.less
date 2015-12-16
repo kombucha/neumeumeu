@@ -1,12 +1,13 @@
 @player-avatar-size: 50px;
 @player-avatar-border: 8px;
 @player-avatar-space: 8px;
+@player-width: @player-avatar-size + (@player-avatar-space*2);
 
 .player {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: @player-width;
 }
 
 .player--current {
@@ -14,15 +15,13 @@
     &::before {
         display: block;
         position: absolute;
-        top: -@s-game-gutter;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 0;
         z-index: -1;
         content: ' ';
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 30px 30px 0 30px;
+        border-width: @player-width/2 @player-width/2 0 @player-width/2;
         border-color: @color-blue transparent transparent transparent;
     }
 }
@@ -67,36 +66,29 @@
     text-transform: uppercase;
 
     white-space: nowrap;
-    max-width: 70px;
+    max-width: @player-width;
     overflow: hidden;
     text-overflow: ellipsis;
 
     color: white;
 }
 
-.player__card {
-    position: absolute;
-    margin-top: -3px;
-    left: 50%;
-    top: 100%;
-    transform: translateX(-50%) scale(.4);
-    transform-origin: 50% 0 0;
-}
-
 .player__malus {
     position: absolute;
-    top: @u-small;
-    left: 100%;
+    top: @u-medium;
+    margin-left: @player-width;
     font-size: 1.8rem;
     letter-spacing: .1em;
     text-shadow: @shadow-l1;
 }
 
-.card--player {
-    transform: rotate(-7Deg);
-    /*
+.player__card {
     position: absolute;
-    transform: scale(0.3);
-    transform-origin: 50% 50%;
-    */
+    height: 0;
+    width: 0;
+}
+
+.card--player {
+    transform: translateX(-25%) scale(.4);
+    transform-origin: 50% 0 0;
 }

@@ -8,6 +8,8 @@ import Players from 'client/components/Players';
 import CardsInPlay from 'client/components/CardsInPlay';
 import PlayerHud from 'client/components/PlayerHUD';
 import StrokedText from 'client/components/StrokedText';
+import {findDOMNode} from 'react-dom';
+import Animate from 'client/helpers/animate';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -23,10 +25,10 @@ export default class Game extends PureRenderComponent {
             shouldAnimate = !!step;
 
         if (shouldAnimate) {
-            console.log('ANIMATING', step);
-            setTimeout(() =>{
-                applyResolutionStep(step);
-            }, 1000);
+            Animate(step, findDOMNode(this))
+                .then(function() {
+                    applyResolutionStep(step);
+                });
         }
 
         // TODO: Check if status === solved && resolutionSteps.length === 0
