@@ -27,14 +27,14 @@
     ],
 
     "players": [{
-        "id": "0",
+        "id": 0,
         "name": "Hugo",
         "status": "played_card",
         "malus": 2,
         "chosenCard": 7,
         "hand": [55, 10, 104, 22, 78, 1, 24]
     }, {
-        "id": "1",
+        "id": 1,
         "name": "Vincent",
         "status": "played_card",
         "malus": 0,
