@@ -1,3 +1,4 @@
+import Messages from 'client/components/Messages';
 let App;
 
 if (process.env.NODE_ENV === 'development' && false) {
@@ -10,7 +11,12 @@ if (process.env.NODE_ENV === 'development' && false) {
         </div>
     );
 } else {
-    App = (props) => (<div className="app">{props.children}</div>);
+    App = (props) => (
+        <div className="app">
+            <Messages text="Error while login!"/>
+            {props.children}
+        </div>
+    );
 }
 
 export default App;
