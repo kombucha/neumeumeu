@@ -30,7 +30,7 @@
         {
             "id": "0",
             "name": "Vincent",
-            "status": "choosing_card",
+            "status": "choosing_pile",
             "malus": 17,
             "chosenCard": 11,
             "hand": [ 55, 10, 104, 22, 78, 1, 24 ]
@@ -42,7 +42,7 @@
     ],
     "maxPlayers": 10,
     "owner": "0",
-    "status": "waiting_for_cards",
+    "status": "waiting_for_pile_choice",
     "isProtected": false,
     "resolutionSteps": null
 }

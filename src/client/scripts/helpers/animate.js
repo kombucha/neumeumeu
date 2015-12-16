@@ -1,4 +1,5 @@
 import Velocity from 'velocity-animate';
+import 'velocity-animate/velocity.ui';
 
 const animationSettings = {
     duration: 400,
@@ -72,10 +73,7 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
         card = pileCards[0].getBoundingClientRect(),
         playerCoord = getPlayer(toPlayer, gameDomElement).getBoundingClientRect(),
 
-        options = {
-            duration: animationSettings.duration,
-            delay: animationSettings.delay
-        },
+        sequence = [],
 
         pileCardsProp = {
             top: playerCoord.top - card.height / 2 + playerCoord.height / 2,
@@ -84,19 +82,39 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
             rotateZ: [45, 0]
         };
 
+    pileCards = Array.prototype.slice.call(pileCards);
+
     // Init pileCard's CSS
-    Array.prototype.slice.call(pileCards).forEach(function(pileCard) {
+    pileCards.forEach(function(pileCard, index) {
         var pileCardCoord = pileCard.getBoundingClientRect();
         setStyle(pileCard, {
-            position: 'absolute',
-            top: pileCardCoord.top + 'px',
-            left: pileCardCoord.left + 'px'
+            'position': 'absolute',
+            'top': pileCardCoord.top + 'px',
+            'left': pileCardCoord.left + 'px',
+            'z-index': 8
         });
     });
 
     return new Promise((resolve, reject) => {
-        options.complete = resolve;
-        Velocity(pileCards, pileCardsProp, options);
+        pileCards.forEach(function(pileCard, index) {
+            var options = {
+                duration: animationSettings.duration,
+                delay: 70 - index * 15,
+                sequenceQueue: false
+            };
+
+            if (index === (pileCards.length - 1)) {
+                options.complete = resolve;
+            }
+
+            sequence.push({
+                e: pileCard,
+                p: pileCardsProp,
+                o: options
+            });
+        });
+
+        Velocity.RunSequence(sequence);
     });
 }
 
