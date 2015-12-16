@@ -95,6 +95,7 @@ export default class Game extends PureRenderComponent {
             <PlayerHud
                 player={player}
                 gameId={game.id}
+                gameStatus={game.status}
                 onHandCardClicked={this.playCard.bind(this)}
                 onSelectedCardClicked={this.cancelCard.bind(this)}/>
         );

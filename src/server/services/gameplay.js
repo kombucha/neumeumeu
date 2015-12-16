@@ -32,11 +32,11 @@ function getGameplayForPlayer(playerId, gameId) {
 function listenToGameplayUpdates (id, updateCallback) {
     return r.table('game')
         .get(id)
-        .changes({squash: 0.2})
+        .changes({squash: 0.2, includeInitial: true})
         .run()
         .then(cursor => {
             cursor.on('data', data => {
-                updateCallback(data.new_val, data.old_val, cursor.close);
+                updateCallback(data.new_val, data.old_val, cursor.close.bind(cursor));
             });
         });
 }
@@ -191,8 +191,9 @@ function solve(game) {
     const resolutionSteps = [];
 
     game.status = GameStatus.SOLVED;
-    sortedPlayers.forEach((player, playerIdx) => {
+    sortedPlayers.forEach(player => {
         player.malusCards = player.malusCards || [];
+        const playerIdx = game.players.findIndex(p => p.id === player.id);
 
         if (hasChosenPile(player)) {
             // Player played a card smaller than any of the piles
@@ -240,6 +241,7 @@ function solveEnd(game) {
         return updateGame(game);
     } else if (endReached) {
         game.status = GameStatus.ENDED;
+        game.resolutionSteps = null;
         return updateGame(game);
     } else {
         return startRound(game.owner, game.id);

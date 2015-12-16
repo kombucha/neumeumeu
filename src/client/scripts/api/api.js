@@ -30,6 +30,9 @@ function emitAction(action, waitForResponse = true) {
         if (!waitForResponse) {
             return Promise.resolve(action);
         }
+    })
+    .catch((result) => {
+        console.warn('Received error', result, 'for action', action);
     });
 }
 

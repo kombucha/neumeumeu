@@ -27,13 +27,14 @@ function startGameRealtimeUpdate(gameId) {
 
 function onGameUpdate(newGame, oldGame, end) {
     if (!newGame || (newGame.status === GameStatus.ENDED)) {
+        broadcastGameUpdate(newGame);
         return end();
     }
 
     log.info('GAME UPDATE', newGame.status);
     const shouldSendResolutionSteps = (newGame.status === GameStatus.SOLVED)
-        && oldGame.status !== newGame.status,
-        shouldSendUpdate = newGame.status !== GameStatus.SOLVED;
+        && oldGame && oldGame.status !== newGame.status,
+        shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;
     // When game is solved, send a special game object
     // With details as to how to solve the game
     // So that we can play super duper animations
