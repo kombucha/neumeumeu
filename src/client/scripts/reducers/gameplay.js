@@ -23,7 +23,7 @@ function applyResolutionStep(game, step) {
     // Apply step
     if (step.hasOwnProperty('fromPlayer')) {
         // From player to pile
-        playerIdx = players.findIndex(p => p.id === step.fromPlayer);
+        playerIdx = step.fromPlayer;
 
         cardsInPlay[step.toPile] = cardsInPlay[step.toPile].concat(players[playerIdx].chosenCard);
         newPlayer = Object.assign({}, players[playerIdx], {
@@ -32,7 +32,7 @@ function applyResolutionStep(game, step) {
     } else {
         // From pile to player
         const newMalus = cardsInPlay[step.fromPile].reduce((sum, card) => sum + card.malus, 0);
-        playerIdx = players.findIndex(p => p.id === step.toPlayer);
+        playerIdx = step.toPlayer;
 
         cardsInPlay[step.fromPile] = [];
         newPlayer = Object.assign({}, players[playerIdx], {
@@ -40,7 +40,6 @@ function applyResolutionStep(game, step) {
             malus: players[playerIdx].malus + newMalus
         });
     }
-
 
     players.splice(playerIdx, 1, newPlayer);
 

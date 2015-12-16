@@ -10,6 +10,8 @@ function start() {
 }
 
 function handleAction(socket, action) {
+    log.info({action: action}, 'RECEIVED ACTION');
+
     switch (action.type) {
     case 'LOGIN':
         return authService.login(action.username, action.password)
@@ -71,6 +73,9 @@ function handleAction(socket, action) {
     case 'TOGGLE_AI':
         // TODO: check rights :)
         return gameplayService.toggleAI(action.playerId, action.gameId, action.enable);
+    case 'PLAYER_READY':
+        return authService.getPlayerFromToken(action.token)
+            .then(player => gameplayService.playerReady(player.id, action.gameId));
 
     default:
         return Promise.reject('Unhandled action: ' + action.type);
@@ -82,11 +87,6 @@ function handleNewClient(socket) {
         sendBack = sendBack || (() => null);
 
         handleAction(socket, action)
-            .then(result => {
-                log.info({action: action}, 'OK');
-                // log.info({result: result});
-                return result;
-            })
             .then((result) => sendBack(result),
                   (error) => sendBack({error: error}));
     });

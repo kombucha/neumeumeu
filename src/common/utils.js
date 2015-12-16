@@ -63,6 +63,12 @@ function promisify(fn) {
     });
 }
 
+function pTimeout(time) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve(), time);
+    });
+}
+
 export default {
     copyArray,
     randomInt,
@@ -71,5 +77,6 @@ export default {
     sort,
     shuffle,
     chunk,
-    promisify
+    promisify,
+    pTimeout
 };

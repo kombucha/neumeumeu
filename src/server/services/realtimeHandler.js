@@ -31,24 +31,27 @@ function onGameUpdate(newGame, oldGame, end) {
     }
 
     log.info('GAME UPDATE', newGame.status);
+    const shouldSendResolutionSteps = (newGame.status === GameStatus.SOLVED)
+        && oldGame.status !== newGame.status,
+        shouldSendUpdate = newGame.status !== GameStatus.SOLVED;
     // When game is solved, send a special game object
     // With details as to how to solve the game
     // So that we can play super duper animations
-    if (newGame.status === GameStatus.SOLVED) {
-        log.info('YIPPY');
+    if (shouldSendResolutionSteps) {
         const hybridGame = Object.assign({}, oldGame, {
             status: GameStatus.SOLVED,
             resolutionSteps: newGame.resolutionSteps
         });
-        return broadcastGameUpdate(hybridGame);
+
+        return broadcastGameUpdate(hybridGame, true);
+    } else if (shouldSendUpdate) {
+        broadcastGameUpdate(newGame);
     }
 
-
-    broadcastGameUpdate(newGame);
     gameplayService.resolveTurn(newGame.id);
 }
 
-function broadcastGameUpdate(game) {
+function broadcastGameUpdate(game, withResolutionSteps) {
     const interestedSockets = socketService.getRoomSocketsIds(game.id);
 
     Promise.all(interestedSockets.map(authService.getPlayerFromSocket))
@@ -57,7 +60,7 @@ function broadcastGameUpdate(game) {
                 const socketId = interestedSockets[idx];
                 socketService.emitAction(socketId, {
                     type: 'UPDATE_CURRENT_GAME',
-                    game: gameplayService.transformGameplayForPlayer(player.id, game)
+                    game: gameplayService.transformGameplayForPlayer(player.id, game, withResolutionSteps)
                 });
             });
         });

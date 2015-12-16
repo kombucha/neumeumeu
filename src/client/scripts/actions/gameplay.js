@@ -29,6 +29,10 @@ function toggleAI(gameId, playerId, enable) {
     return () => api.toggleAI(gameId, playerId, enable);
 }
 
+function playerReady(gameId) {
+    return () => api.playerReady(gameId);
+}
+
 function updateCurrentGame(gameId) {
     return dispatch => {
         return api.getGame(gameId)
@@ -62,5 +66,6 @@ export default {
     cancelCard,
     choosePile,
     toggleAI,
+    playerReady,
     applyResolutionStep
 };

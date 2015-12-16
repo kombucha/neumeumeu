@@ -20,7 +20,6 @@ function animate(step, gameDomElement) {
 function play(step, gameDomElement) {
     if (step.hasOwnProperty('fromPlayer')) {
         return animateCard(step.fromPlayer, step.toPile, gameDomElement);
-
     } else if (step.hasOwnProperty('fromPile')) {
         return animatePile(step.fromPile, step.toPlayer, gameDomElement);
     }
@@ -44,7 +43,7 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
 
         cardProp = {
             top: [cardEndCoords.top, cardCoord.top],
-            left: [cardEndCoords.left, cardCoord.left],
+            left: [cardEndCoords.left, cardCoord.left]
         },
 
         innerCardProp = {
@@ -58,9 +57,10 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
         margin: 0
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         Velocity(innerCard, innerCardProp, options);
         options.complete = function() {
+            card.removeAttribute('style');
             resolve();
         };
         Velocity(card, cardProp, options);
@@ -85,7 +85,7 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
     pileCards = Array.prototype.slice.call(pileCards);
 
     // Init pileCard's CSS
-    pileCards.forEach(function(pileCard, index) {
+    pileCards.forEach(function(pileCard) {
         var pileCardCoord = pileCard.getBoundingClientRect();
         setStyle(pileCard, {
             'position': 'absolute',
@@ -95,7 +95,7 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
         });
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         pileCards.forEach(function(pileCard, index) {
             var options = {
                 duration: animationSettings.duration,

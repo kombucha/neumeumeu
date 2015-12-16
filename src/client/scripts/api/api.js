@@ -138,6 +138,14 @@ function toggleAI(gameId, playerId, enable) {
     });
 }
 
+function playerReady(gameId) {
+    return emitAction({
+        type: 'PLAYER_READY',
+        token: getAuthToken(),
+        gameId
+    });
+}
+
 function joinRoom(id) {
     return emitAction({
         type: 'JOIN_ROOM',
@@ -174,5 +182,6 @@ export default {
     playCard,
     cancelCard,
     choosePile,
-    toggleAI
+    toggleAI,
+    playerReady
 };

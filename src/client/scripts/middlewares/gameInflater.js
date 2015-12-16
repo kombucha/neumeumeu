@@ -13,6 +13,7 @@ function inflateGame(game) {
 }
 
 export default (/* store */) => next => action => {
+    console.log(action);
     if (action.type === 'UPDATE_CURRENT_GAME') {
         action = Object.assign({}, action, {
             game: inflateGame(action.game)

@@ -6,10 +6,42 @@ import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
 import log from 'server/log';
 
+// Data
+function getGame(id) {
+    return r.table('game').get(id).run();
+}
+
+function updateGame(game) {
+    return r.table('game')
+        .get(game.id)
+        .update(game, {returnChanges: true})
+        .run()
+        .then(result => {
+            if (result.changes.length === 0) {
+                return game;
+            }
+
+            return result.changes[0]['new_val'];
+        });
+}
+
 function getGameplayForPlayer(playerId, gameId) {
     return getGame(gameId).then(game => transformGameplayForPlayer(playerId, game));
 }
 
+function listenToGameplayUpdates (id, updateCallback) {
+    return r.table('game')
+        .get(id)
+        .changes({squash: 0.2})
+        .run()
+        .then(cursor => {
+            cursor.on('data', data => {
+                updateCallback(data.new_val, data.old_val, cursor.close);
+            });
+        });
+}
+
+// Player actions
 function startRound(playerId, gameId) {
     return getGame(gameId)
         .then(game => {
@@ -103,6 +135,22 @@ function toggleAI(playerId, gameId, enable) {
         .then(game => transformGameplayForPlayer(playerId, game));
 }
 
+function playerReady(playerId, gameId) {
+    return getGame(gameId)
+        .then(game => {
+            if (game.status !== GameStatus.SOLVED) {
+                return Promise.reject(Errors.INVALID_ACTION);
+            }
+
+            const player = game.players.find(p => p.id === playerId);
+            player.status = PlayerStatus.READY_FOR_NEXT_ROUND;
+
+            return updateGame(game);
+        })
+        .then(game => transformGameplayForPlayer(playerId, game));
+}
+
+// Game rules
 function resolveTurn(gameId) {
     // FIXME: Game fetched many times :/
     return getGame(gameId)
@@ -143,15 +191,15 @@ function solve(game) {
     const resolutionSteps = [];
 
     game.status = GameStatus.SOLVED;
-    sortedPlayers.forEach(player => {
+    sortedPlayers.forEach((player, playerIdx) => {
         player.malusCards = player.malusCards || [];
 
         if (hasChosenPile(player)) {
             // Player played a card smaller than any of the piles
             let pileCards = game.cardsInPlay[player.chosenPile].splice(0, 5, player.chosenCard);
             player.malusCards = player.malusCards.concat(pileCards);
-            resolutionSteps.push({fromPile: player.chosenPile, toPlayer: player.id});
-            resolutionSteps.push({fromPlayer: player.id, toPile: player.chosenPile});
+            resolutionSteps.push({fromPile: player.chosenPile, toPlayer: playerIdx});
+            resolutionSteps.push({fromPlayer: playerIdx, toPile: player.chosenPile});
         } else {
             // Regular play
             const destinationPile = destinationPileIdx(player.chosenCard, game.cardsInPlay);
@@ -160,10 +208,10 @@ function solve(game) {
             // Oh noes !
             if (game.cardsInPlay[destinationPile].length > 5) {
                 player.malusCards = player.malusCards.concat(game.cardsInPlay[destinationPile].splice(0, 5));
-                resolutionSteps.push({fromPile: destinationPile, toPlayer: player.id});
+                resolutionSteps.push({fromPile: destinationPile, toPlayer: playerIdx});
             }
 
-            resolutionSteps.push({fromPlayer: player.id, toPile: destinationPile});
+            resolutionSteps.push({fromPlayer: playerIdx, toPile: destinationPile});
         }
 
         player.status = PlayerStatus.IDLE;
@@ -171,7 +219,6 @@ function solve(game) {
         player.chosenCard = null;
     });
 
-    log.info('RESOLUTION STEPS', resolutionSteps);
     game.resolutionSteps = resolutionSteps;
 
     return updateGame(game);
@@ -208,6 +255,8 @@ function playAIs(game) {
                 return playCard(p.id, game.id, randomCardValue);
             } else if (p.status === PlayerStatus.HAS_TO_CHOOSE_PILE) {
                 return choosePile(p.id, game.id, randomInt(0, 3));
+            } else if (game.status === GameStatus.SOLVED) {
+                return playerReady(p.id, game.id);
             }
         });
 
@@ -218,24 +267,6 @@ function isEndReached(game) {
     return game.players
         .map(p => computePlayerMalus(p.malusCards))
         .some(malus => malus >= game.maxMalus);
-}
-
-function getGame(id) {
-    return r.table('game').get(id).run();
-}
-
-function updateGame(game) {
-    return r.table('game')
-        .get(game.id)
-        .update(game, {returnChanges: true})
-        .run()
-        .then(result => {
-            if (result.changes.length === 0) {
-                return game;
-            }
-
-            return result.changes[0]['new_val'];
-        });
 }
 
 function hasChosenPile(player) {
@@ -251,9 +282,11 @@ function destinationPileIdx(card, piles) {
     }, -1);
 }
 
-function transformGameplayForPlayer(playerId, game) {
+// Data helpers
+function transformGameplayForPlayer(playerId, game, withResolutionSteps = false) {
     return Object.assign({}, game, {
         cardsInPlay: game.cardsInPlay.map(pile => pile.map(simpleCard)),
+        resolutionSteps: withResolutionSteps ? game.resolutionSteps : null,
         players: game.players.map(player => {
             const shouldReturnFullPlayer = (player.id === playerId || game.status !== GameStatus.WAITING_FOR_CARDS);
             return shouldReturnFullPlayer ? fullPlayer(player) : otherPlayer(player);
@@ -289,17 +322,6 @@ function computePlayerMalus(cards) {
     return cards.reduce((sum, card) => sum + card.malus, 0);
 }
 
-function listenToGameplayUpdates (id, updateCallback) {
-    return r.table('game')
-        .get(id)
-        .changes({squash: 0.2})
-        .run()
-        .then(cursor => {
-            cursor.on('data', data => {
-                updateCallback(data.new_val, data.old_val, cursor.close);
-            });
-        });
-}
 
 export default {
     startRound,
@@ -308,6 +330,7 @@ export default {
     cancelCard,
     choosePile,
     toggleAI,
+    playerReady,
 
     resolveTurn,
     getGameplayForPlayer,

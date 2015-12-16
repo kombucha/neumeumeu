@@ -20,19 +20,18 @@ export default class Game extends PureRenderComponent {
     }
 
     componentDidUpdate() {
-        const step = this.props.resolutionStep,
-            applyResolutionStep = this.props.applyResolutionStep,
-            shouldAnimate = !!step;
+        const {applyResolutionStep, resolutionStep, game} = this.props,
+            shouldAnimate = !!resolutionStep,
+            shouldGetReady = !!game
+                && game.status === GameStatus.SOLVED
+                && !resolutionStep ;
 
         if (shouldAnimate) {
-            Animate(step, findDOMNode(this))
-                .then(function() {
-                    applyResolutionStep(step);
-                });
+            return Animate(resolutionStep, findDOMNode(this))
+                .then(() => applyResolutionStep(resolutionStep));
+        } else if (shouldGetReady) {
+            this.getReady();
         }
-
-        // TODO: Check if status === solved && resolutionSteps.length === 0
-        // --> update player.status to READY_FOR_NEXT_TURN
     }
 
     componentWillUnmount() {
@@ -42,8 +41,17 @@ export default class Game extends PureRenderComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.game && nextProps.game.status === GameStatus.ENDED) {
-            return nextProps.updatePath(`/games/${nextProps.game.id}/results`);
+        const {game, resolutionStep, currentPlayer, updatePath} = nextProps;
+        if (!game) {
+            return;
+        }
+
+        if (game.status === GameStatus.ENDED) {
+            return updatePath(`/games/${nextProps.game.id}/results`);
+        } else if (game.status === GameStatus.SOLVED
+            && !resolutionStep
+            && currentPlayer.status !== PlayerStatus.READY_FOR_NEXT_ROUND) {
+            return this.getReady();
         }
     }
 
@@ -57,6 +65,11 @@ export default class Game extends PureRenderComponent {
 
     cancelCard() {
         this.props.cancelCard(this.props.game.id);
+    }
+
+    getReady() {
+        const {game, playerReady} = this.props;
+        return playerReady(game.id);
     }
 
     handlePileSelected(pile) {
