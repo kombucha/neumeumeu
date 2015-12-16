@@ -30,7 +30,7 @@ export default class Game extends PureRenderComponent {
             return Animate(resolutionStep, findDOMNode(this))
                 .then(() => applyResolutionStep(resolutionStep));
         } else if (shouldGetReady) {
-            this.getReady();
+            this.getReady(game.id);
         }
     }
 
@@ -51,7 +51,7 @@ export default class Game extends PureRenderComponent {
         } else if (game.status === GameStatus.SOLVED
             && !resolutionStep
             && currentPlayer.status !== PlayerStatus.READY_FOR_NEXT_ROUND) {
-            return this.getReady();
+            return this.getReady(game.id);
         }
     }
 
@@ -67,9 +67,8 @@ export default class Game extends PureRenderComponent {
         this.props.cancelCard(this.props.game.id);
     }
 
-    getReady() {
-        const {game, playerReady} = this.props;
-        return playerReady(game.id);
+    getReady(gameId) {
+        return this.props.playerReady(gameId);
     }
 
     handlePileSelected(pile) {
