@@ -40,8 +40,12 @@
 @color-card-0-malus: @color-card-2-malus;
 @color-card-0-corner: @color-card-2-corner;
 
-
 .card {
+    position: relative;
+}
+
+.card__backface,
+.card__frontface {
     position: relative;
     width: @card-width;
     height: @card-height;
@@ -52,7 +56,18 @@
 
     user-select: none;
     -webkit-user-drag: element;
+}
 
+.card__backface{
+    background-color: @color-purple;
+
+    .card__value--center::before {
+        color: @color-yellow;
+        font-size: 70px;
+    }
+}
+
+.card__frontface {
     &::before {
         content: '';
         position: absolute;
@@ -136,26 +151,69 @@
     -webkit-text-stroke-color: @color-white;
 }
 
+// CARD FLIP ANIMATION
+.card {
+    perspective: 800px;
+    height: 200px;
+    width: 130px;
+}
+
+.card__backface,
+.card__frontface {
+    position: absolute;
+    top: 0;
+}
+
+.card__frontface {
+    transition: transform .3s linear .3s, opacity 1ms .3s;
+    opacity: 1;
+    transform: rotateY(0);
+}
+
+.card__backface {
+    transition: transform .3s linear, opacity 1ms .3s;
+    opacity: 0;
+    transform: rotateY(90deg);
+}
+
+.card.card--flipped {
+    .card__frontface {
+        transition: transform .3s linear, opacity 1ms .3s;
+        opacity: 0;
+        transform: rotateY(-90deg);
+    }
+
+    .card__backface {
+        transition: transform .3s linear .3s, opacity 1ms .3s;
+        opacity: 1;
+        transform: rotateY(0);
+    }
+}
+
+
 // MALUS DEPENDENCIES
 .mixin__card(@color-background, @color-number, @color-logo, @color-malus, @color-corner) {
-    &::before {
-        border-left-color: @color-background;
-    }
+    .card__frontface {
 
-    .card__value--top {
-        color: @color-corner;
-    }
+        &::before {
+            border-left-color: @color-background;
+        }
 
-    .card__value__text {
-        color: @color-number;
-    }
+        .card__value--top {
+            color: @color-corner;
+        }
 
-    .card__value--center::before {
-        color: @color-logo;
-    }
+        .card__value__text {
+            color: @color-number;
+        }
 
-    .card__malus span {
-        background: @color-malus;
+        .card__value--center::before {
+            color: @color-logo;
+        }
+
+        .card__malus span {
+            background: @color-malus;
+        }
     }
 }
 
@@ -186,18 +244,4 @@
 
 .card--malus-7 {
     .mixin_applyCard(7);
-}
-
-.card--flipped {
-    .mixin_applyCard(0);
-
-    .card__top,
-    .card__value__text,
-    .card__value__border, {
-        display: none;
-    }
-
-    &::before {
-        top: @card-border;
-    }
 }
