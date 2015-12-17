@@ -27,32 +27,41 @@
     ],
 
     "players": [{
-        "id": "0",
+        "id": "1",
         "name": "Hugo",
         "status": "played_card",
         "malus": 2,
-        "chosenCard": 7,
+        "chosenCard": 8,
         "hand": [55, 10, 104, 22, 78, 1, 24]
     }, {
-        "id": "1",
+        "id": "2",
         "name": "Vincent",
         "status": "played_card",
         "malus": 0,
-        "chosenCard": 8,
+        "chosenCard": 7,
         "hand": [55, 10, 104, 22, 78, 1, 24]
     }],
     "maxPlayers": 10,
-    "owner": "0",
+    "owner": "1",
     "status": "solved",
     "isProtected": false,
     "resolutionSteps": [{
-        "fromPlayer": "0",
+        "fromPlayer": 1,
         "toPile": 0
     }, {
         "fromPile": 0,
-        "toPlayer": "1"
+        "toPlayer": 0
     }, {
-        "fromPlayer": "1",
+        "fromPile": 1,
+        "toPlayer": 0
+    }, {
+        "fromPile": 2,
+        "toPlayer": 0
+    }, {
+        "fromPile": 3,
+        "toPlayer": 1
+    }, {
+        "fromPlayer": 0,
         "toPile": 0
     }]
 }

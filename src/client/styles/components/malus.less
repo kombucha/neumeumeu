@@ -3,6 +3,7 @@
     bottom: 0;
     right: 0;
     width: @card-width;
+    z-index: @z-playerHud;
 
     &::before,
     &::after {
@@ -22,28 +23,15 @@
         transform: translate(3px, -25px);
         background: @color-white;
     }
-}
 
-.malus__value,
-.malus__border {
-    display: block;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: -12px;
-    z-index: 1;
-    font-size: 120px;
-    text-align: center;
-    color: @color-red;
-}
-
-.malus__value {
-    -webkit-text-stroke-width: 6px;
-    -webkit-text-stroke-color: @color-blue-dark;
-}
-
-.malus__border {
-    text-shadow: -5px -5px 30px rgba(0, 0, 0, .7);
-    -webkit-text-stroke-width: 18px;
-    -webkit-text-stroke-color: @color-white
+    .stroked-text {
+        display: block;
+        position: absolute;
+        bottom: @u-small;
+        right: @u-medium;
+        z-index: inherit;
+        font-size: 12rem;
+        text-align: center;
+        color: @color-red;
+    }
 }

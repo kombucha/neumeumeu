@@ -1,8 +1,10 @@
-export default ({malus}) => {
+import StrokedText from 'client/components/StrokedText';
+
+export default ({malus, className}) => {
+
     return (
         <div className="malus">
-            <span className="malus__border">{malus}</span>
-            <span className="malus__value">{malus}</span>
+            <StrokedText text={malus} double={true}/>
         </div>
     );
 };

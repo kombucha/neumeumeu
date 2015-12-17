@@ -34,6 +34,7 @@ export default {
     joinRoom: noOpPromise,
     leaveRoom: noOpPromise,
 
+    playerReady: noOpPromise,
     createGame,
     fetchGames,
     getGame,

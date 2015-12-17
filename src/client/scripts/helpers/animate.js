@@ -1,10 +1,10 @@
 import Velocity from 'velocity-animate';
 import 'velocity-animate/velocity.ui';
+import {randomInt} from 'common/utils';
 
 const animationSettings = {
     duration: 400,
     delay: 500,
-
 
     cardTranslateX: '-25%',
     cardScale: '0.4',
@@ -13,15 +13,15 @@ const animationSettings = {
 };
 
 
-function animate(step, gameDomElement) {
-    return play(step, gameDomElement);
+function animate(step, gameDomElement, currentPlayerIndex) {
+    return play(step, gameDomElement, currentPlayerIndex);
 }
 
-function play(step, gameDomElement) {
+function play(step, gameDomElement, currentPlayerIndex) {
     if (step.hasOwnProperty('fromPlayer')) {
         return animateCard(step.fromPlayer, step.toPile, gameDomElement);
     } else if (step.hasOwnProperty('fromPile')) {
-        return animatePile(step.fromPile, step.toPlayer, gameDomElement);
+        return animatePile(step.fromPile, step.toPlayer, gameDomElement, currentPlayerIndex);
     }
 }
 
@@ -67,17 +67,21 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
     });
 }
 
-function animatePile(fromPile, toPlayer, gameDomElement) {
+function animatePile(fromPile, toPlayer, gameDomElement, currentPlayerIndex) {
     var pile = getPile(fromPile, gameDomElement),
         pileCards = pile.getElementsByClassName('card--pile'),
         card = pileCards[0].getBoundingClientRect(),
-        playerCoord = getPlayer(toPlayer, gameDomElement).getBoundingClientRect(),
+
+        isCurrentPlayer = toPlayer == currentPlayerIndex,
+
+        target = isCurrentPlayer ? gameDomElement.querySelectorAll('.malus .stroked-text')[0] : getPlayer(toPlayer, gameDomElement),
+        targetCoord = target.getBoundingClientRect(),
 
         sequence = [],
 
         pileCardsProp = {
-            top: playerCoord.top - card.height / 2 + playerCoord.height / 2,
-            left: playerCoord.left - card.width / 2 + playerCoord.width / 2,
+            top: targetCoord.top - card.height / 2 + targetCoord.height / 2,
+            left: targetCoord.left - card.width / 2 + targetCoord.width / 2,
             scale: 0.2,
             rotateZ: [45, 0]
         };
@@ -91,9 +95,11 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
             'position': 'absolute',
             'top': pileCardCoord.top + 'px',
             'left': pileCardCoord.left + 'px',
-            'z-index': 8
+            'z-index': 7
         });
     });
+
+
 
     return new Promise((resolve) => {
         pileCards.forEach(function(pileCard, index) {
@@ -105,6 +111,10 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
 
             if (index === (pileCards.length - 1)) {
                 options.complete = resolve;
+            } else if (index === 0) {
+                options.complete = function() {
+                    shake(target, 200, isCurrentPlayer ? 10 : 3);
+                };
             }
 
             sequence.push({
@@ -114,6 +124,32 @@ function animatePile(fromPile, toPlayer, gameDomElement) {
             });
         });
 
+        Velocity.RunSequence(sequence);
+    });
+}
+
+function shake(element, duration = 400, intensity = 3) {
+    var sequence = [],
+        shakeDuration = 20;
+
+    for (var i = 0; i < duration / shakeDuration; i++) {
+        sequence.push({
+            e: element,
+            p: {
+                'translateX': randomInt(-intensity, intensity),
+                'translateY': randomInt(-intensity, intensity)
+            },
+            o: {
+                duration: shakeDuration
+            }
+        });
+    }
+
+    return new Promise((resolve) => {
+        sequence[sequence.length - 1].o.complete = function() {
+            element.removeAttribute('style');
+            resolve();
+        };
         Velocity.RunSequence(sequence);
     });
 }

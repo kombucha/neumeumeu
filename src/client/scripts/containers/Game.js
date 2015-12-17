@@ -20,14 +20,14 @@ export default class Game extends PureRenderComponent {
     }
 
     componentDidUpdate() {
-        const {applyResolutionStep, resolutionStep, game} = this.props,
+        const {applyResolutionStep, resolutionStep, game, currentPlayerIndex} = this.props,
             shouldAnimate = !!resolutionStep,
             shouldGetReady = !!game
                 && game.status === GameStatus.SOLVED
                 && !resolutionStep ;
 
         if (shouldAnimate) {
-            return Animate(resolutionStep, findDOMNode(this))
+            return Animate(resolutionStep, findDOMNode(this), currentPlayerIndex)
                 .then(() => applyResolutionStep(resolutionStep));
         } else if (shouldGetReady) {
             this.getReady(game.id);
@@ -150,12 +150,16 @@ function mapStateToProps(state) {
             : null,
         currentPlayer = game ?
             state.gameplay.players.find(player => player.id === state.authentication.player.id)
+            : null,
+        currentPlayerIndex = game ?
+            state.gameplay.players.findIndex(player => player.id === state.authentication.player.id)
             : null;
 
     return {
         game,
         resolutionStep,
-        currentPlayer
+        currentPlayer,
+        currentPlayerIndex
     };
 }
 

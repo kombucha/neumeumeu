@@ -26,9 +26,9 @@
 
     "players": [
         {"id":"7", "name": "Gabriela", "hand": [], "malus": 20},
-        {"id":"1", "name": "Azadeh", "hand": [], "malus": 22},
+        {"id":"2", "name": "Azadeh", "hand": [], "malus": 22},
         {
-            "id": "0",
+            "id": "1",
             "name": "Vincent",
             "status": "choosing_pile",
             "malus": 17,
@@ -41,7 +41,7 @@
         {"id":"6", "name": "Arnaud", "hand": [], "malus": 4}
     ],
     "maxPlayers": 10,
-    "owner": "0",
+    "owner": "1",
     "status": "waiting_for_pile_choice",
     "isProtected": false,
     "resolutionSteps": null
