@@ -2,7 +2,6 @@ import log from 'server/log';
 import GameStatus from 'common/constants/game-status';
 import socketService from 'server/services/socket';
 import gameService from 'server/services/game';
-import authService from 'server/services/authentication';
 import gameplayService from 'server/services/gameplay';
 
 function start() {
@@ -11,7 +10,7 @@ function start() {
 }
 
 function startRealtimeLobbyUpdate() {
-    log.info('STARTING REALTIME UPDATES FOR LOBBY');
+    log.info('Starting realtime updates for lobby');
     gameService.onLobbyUpdate(games => {
         socketService.broadcastActionToRoom('lobby', {
             type: 'UPDATE_GAMES',
@@ -21,7 +20,7 @@ function startRealtimeLobbyUpdate() {
 }
 
 function startGameRealtimeUpdate(gameId) {
-    log.info('STARTING REALTIME UPDATES FOR GAME', gameId);
+    log.info('Starting realtime updates for game', gameId);
     return gameplayService.listenToGameplayUpdates(gameId, onGameUpdate);
 }
 
@@ -31,7 +30,7 @@ function onGameUpdate(newGame, oldGame, end) {
         return end();
     }
 
-    log.info('GAME UPDATE', newGame.id, newGame.status);
+    log.info('Game update', newGame.id, newGame.status);
     const shouldSendResolutionSteps = (newGame.status === GameStatus.SOLVED)
         && oldGame && oldGame.status !== newGame.status,
         shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;
@@ -56,7 +55,7 @@ function onGameUpdate(newGame, oldGame, end) {
 function broadcastGameUpdate(game, withResolutionSteps) {
     const interestedSockets = socketService.getRoomSocketsIds(game.id);
 
-    Promise.all(interestedSockets.map(authService.getPlayerFromSocket))
+    Promise.all(interestedSockets.map(socketService.getPlayerFromSocket))
         .then(players => {
             players.forEach((player, idx) => {
                 const socketId = interestedSockets[idx];

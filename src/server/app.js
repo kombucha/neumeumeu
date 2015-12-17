@@ -19,8 +19,9 @@ app.use(html5History())
     .use(express.static(staticAssetsPath));
 
 // Init app
-socketService.init(server);
-actionHandler.start();
-realtimeHandler.start();
-
-server.listen(config.port, 'localhost', () => log.info('Server started on port', config.port));
+socketService.start(server)
+    .then(() => actionHandler.start())
+    .then(() => realtimeHandler.start())
+    .then(() => {
+        server.listen(config.port, 'localhost', () => log.info('Server started on port', config.port));
+    });

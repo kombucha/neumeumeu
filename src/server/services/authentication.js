@@ -23,13 +23,6 @@ function getPlayerFromToken(token) {
         });
 }
 
-function getPlayerFromSocket(socketId) {
-    return r.table('player')
-        .filter(player => player('sockets').contains(socketId))
-        .run()
-        .then(players => players[0]);
-}
-
 function simplePlayer(player) {
     return {
         id: player.id,
@@ -113,23 +106,6 @@ function logout(token) {
         .run();
 }
 
-function associateWithSocket(playerId, socketId) {
-    return r.table('player')
-        .get(playerId)
-        .update({
-            sockets: r.row('sockets').default([]).setInsert(socketId)
-        })
-        .run();
-}
-
-function dissociateFromSocket(socketId) {
-    return r.table('player')
-        .update({
-            sockets: r.row('sockets').default([]).setDifference([socketId])
-        })
-        .run();
-}
-
 function createTokenForPlayer(playerId) {
     const token = generateToken();
     return r.table('player')
@@ -169,10 +145,7 @@ function hashAndSaltPassword(password, salt) {
 
 export default {
     getPlayerFromToken,
-    getPlayerFromSocket,
     register,
     login,
-    logout,
-    associateWithSocket,
-    dissociateFromSocket
+    logout
 };

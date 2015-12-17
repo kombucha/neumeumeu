@@ -16,23 +16,23 @@ function handleAction(socket, action) {
     case 'LOGIN':
         return authService.login(action.username, action.password)
             .then(result => {
-                authService.associateWithSocket(result.player.id, socket.id);
+                socketService.associatePlayerWithSocket(result.player.id, socket.id);
                 return result;
             });
     case 'LOGOUT':
         return authService.logout(action.token)
             .then(result => {
-                authService.dissociateFromSocket(socket.id);
+                socketService.dissociatePlayerFromSocket(socket.id);
                 return result;
             });
     case 'REGISTER':
         return authService.register(action.user)
             .then(result => {
-                authService.associateWithSocket(result.player.id, socket.id);
+                socketService.associatePlayerWithSocket(result.player.id, socket.id);
                 return result;
             });
     case 'ASSOCIATE_PLAYER_TO_SOCKET':
-        return authService.associateWithSocket(action.playerId, action.socketId);
+        return socketService.associatePlayerWithSocket(action.playerId, action.socketId);
 
     case 'JOIN_ROOM':
         return socketService.joinRoom(socket, action.id);
@@ -93,7 +93,7 @@ function handleNewClient(socket) {
                       sendBack({error});
                   });
     });
-    socket.on('disconnect', () => authService.dissociateFromSocket(socket.id));
+    socket.on('disconnect', () => socketService.dissociatePlayerFromSocket(socket.id));
 }
 
 export default {

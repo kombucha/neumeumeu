@@ -1,10 +1,12 @@
 import Server from 'socket.io';
+import r from 'server/database';
+import log from 'server/log';
 
 let io;
 
-function init(server, config) {
+function start(server, config) {
     io = Server(server, config);
-    return io;
+    return flushSockets();
 }
 
 function on(...args) {
@@ -36,8 +38,39 @@ function leaveRoom(socket, roomId) {
     return Promise.resolve(roomId);
 }
 
+function getPlayerFromSocket(socketId) {
+    return r.table('player')
+        .filter(player => player('sockets').contains(socketId))
+        .run()
+        .then(players => players[0]);
+}
+
+function associatePlayerWithSocket(playerId, socketId) {
+    return r.table('player')
+        .get(playerId)
+        .update({
+            sockets: r.row('sockets').default([]).setInsert(socketId)
+        })
+        .run();
+}
+
+function dissociatePlayerFromSocket(socketId) {
+    return r.table('player')
+        .update({
+            sockets: r.row('sockets').default([]).setDifference([socketId])
+        })
+        .run();
+}
+
+function flushSockets() {
+    log.info('Flushing sockets');
+    return r.table('player')
+        .update({sockets: []})
+        .run();
+}
+
 export default {
-    init,
+    start,
 
     on,
     joinRoom,
@@ -45,5 +78,9 @@ export default {
 
     getRoomSocketsIds,
     emitAction,
-    broadcastActionToRoom
+    broadcastActionToRoom,
+
+    getPlayerFromSocket,
+    associatePlayerWithSocket,
+    dissociatePlayerFromSocket
 };
