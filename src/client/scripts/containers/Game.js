@@ -105,18 +105,17 @@ export default class Game extends PureRenderComponent {
     }
 
     renderGame(game) {
-        const {currentPlayer} = this.props,
+        const {currentPlayer, currentPlayerIndex} = this.props,
             isOwner = (game.owner === currentPlayer.id),
             gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
             topPlayers = game.players,
-            currentPlayerIdx = game.players.findIndex(p => p.id === currentPlayer.id),
             canStartGame = !gameStarted && isOwner && game.players.length >= 2,
             canCancelCard = (game.status === GameStatus.WAITING_FOR_CARDS);
 
         return (
             <div className="game">
                 <Players players={topPlayers}
-                    currentPlayerIndex={currentPlayerIdx}
+                    currentPlayerIndex={currentPlayerIndex}
                     canCancelCard={canCancelCard}
                     cancelCard={this.cancelCard.bind(this)} />
 
@@ -155,10 +154,10 @@ function mapStateToProps(state) {
             ? game.resolutionSteps[0]
             : null,
         currentPlayer = game ?
-            state.gameplay.players.find(player => player.id === state.authentication.player.id)
+            game.players.find(player => player.id === state.authentication.player.id)
             : null,
         currentPlayerIndex = game ?
-            state.gameplay.players.findIndex(player => player.id === state.authentication.player.id)
+            game.players.findIndex(player => player.id === state.authentication.player.id)
             : null;
 
     return {
