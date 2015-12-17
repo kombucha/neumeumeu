@@ -42,6 +42,8 @@
 
 .card {
     position: relative;
+    height: @card-height;
+    width: @card-width;
 }
 
 .card__backface,
@@ -56,6 +58,9 @@
 
     user-select: none;
     -webkit-user-drag: element;
+
+    position: absolute;
+    top: 0;
 }
 
 .card__backface{
@@ -152,31 +157,24 @@
 }
 
 // CARD FLIP ANIMATION
-.card {
+
+.card--flippable {
     perspective: 800px;
-    height: 200px;
-    width: 130px;
+
+    .card__frontface {
+        transition: transform .3s linear .3s, opacity 1ms .3s;
+        opacity: 1;
+        transform: rotateY(0);
+    }
+
+    .card__backface {
+        transition: transform .3s linear, opacity 1ms .3s;
+        opacity: 0;
+        transform: rotateY(90deg);
+    }
 }
 
-.card__backface,
-.card__frontface {
-    position: absolute;
-    top: 0;
-}
-
-.card__frontface {
-    transition: transform .3s linear .3s, opacity 1ms .3s;
-    opacity: 1;
-    transform: rotateY(0);
-}
-
-.card__backface {
-    transition: transform .3s linear, opacity 1ms .3s;
-    opacity: 0;
-    transform: rotateY(90deg);
-}
-
-.card.card--flipped {
+.card.card--flippable.card--flipped {
     .card__frontface {
         transition: transform .3s linear, opacity 1ms .3s;
         opacity: 0;

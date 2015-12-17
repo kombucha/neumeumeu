@@ -23,9 +23,10 @@ export default ({className, player, defaultAvatarURL='/images/players/avatar-def
             </div>
             <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
             <div className="player__card">
+                <button className="player__cancel">cancel</button>
                 {
                     player.chosenCard
-                        ? (<Card className="card--player" card={player.chosenCard}/>)
+                        ? (<Card className="card--player" card={player.chosenCard} flippable={true}/>)
                         : (<div className="player__card-placeholder"></div>)
                 }
             </div>

@@ -1,18 +1,23 @@
 import classNames from 'classnames/dedupe';
 import {range} from 'common/utils';
 
-export default ({card, className, onClick}) => {
+export default ({card, className, onClick, flippable}) => {
     const isFlipped = !!card.value,
         classes = classNames(
         'card',
         className,
+        flippable ? 'card--flippable' : null,
         isFlipped ? 'card--malus-' + card.malus : 'card--flipped');
 
     return (
         <div className={classes} onClick={onClick}>
-            <div className="card__backface">
-                <div className="card__value card__value--center"></div>
-            </div>
+            {
+                flippable
+                    ? <div className="card__backface">
+                        <div className="card__value card__value--center"></div>
+                    </div>
+                    : null
+            }
             <div className="card__frontface">
                 <div className="card__top">
                     <div className="card__value card__value--top">{card.value}</div>

@@ -16,7 +16,7 @@ function fetchGames() {
 }
 
 function getGame(gameId) {
-    const response = Object.assign({}, require('./mocks/solvedGame.json'), {
+    const response = Object.assign({}, require('./mocks/gameWaitingForPileChoice.json'), {
         id: gameId
     });
 

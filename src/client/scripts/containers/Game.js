@@ -10,6 +10,7 @@ import PlayerHud from 'client/components/PlayerHUD';
 import StrokedText from 'client/components/StrokedText';
 import {findDOMNode} from 'react-dom';
 import Animate from 'client/helpers/animate';
+import ChoosePile from 'client/components/ChoosePile';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -126,6 +127,12 @@ export default class Game extends PureRenderComponent {
                         canSelectPiles={currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE}
                         onPileSelected={this.handlePileSelected.bind(this)} />
                     : null
+                }
+
+                {
+                    currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE
+                        ? <ChoosePile/>
+                        : null
                 }
 
                 {

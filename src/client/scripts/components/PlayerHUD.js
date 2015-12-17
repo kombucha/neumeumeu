@@ -12,15 +12,6 @@ export default({player, gameId, gameStatus, onHandCardClicked}) => {
 
     return (
         <div className="player-hud">
-            {
-                player.status === 'choosing_pile'
-                    ? (
-                        <div className="player-hud__info">
-                            <span className="player-hud__info-text">Would you kindly choose a pile ?</span>
-                        </div>
-                    )
-                    : null
-            }
             <div className="player-hud__main">
                 <PlayerMenu player={player} gameId={gameId}/>
                 <Hand className={handClasses} cards={sortedCards} onCardSelected={onHandCardClicked}/>

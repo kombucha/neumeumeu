@@ -33,7 +33,7 @@
             "status": "choosing_pile",
             "malus": 17,
             "chosenCard": 11,
-            "hand": [ 55, 10, 104, 22, 78, 1, 24 ]
+            "hand": [55]
         },
         {"id":"3", "name": "Hugo", "hand": [], "malus": 2},
         {"id":"4", "name": "Samuel", "hand": [], "malus": 40},

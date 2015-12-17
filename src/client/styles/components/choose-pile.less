@@ -1,0 +1,26 @@
+.choose-pile {
+    position: fixed;
+    text-align: center;
+    text-shadow: @shadow-l1;
+    left: 0;
+    right: 0;
+}
+
+.choose-pile {
+
+    &::before {
+        content: "";
+        position: fixed;
+        background-color: rgba(0, 0, 0, .8);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: @z-hudInfo;
+    }
+}
+
+.choose-pile__text {
+    position: relative;
+    z-index: @z-hudInfoOverlay;
+}
