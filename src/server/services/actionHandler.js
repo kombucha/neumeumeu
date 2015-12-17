@@ -10,7 +10,7 @@ function start() {
 }
 
 function handleAction(socket, action) {
-    log.info({action: action}, 'RECEIVED ACTION');
+    log.info({action: action});
 
     switch (action.type) {
     case 'LOGIN':
@@ -88,7 +88,10 @@ function handleNewClient(socket) {
 
         handleAction(socket, action)
             .then((result) => sendBack(result),
-                  (error) => sendBack({error: error}));
+                  (error) => {
+                      log.error({error});
+                      sendBack({error});
+                  });
     });
     socket.on('disconnect', () => authService.dissociateFromSocket(socket.id));
 }

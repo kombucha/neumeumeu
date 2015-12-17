@@ -31,7 +31,7 @@ function onGameUpdate(newGame, oldGame, end) {
         return end();
     }
 
-    log.info('GAME UPDATE', newGame.status);
+    log.info('GAME UPDATE', newGame.id, newGame.status);
     const shouldSendResolutionSteps = (newGame.status === GameStatus.SOLVED)
         && oldGame && oldGame.status !== newGame.status,
         shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;

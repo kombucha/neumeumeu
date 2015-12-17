@@ -26,7 +26,6 @@ function updateGame(game) {
 }
 
 function updatePlayerInGame(gameId, player) {
-    log.info('UPDATING PLAYER ', gameId, player);
     return r.table('game')
         .get(gameId)
         // DAMN that's convoluted...
