@@ -1,8 +1,10 @@
+import {PropTypes} from 'react';
+
 import classNames from 'classnames/dedupe';
 import PlayerStatus from 'common/constants/player-status';
 import Card from './Card';
 
-export default ({className, player, isCurrentPlayer, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
+const Player = ({player, isCurrentPlayer, cancelCard, canCancelCard, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
     const avatarURL = player.avatarURL || defaultAvatarURL,
         classes = classNames(
             'player',
@@ -12,21 +14,19 @@ export default ({className, player, isCurrentPlayer, defaultAvatarURL='/images/p
                     || player.status === PlayerStatus.CHOOSED_PILE,
                 'player--choosing-pile': player.status === PlayerStatus.HAS_TO_CHOOSE_PILE,
                 'player--ai': !!player.AIEnabled
-            },
-            className
-        );
+            }
+        ),
+        showCancelAction = isCurrentPlayer && player.chosenCard && canCancelCard;
 
     return (
         <div className={classes}>
             <div className="player__malus">{player.malus}</div>
-            <div className="player__username">
-                {player.name}
-            </div>
+            <div className="player__username">{player.name}</div>
             <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
 
             {
-                player.chosenCard && isCurrentPlayer
-                    ? (<button className="player__cancel"></button>)
+                showCancelAction
+                    ? (<button className="player__cancel" onClick={() => cancelCard()}></button>)
                     : null
             }
 
@@ -40,3 +40,13 @@ export default ({className, player, isCurrentPlayer, defaultAvatarURL='/images/p
         </div>
     );
 };
+
+Player.propTypes = {
+    player: PropTypes.object.isRequired,
+    isCurrentPlayer: PropTypes.bool.isRequired,
+    canCancelCard: PropTypes.bool.isRequired,
+    cancelCard: PropTypes.func.isRequired
+};
+
+
+export default Player;

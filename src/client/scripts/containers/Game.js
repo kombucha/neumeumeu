@@ -21,17 +21,12 @@ export default class Game extends PureRenderComponent {
     }
 
     componentDidUpdate() {
-        const {applyResolutionStep, resolutionStep, game, currentPlayerIndex} = this.props,
-            shouldAnimate = !!resolutionStep,
-            shouldGetReady = !!game
-                && game.status === GameStatus.SOLVED
-                && !resolutionStep ;
+        const {applyResolutionStep, resolutionStep, currentPlayerIndex} = this.props,
+            shouldAnimate = !!resolutionStep;
 
         if (shouldAnimate) {
             return Animate(resolutionStep, findDOMNode(this), currentPlayerIndex)
                 .then(() => applyResolutionStep(resolutionStep));
-        } else if (shouldGetReady) {
-            this.getReady(game.id);
         }
     }
 
@@ -115,11 +110,15 @@ export default class Game extends PureRenderComponent {
             gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
             topPlayers = game.players,
             currentPlayerIdx = game.players.findIndex(p => p.id === currentPlayer.id),
-            canStartGame = !gameStarted && isOwner && game.players.length >= 2;
+            canStartGame = !gameStarted && isOwner && game.players.length >= 2,
+            canCancelCard = (game.status === GameStatus.WAITING_FOR_CARDS);
 
         return (
             <div className="game">
-                <Players players={topPlayers} currentPlayerIndex={currentPlayerIdx} />
+                <Players players={topPlayers}
+                    currentPlayerIndex={currentPlayerIdx}
+                    canCancelCard={canCancelCard}
+                    cancelCard={this.cancelCard.bind(this)} />
 
                 { gameStarted
                     ? <CardsInPlay
