@@ -159,10 +159,7 @@ function playerReady(playerId, gameId) {
                 return Promise.reject(Errors.INVALID_ACTION);
             }
 
-            const player = game.players.find(p => p.id === playerId);
-            player.status = PlayerStatus.READY_FOR_NEXT_ROUND;
-
-            return updateGame(game);
+            return updatePlayerInGame(game.id, {id: playerId, status: PlayerStatus.READY_FOR_NEXT_ROUND});
         })
         .then(returnEmptyObject);
 }
