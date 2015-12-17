@@ -2,6 +2,7 @@
 @player-avatar-border: 8px;
 @player-avatar-space: 8px;
 @player-width: @player-avatar-size + (@player-avatar-space*2);
+@player-cancel-size: 22px;
 
 .player {
     display: flex;
@@ -91,4 +92,29 @@
 .card--player {
     transform: translateX(-25%) scale(.4);
     transform-origin: 50% 0 0;
+}
+
+.player__cancel {
+    transition: background-color .2s ease-out;
+    position: absolute;
+    background-color: @color-red;
+    width: @player-cancel-size;
+    height: @player-cancel-size;
+    border-radius: 50%;
+    z-index: @z-players;
+    margin: (-@player-cancel-size / 2) (38px + @player-cancel-size / 2);
+
+    &::before {
+        content: "\2716";
+        color: #FFF;
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+        background-color: @color-purple;
+    }
 }

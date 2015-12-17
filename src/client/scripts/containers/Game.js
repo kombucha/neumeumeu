@@ -119,7 +119,7 @@ export default class Game extends PureRenderComponent {
 
         return (
             <div className="game">
-                <Players players={topPlayers} highlightIdx={currentPlayerIdx} />
+                <Players players={topPlayers} currentPlayerIndex={currentPlayerIdx} />
 
                 { gameStarted
                     ? <CardsInPlay
