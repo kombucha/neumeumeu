@@ -27,7 +27,7 @@ function startGameRealtimeUpdate(gameId) {
 
 function onGameUpdate(newGame, oldGame, end) {
     if (!newGame || (newGame.status === GameStatus.ENDED)) {
-        broadcastGameUpdate(newGame);
+        newGame && broadcastGameUpdate(newGame);
         return end();
     }
 
