@@ -267,10 +267,22 @@ function playAIs(game) {
         .filter(p => p.AIEnabled)
         .map(p => {
             if (p.status === PlayerStatus.CHOOSING_CARD) {
+                // Choose random card
                 const randomCardValue = pickRandom(p.hand).value;
                 return playCard(p.id, game.id, randomCardValue);
             } else if (p.status === PlayerStatus.HAS_TO_CHOOSE_PILE) {
-                return choosePile(p.id, game.id, randomInt(0, 3));
+                // Choose pile with lowest malus
+                const smartestPileIdx = game.cardsInPlay
+                    .map(computeTotalCardMalus)
+                    .reduce((idx, malus, currentIdx, maluses) => {
+                        if (idx === -1 || malus < maluses[idx]) {
+                            return currentIdx;
+                        }
+
+                        return idx;
+                    }, -1);
+
+                return choosePile(p.id, game.id, smartestPileIdx);
             } else if (game.status === GameStatus.SOLVED) {
                 return playerReady(p.id, game.id);
             }
@@ -281,7 +293,7 @@ function playAIs(game) {
 
 function isEndReached(game) {
     return game.players
-        .map(p => computePlayerMalus(p.malusCards))
+        .map(p => computeTotalCardMalus(p.malusCards))
         .some(malus => malus >= game.maxMalus);
 }
 
@@ -315,7 +327,7 @@ function fullPlayer(player) {
         hand: player.hand.map(simpleCard),
         chosenCard: simpleCard(player.chosenCard),
         malusCards: player.malusCards.map(simpleCard),
-        malus: computePlayerMalus(player.malusCards)
+        malus: computeTotalCardMalus(player.malusCards)
     });
 }
 
@@ -325,7 +337,7 @@ function otherPlayer(player) {
         name: player.name,
         status: player.status,
         chosenCard: simpleCard(player.chosenCard ? {value: UNKNOWN_CARD_VALUE} : null),
-        malus: computePlayerMalus(player.malusCards),
+        malus: computeTotalCardMalus(player.malusCards),
         AIEnabled: player.AIEnabled
     };
 }
@@ -334,7 +346,7 @@ function simpleCard(card) {
     return card ? card.value : null;
 }
 
-function computePlayerMalus(cards) {
+function computeTotalCardMalus(cards) {
     return cards.reduce((sum, card) => sum + card.malus, 0);
 }
 
