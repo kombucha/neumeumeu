@@ -23,8 +23,8 @@ function createGame(playerId, options) {
     const newGame = {
         name: options.name,
         password: options.password,
-        maxMalus: options.maxMalus || 66,
-        maxPlayers: options.maxPlayers || 10,
+        maxMalus: options.maxMalus ? parseInt(options.maxMalus, 10) : 66,
+        maxPlayers: options.maxPlayers ? parseInt(options.maxPlayers, 10) : 10,
 
         creationDate: r.now(),
         status: GameStatus.WAITING_FOR_PLAYERS,
