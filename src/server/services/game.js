@@ -12,6 +12,7 @@ function createGamePlayer(player) {
     return {
         id: player.id,
         name: player.name,
+        avatarURL: player.avatarURL,
         hand: [],
         chosenCard: null,
         status: PlayerStatus.IDLE,

@@ -33,7 +33,8 @@ function logout() {
 function register(newUser) {
     return dispatch => {
         return api.register(newUser)
-            .then(loginData => loginSuccessful(dispatch, loginData));
+            .then(loginData => loginSuccessful(dispatch, loginData))
+            .catch(error => dispatch(addErrorMessage(error)));
     };
 }
 

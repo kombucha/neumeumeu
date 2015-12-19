@@ -335,6 +335,7 @@ function otherPlayer(player) {
         id: player.id,
         name: player.name,
         status: player.status,
+        avatarURL: player.avatarURL,
         chosenCard: simpleCard(player.chosenCard ? {value: UNKNOWN_CARD_VALUE} : null),
         malus: computeTotalCardMalus(player.malusCards),
         AIEnabled: player.AIEnabled

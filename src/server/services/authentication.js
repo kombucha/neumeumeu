@@ -72,9 +72,7 @@ function register(newPlayer) {
     return isNameAvailable(newPlayer.username)
         .then((available) => {
             if (!available) {
-                return Promise.reject({
-                    errors:[`Username ${newPlayer.username} is already taken !`]
-                });
+                return Promise.reject(`Username "${newPlayer.username}" is already taken !`);
             }
 
             const salt = randomHexString();
@@ -90,6 +88,7 @@ function register(newPlayer) {
                     name: newPlayer.username,
                     email: newPlayer.email,
                     password: hashedPassword,
+                    avatarURL: newPlayer.avatarURL,
                     salt,
                     tokens: []
                 })
