@@ -1,4 +1,5 @@
 import api from 'client/api';
+import {addErrorMessage} from 'client/actions/errors';
 import {updatePath} from 'redux-simple-router';
 
 function loginSuccessful(dispatch, loginData) {
@@ -16,7 +17,8 @@ function loginSuccessful(dispatch, loginData) {
 function login (username, password) {
     return dispatch => {
         return api.login(username, password)
-            .then(loginData => loginSuccessful(dispatch, loginData));
+            .then(loginData => loginSuccessful(dispatch, loginData))
+            .catch(error => dispatch(addErrorMessage(error)));
     };
 }
 

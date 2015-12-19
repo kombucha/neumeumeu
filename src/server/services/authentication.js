@@ -31,9 +31,7 @@ function simplePlayer(player) {
 }
 
 function login(username, password) {
-    const genericError = {
-        errors: ['Invalid username or password']
-    };
+    const genericError = 'Invalid username or password';
 
     return r.table('player')
         .filter(player => player('name').eq(username))
@@ -43,7 +41,7 @@ function login(username, password) {
             const player = players[0];
 
             if (!player) {
-                return Promise.reject(genericError);
+                return Promise.reject();
             }
 
             return Promise.all([
@@ -53,7 +51,7 @@ function login(username, password) {
         })
         .then(([player, isPasswordOk]) => {
             if (!isPasswordOk) {
-                return Promise.reject(genericError);
+                return Promise.reject();
             }
 
             return Promise.all([
@@ -66,7 +64,8 @@ function login(username, password) {
                 player,
                 token
             };
-        });
+        })
+        .catch(() => Promise.reject(genericError));
 }
 
 function register(newPlayer) {

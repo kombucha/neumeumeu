@@ -1,8 +1,8 @@
-import Messages from 'client/components/Messages';
+import ErrorMessagesContainer from 'client/containers/ErrorMessagesContainer';
 
 export default (props) => (
     <div className="app">
-        <Messages text="Error while login!"/>
+        <ErrorMessagesContainer text="Error while login!"/>
         {props.children}
     </div>
 );
