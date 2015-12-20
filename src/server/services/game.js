@@ -2,6 +2,7 @@ import r from 'server/database';
 import {getPlayer} from 'server/services/player';
 import PlayerStatus from 'common/constants/player-status';
 import GameStatus from 'common/constants/game-status';
+import log from 'server/log';
 
 const simpleGameProjection = [
     'id', 'isProtected', 'maxPlayers', 'status', 'name',
@@ -41,7 +42,6 @@ function createGame(playerId, options) {
 }
 
 function joinGame(playerId, gameId, password = '') {
-    // TODO: Reject promise if result.replaced !== 1 (?) or errors.length !== 0
     return getPlayer(playerId)
         .then(player => {
             const gamePlayer = createGamePlayer(player);
@@ -61,8 +61,27 @@ function joinGame(playerId, gameId, password = '') {
                         {players: game('players').append(gamePlayer)},
                         {}
                     );
-                })
-                .run();
+                }, {returnChanges: 'always'})
+                .run()
+                .then(result => {
+                    if (result.unchanged !== 1) {
+                        return {};
+                    }
+
+                    const game = result.changes[0]['new_val'];
+
+                    if (game.status !== GameStatus.WAITING_FOR_PLAYERS) {
+                        return Promise.reject('Can\'t join game: Already running');
+                    } else if (game.password && game.password !== password) {
+                        return Promise.reject('Can\'t join game: Wrong password');
+                    } else if (game.players.length >= game.maxPlayers) {
+                        return Promise.reject('Can\'t join game: Game is full');
+                    } else if (game.players.filter(p => p.id === playerId) === 1) {
+                        return {};
+                    }
+
+                    return Promise.reject('Can\'t join game: Unknown reason');
+                });
         });
 }
 
