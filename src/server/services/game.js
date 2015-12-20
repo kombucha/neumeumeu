@@ -2,7 +2,6 @@ import r from 'server/database';
 import {getPlayer} from 'server/services/player';
 import PlayerStatus from 'common/constants/player-status';
 import GameStatus from 'common/constants/game-status';
-import log from 'server/log';
 
 const simpleGameProjection = [
     'id', 'isProtected', 'maxPlayers', 'status', 'name',

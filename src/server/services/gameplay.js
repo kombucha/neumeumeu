@@ -1,10 +1,9 @@
 import r from 'server/database';
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
-import {copyArray, pickRandom, randomInt} from 'common/utils';
+import {copyArray, pickRandom} from 'common/utils';
 import Errors from 'common/constants/errors';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
-import log from 'server/log';
 
 // Data
 function getGame(id) {
