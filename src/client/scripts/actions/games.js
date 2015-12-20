@@ -13,8 +13,8 @@ function updateGames(games) {
 function createGame(game) {
     return dispatch => {
         return api.createGame(game)
-            .then(() => {
-                dispatch(updatePath('/'));
+            .then((gameId) => {
+                dispatch(updatePath(`/games/${gameId}`));
             });
     };
 }

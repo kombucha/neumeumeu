@@ -37,7 +37,11 @@ function createGame(playerId, options) {
     return r.table('game')
         .insert(newGame)
         .run()
-        .then(gameCreation => gameCreation['generated_keys'][0]);
+        .then(gameCreation => {
+            const gameId = gameCreation['generated_keys'][0];
+            return joinGame(playerId, gameId, options.password)
+                .then(() => gameId);
+        });
 }
 
 function joinGame(playerId, gameId, password = '') {
