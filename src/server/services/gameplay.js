@@ -35,13 +35,9 @@ function updatePlayerInGame(gameId, player) {
                     players: game('players')
                         .changeAt(playerIdx, game('players')(playerIdx).merge(player))
                 }));
-        }, {returnChanges: true})
+        }, {returnChanges: 'always'})
         .run()
         .then(result => {
-            if (result.changes.length === 0) {
-                return {}; // FIXME: :/
-            }
-
             return result.changes[0]['new_val'];
         });
 }
