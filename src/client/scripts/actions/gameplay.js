@@ -7,10 +7,8 @@ function fetchedCurrentGame(game) {
     };
 }
 
-function startedGame() {
-    return {
-        type: 'START_GAME'
-    };
+function startGame(gameId) {
+    return () => api.startGame(gameId);
 }
 
 function playCard(gameId, cardValue) {
@@ -38,11 +36,6 @@ function updateCurrentGame(gameId) {
         return api.getGame(gameId)
             .then(game => dispatch(fetchedCurrentGame(game)));
     };
-}
-
-function startGame(gameId) {
-    return dispatch => api.startGame(gameId)
-        .then(() => dispatch(startedGame()));
 }
 
 function clearCurrentGame() {
