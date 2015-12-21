@@ -55,15 +55,19 @@ export default class RegisterForm extends FormComponent {
                     required
                     onChange={this.onChange('username')}/>
 
-                <select id="avatar"
-                    value={this.state.avatarURL}
-                    onChange={this.onChange('avatarURL')}>
-                    {
-                        AVATARS.map(avatar => (
-                            <option key={avatar.value} value={avatar.value}>{avatar.name}</option>
-                        ))
-                    }
-                </select>
+                <label className="form__label form__label--avatar">
+                    <img className="register-form__avatar-preview" src={this.state.avatarURL} alt="avatar"/>
+                    <select id="avatar"
+                        value={this.state.avatarURL}
+                        onChange={this.onChange('avatarURL')}>
+                        {
+                            AVATARS.map(avatar => (
+                                <option key={avatar.value} value={avatar.value}>{avatar.name}</option>
+                            ))
+                        }
+                    </select>
+                </label>
+
 
                 <input id="password"
                     type="password"
