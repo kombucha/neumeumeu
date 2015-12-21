@@ -8,7 +8,8 @@ export default class GameCreationForm extends FormComponent {
         this.state = {
             isProtected: false,
             maxMalus: 66,
-            maxPlayers: 4
+            maxPlayers: 4,
+            botsCount: 0
         };
     }
 
@@ -18,16 +19,14 @@ export default class GameCreationForm extends FormComponent {
         this.props.onCreateGame(game);
     }
 
-    onChange(stateProp) {
-        return (e) => this.setState({[stateProp]: e.target.value});
-    }
-
-    onCheckboxChange(stateProp) {
-        return (e) => this.setState({[stateProp]: e.target.checked});
+    componentWillUpdate(nextProps, nextState) {
+        if (nextState.botsCount > nextState.maxPlayers - 1) {
+            this.setState({botsCount: nextState.maxPlayers - 1});
+        }
     }
 
     render() {
-        const {name, isProtected, password, maxMalus, maxPlayers} = this.state;
+        const {name, isProtected, password, maxMalus, botsCount, maxPlayers} = this.state;
 
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -62,6 +61,19 @@ export default class GameCreationForm extends FormComponent {
                                step="1"
                                value={maxPlayers}
                                onChange={this.onChange('maxPlayers')}/>
+                    </div>
+                </label>
+
+                <label className="form__label">
+                    <span className="form__text">Bots number</span>
+                    <div className="form__range">
+                        <span className="form__range__value">{botsCount}</span>
+                        <input type="range"
+                               min="0"
+                               max="9"
+                               step="1"
+                               value={botsCount}
+                               onChange={this.onChange('botsCount')}/>
                     </div>
                 </label>
 

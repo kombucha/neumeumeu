@@ -1,5 +1,6 @@
 import r from 'server/database';
 import {getPlayer} from 'server/services/player';
+import {range} from 'common/utils';
 import PlayerStatus from 'common/constants/player-status';
 import GameStatus from 'common/constants/game-status';
 
@@ -16,32 +17,45 @@ function createGamePlayer(player) {
         hand: [],
         chosenCard: null,
         status: PlayerStatus.IDLE,
-        malusCards: []
+        malusCards: [],
+        AIEnabled: !!player.AIEnabled
     };
 }
 
+function createBot() {
+    return createGamePlayer({
+        id: r.uuid(),
+        name: 'Bob', // TODO: generate random funny name :)
+        avatarURL: undefined, // TODO: robot avatar
+        AIEnabled: true
+    });
+}
+
 function createGame(playerId, options) {
-    const newGame = {
-        name: options.name,
-        password: options.password,
-        maxMalus: options.maxMalus ? parseInt(options.maxMalus, 10) : 66,
-        maxPlayers: options.maxPlayers ? parseInt(options.maxPlayers, 10) : 10,
+    const maxMalus = isNaN(options.maxMalus) ? 66 : parseInt(options.maxMalus, 10),
+        maxPlayers = isNaN(options.maxPlayers) ? 10 : parseInt(options.maxPlayers, 10),
+        botsCount = isNaN(options.botsCount) ? 0 : Math.min(maxPlayers, parseInt(options.botsCount, 10)),
+        newGame = {
+            name: options.name,
+            password: options.password,
+            maxMalus,
+            maxPlayers,
 
-        creationDate: r.now(),
-        status: GameStatus.WAITING_FOR_PLAYERS,
-        players: [],
-        owner: playerId,
-        cardsInPlay: [[], [], [], []]
-    };
+            creationDate: r.now(),
+            status: GameStatus.WAITING_FOR_PLAYERS,
+            players: range(Math.max(0, botsCount)).map(createBot),
+            owner: playerId,
+            cardsInPlay: [[], [], [], []]
+        };
 
-    return r.table('game')
-        .insert(newGame)
-        .run()
-        .then(gameCreation => {
-            const gameId = gameCreation['generated_keys'][0];
-            return joinGame(playerId, gameId, options.password)
-                .then(() => gameId);
-        });
+    return getPlayer(playerId)
+        .then(player => {
+            newGame.players = [createGamePlayer(player), ...newGame.players];
+            return r.table('game')
+                .insert(newGame)
+                .run();
+        })
+        .then(result => result['generated_keys'][0]);
 }
 
 function joinGame(playerId, gameId, password = '') {
