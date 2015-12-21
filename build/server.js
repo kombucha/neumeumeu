@@ -25,12 +25,14 @@ function startServer() {
                 interval: 500
             },
             reloadDebounce: 1000,
+            ui: false,
             ghostMode: false,
             online: false,
             notify: false
         };
 
     if (buildConf.useMocks) {
+        bsConf.port = buildConf.serverPort;
         bsConf.server = {
             baseDir: buildConf.paths.distBase,
             middleware: [
