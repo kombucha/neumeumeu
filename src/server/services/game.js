@@ -104,17 +104,17 @@ function joinGame(playerId, gameId, password = '') {
 
 function getCurrentGames() {
     return r.table('game')
-        .pluck(...simpleGameProjection)
         .filter(r.row('status').ne(GameStatus.ENDED))
         .orderBy(r.desc('creationDate'))
+        .pluck(...simpleGameProjection)
         .limit(10)
         .run();
 }
 
 function onLobbyUpdate(cb) {
     return r.table('game')
-        .pluck(...simpleGameProjection)
         .filter(r.row('status').ne(GameStatus.ENDED))
+        .pluck(...simpleGameProjection)
         .changes()
         .run()
         .then(cursor => {
