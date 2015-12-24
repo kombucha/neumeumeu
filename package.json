@@ -60,7 +60,7 @@
     "redux-logger": "^2.2.1",
     "redux-simple-router": "0.0.10",
     "redux-thunk": "^1.0.0",
-    "rethinkdbdash": "^2.1.17",
+    "rethinkdbdash": "^2.2.12",
     "run-sequence": "^1.1.4",
     "sinon": "^1.17.1",
     "sinon-chai": "^2.8.0",
