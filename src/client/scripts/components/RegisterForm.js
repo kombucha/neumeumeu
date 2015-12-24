@@ -1,26 +1,10 @@
+import {connect} from 'react-redux';
+import AVATARS from 'common/constants/avatars';
+import {register, addErrorMessage} from 'client/actions';
 import FormComponent from 'client/components/FormComponent';
-import {PropTypes} from 'react';
 import StrokedText from 'client/components/StrokedText';
 
-const AVATARS = [
-    {name: 'Avatar 1',  value: '/images/players/avatar-01.svg'},
-    {name: 'Avatar 2',  value: '/images/players/avatar-02.svg'},
-    {name: 'Avatar 3',  value: '/images/players/avatar-03.svg'},
-    {name: 'Avatar 4',  value: '/images/players/avatar-04.svg'},
-    {name: 'Avatar 5',  value: '/images/players/avatar-05.svg'},
-    {name: 'Avatar 6',  value: '/images/players/avatar-06.svg'},
-    {name: 'Avatar 7',  value: '/images/players/avatar-07.svg'},
-    {name: 'Avatar 8',  value: '/images/players/avatar-08.svg'},
-    {name: 'Avatar 9',  value: '/images/players/avatar-09.svg'},
-    {name: 'Avatar 10', value: '/images/players/avatar-10.svg'},
-    {name: 'Avatar 11', value: '/images/players/avatar-11.svg'},
-    {name: 'Avatar 13', value: '/images/players/avatar-13.svg'},
-    {name: 'Avatar 14', value: '/images/players/avatar-14.svg'},
-    {name: 'Avatar 15', value: '/images/players/avatar-15.svg'},
-    {name: 'Avatar 16', value: '/images/players/avatar-16.svg'}
-];
-
-export default class RegisterForm extends FormComponent {
+class RegisterForm extends FormComponent {
 
     constructor(props) {
         super(props);
@@ -31,13 +15,36 @@ export default class RegisterForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
+
+        const validation = this.validate(this.state),
+            hasErrors = validation.errors.length > 0;
+
+        if (hasErrors) {
+            const firstError = validation.errors[0];
+            return this.props.addErrorMessage(firstError.message);
+        }
+
         const newUser = Object.assign({}, {
             username: this.state.username,
             password: this.state.password,
             avatarURL: this.state.avatarURL,
             email: this.state.email
         });
-        this.props.handleRegistration(newUser);
+
+        this.props.register(newUser);
+    }
+
+    validate(formValues) {
+        const errors = [];
+
+        if (formValues.password !== formValues.confirmPassword) {
+            errors.push({
+                field: 'confirmPassword',
+                message: 'Passwords dont match'
+            });
+        }
+
+        return {errors};
     }
 
     render() {
@@ -89,6 +96,7 @@ export default class RegisterForm extends FormComponent {
     }
 }
 
-RegisterForm.propTypes = {
-    handleRegistration: PropTypes.func.isRequired
-};
+export default connect(
+    null,
+    {register, addErrorMessage}
+)(RegisterForm);
