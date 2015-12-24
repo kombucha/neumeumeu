@@ -1,9 +1,10 @@
-import r from 'server/database';
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
-import {copyArray, pickRandom} from 'common/utils';
+import {sum, sortBy} from 'common/utils';
 import Errors from 'common/constants/errors';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
+import r from 'server/database';
+import ai from 'server/services/ai';
 
 // Data
 function getGame(id) {
@@ -69,7 +70,7 @@ function startRound(playerId, gameId) {
             const gameCards = generateGameCards();
 
             game.status = GameStatus.WAITING_FOR_CARDS;
-            game.cardsInPlay = gameCards.cardsInPlay.sort((pile1, pile2) => pile1[0].value - pile2[0].value);
+            game.cardsInPlay = sortBy(pile => pile[0].value, gameCards.cardsInPlay);
             game.players = game.players.map((player, idx) => Object.assign({}, player, {
                 hand: gameCards.hands[idx],
                 chosenCard: null,
@@ -177,7 +178,7 @@ function solve(game) {
         return Promise.resolve(game);
     }
 
-    const sortedPlayers = copyArray(game.players).sort((p1, p2) => p1.chosenCard.value - p2.chosenCard.value),
+    const sortedPlayers = sortBy(p => p.chosenCard.value, game.players),
         pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]),
         playerHasToChoosePile = player => pilesTopCards.every(topCard => player.chosenCard.value < topCard.value),
         playerWithTooSmallCard = sortedPlayers.find(playerHasToChoosePile),
@@ -261,22 +262,11 @@ function playAIs(game) {
         .filter(p => p.AIEnabled)
         .map(p => {
             if (p.status === PlayerStatus.CHOOSING_CARD) {
-                // Choose random card
-                const randomCardValue = pickRandom(p.hand).value;
-                return playCard(p.id, game.id, randomCardValue);
+                const cardId = ai.chooseCard(p.hand, game.cardsInPlay, game.players.length);
+                return playCard(p.id, game.id, cardId);
             } else if (p.status === PlayerStatus.HAS_TO_CHOOSE_PILE) {
-                // Choose pile with lowest malus
-                const smartestPileIdx = game.cardsInPlay
-                    .map(computeTotalCardMalus)
-                    .reduce((idx, malus, currentIdx, maluses) => {
-                        if (idx === -1 || malus < maluses[idx]) {
-                            return currentIdx;
-                        }
-
-                        return idx;
-                    }, -1);
-
-                return choosePile(p.id, game.id, smartestPileIdx);
+                const chosenPile = ai.choosePileIdx(game.cardsInPlay);
+                return choosePile(p.id, game.id, chosenPile);
             } else if (game.status === GameStatus.SOLVED) {
                 return playerReady(p.id, game.id);
             }
@@ -342,7 +332,7 @@ function simpleCard(card) {
 }
 
 function computeTotalCardMalus(cards) {
-    return cards.reduce((sum, card) => sum + card.malus, 0);
+    return sum('malus', cards);
 }
 
 function returnEmptyObject() {

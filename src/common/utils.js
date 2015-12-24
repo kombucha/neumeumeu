@@ -6,9 +6,22 @@ function range(size) {
     return Array.apply(null, Array(size)).map((_, i) => i);
 }
 
+function getSelectorFunction(selector) {
+    if (!selector) {
+        return item => item;
+    } else if (typeof selector === 'string') {
+        return (item) => item[selector];
+    } else if (typeof selector === 'function') {
+        return selector;
+    } else {
+        throw new Error('Invalid selector');
+    }
+}
+
 // Returns a sorted COPY of an array
-function sort(arr, compareFn) {
-    return copyArray(arr).sort(compareFn);
+function sortBy(selector, arr) {
+    const selectorFn = getSelectorFunction(selector);
+    return copyArray(arr).sort((a, b) => selectorFn(a) - selectorFn(b));
 }
 
 function randomInt(min, max) {
@@ -17,6 +30,11 @@ function randomInt(min, max) {
 
 function pickRandom(arr) {
     return arr[randomInt(0, arr.length - 1)];
+}
+
+function sum(selector, arr) {
+    const selectorFn = getSelectorFunction(selector);
+    return arr.reduce((sum, item) => sum + selectorFn(item), 0);
 }
 
 // http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
@@ -74,9 +92,10 @@ export default {
     randomInt,
     pickRandom,
     range,
-    sort,
+    sortBy,
     shuffle,
     chunk,
+    sum,
     promisify,
     pTimeout
 };

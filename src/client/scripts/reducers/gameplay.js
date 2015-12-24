@@ -1,4 +1,4 @@
-import {copyArray} from 'common/utils';
+import {copyArray, sum} from 'common/utils';
 
 function updateCurrentGame(state, game) {
     return game;
@@ -31,7 +31,7 @@ function applyResolutionStep(game, step) {
         });
     } else {
         // From pile to player
-        const newMalus = cardsInPlay[step.fromPile].reduce((sum, card) => sum + card.malus, 0);
+        const newMalus = sum('malus', cardsInPlay[step.fromPile]);
         playerIdx = step.toPlayer;
 
         cardsInPlay[step.fromPile] = [];

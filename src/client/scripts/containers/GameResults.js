@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import {sort} from 'common/utils';
+import {sortBy} from 'common/utils';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import Fireworks from 'client/components/Fireworks';
 import actionCreators from 'client/actions';
@@ -17,7 +17,7 @@ export default class GameResults extends PureRenderComponent {
     }
 
     renderResults(game) {
-        const rankedPlayers = sort(game.players, (p1, p2) => p1.malus - p2.malus);
+        const rankedPlayers = sortBy('malus', game.players);
         return (
             <div className="game-results">
                 <ul className="game-results__players">
