@@ -37,16 +37,6 @@ export default class Fireworks extends Component {
     }
 
     componentDidMount() {
-        const {top, left} = findDOMNode(this).parentElement.getBoundingClientRect();
-
-        // Reajust initial position
-        this._particles.forEach(p => {
-            p.x = left;
-            p.y = top;
-            p.originX = left;
-            p.originY = top;
-        });
-
         // Start animating
         this._startAnimating();
     }
@@ -72,11 +62,14 @@ export default class Fireworks extends Component {
                 originY,
                 x: originX + randomInt(-20, 20),
                 y: originY + randomInt(-20, 20),
+                z: 1,
                 size: randomInt(2, 4),
-                velocityX: randomInt(-30, 30),
-                velocityY: randomInt(-60, 10),
+                velocityX: randomInt(-30, 60),
+                velocityY: randomInt(-40, 20),
+                velocityZ: randomInt(-30, 30),
                 forceX: 0,
                 forceY: 0,
+                forceZ: 0,
                 maxRadius
             }));
     }
@@ -116,18 +109,21 @@ export default class Fireworks extends Component {
             pAlive++;
 
             // Update p
-            let aX = 0, aY = 0;
+            let aX = 0, aY = 0, aZ = 0;
             aY += GRAVITY + p.forceY;
             aX += p.forceX;
+            aZ += p.forceZ;
 
-            p.velocityY += aY;
-            p.velocityX += aX;
+            p.velocityY += aY / p.size;
+            p.velocityX += aX / p.size;
+            p.velocityZ += aZ / p.size;
 
             p.y += p.velocityY;
             p.x += p.velocityX;
+            p.z += p.velocityZ;
 
             // Update actual style
-            pEl.style.transform = `translate(${p.x}px, ${p.y}px)`;
+            pEl.style.transform = `translate3d(${p.x}px, ${p.y}px, ${p.z}px)`;
             if (pEl.style.display === 'none') {
                 pEl.style.display = 'block';
             }
@@ -163,7 +159,7 @@ export default class Fireworks extends Component {
     render() {
         const particles = this._particles;
         return (
-            <div className="fireworks">
+            <div className="fireworks" style={{perspective: '600px'}}>
                 {particles.map(p => (<span style={this._particleStyle(p)} key={p.id}></span>))}
             </div>
         );
