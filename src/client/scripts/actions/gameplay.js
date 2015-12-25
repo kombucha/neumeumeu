@@ -33,10 +33,6 @@ function choosePile(gameId, pile) {
     return () => api.choosePile(gameId, pile);
 }
 
-function toggleAI(gameId, playerId, enable) {
-    return () => api.toggleAI(gameId, playerId, enable);
-}
-
 function playerReady(gameId) {
     return () => api.playerReady(gameId);
 }
@@ -75,13 +71,11 @@ function applyResolutionStep(step) {
 export default {
     joinGame,
     leaveGame,
-    startGame,
     playerReady,
+    applyResolutionStep,
 
+    startGame,
     playCard,
     cancelCard,
-    choosePile,
-
-    toggleAI,
-    applyResolutionStep
+    choosePile
 };

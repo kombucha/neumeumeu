@@ -73,9 +73,6 @@ function handleAction(socket, action) {
     case 'CHOOSE_PILE':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameplayService.choosePile(player.id, action.gameId, action.pile));
-    case 'TOGGLE_AI':
-        // TODO: check rights :)
-        return gameplayService.toggleAI(action.playerId, action.gameId, action.enable);
     case 'PLAYER_READY':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameplayService.playerReady(player.id, action.gameId));

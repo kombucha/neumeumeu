@@ -132,16 +132,6 @@ function choosePile(gameId, pile) {
     });
 }
 
-function toggleAI(gameId, playerId, enable) {
-    return emitAction({
-        type: 'TOGGLE_AI',
-        token: getAuthToken(),
-        gameId,
-        playerId,
-        enable
-    });
-}
-
 function playerReady(gameId) {
     return emitAction({
         type: 'PLAYER_READY',
@@ -186,6 +176,5 @@ export default {
     playCard,
     cancelCard,
     choosePile,
-    toggleAI,
     playerReady
 };

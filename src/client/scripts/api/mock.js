@@ -43,6 +43,5 @@ export default {
     startGame: noOpPromise,
     playCard: noOpPromise,
     cancelCard: noOpPromise,
-    choosePile: noOpPromise,
-    toggleAI: noOpPromise
+    choosePile: noOpPromise
 };
