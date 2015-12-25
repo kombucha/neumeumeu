@@ -9,16 +9,13 @@ function start() {
     socketService.on('connection', handleNewClient);
 }
 
-function handleAction(socket, action) {
+function handleAction(socket, action, player) {
     log.info({action: action});
 
     switch (action.type) {
     case 'LOGIN':
-        return authService.login(action.username, action.password)
-            .then(result => {
-                socketService.associatePlayerWithSocket(result.player.id, socket.id);
-                return result;
-            });
+        socketService.associatePlayerWithSocket(player.id, socket.id);
+        return player;
     case 'LOGOUT':
         return authService.logout(action.token)
             .then(result => {
@@ -40,14 +37,10 @@ function handleAction(socket, action) {
         return socketService.leaveRoom(socket, action.id);
 
     case 'JOIN_GAME':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => {
-                return gameService.joinGame(player.id, action.id, action.password)
-                    .then(game => gameplayService.transformGameplayForPlayer(player.id, game));
-            });
+        return gameService.joinGame(player.id, action.id, action.password)
+            .then(game => gameplayService.transformGameplayForPlayer(player.id, game));
     case 'CREATE_GAME':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameService.createGame(player.id, action.game))
+        return gameService.createGame(player.id, action.game)
             .then(gameId => {
                 realtimeHandler.startGameRealtimeUpdate(gameId);
                 return gameId;
@@ -55,38 +48,34 @@ function handleAction(socket, action) {
     case 'UPDATE_GAMES':
         return gameService.getCurrentGames();
 
-    case 'GET_GAMEPLAY':
     case 'GET_GAME':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => {
-                return gameplayService.getGameplayForPlayer(player.id, action.id);
-            });
+        return gameplayService.getGameplayForPlayer(player.id, action.id);
     case 'START_GAME':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameplayService.startRound(player.id, action.id));
+        return gameplayService.startRound(player.id, action.id);
     case 'PLAY_CARD':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameplayService.playCard(player.id, action.gameId, action.cardValue));
+        return gameplayService.playCard(player.id, action.gameId, action.cardValue);
     case 'CANCEL_CARD':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameplayService.cancelCard(player.id, action.gameId));
+        return player => gameplayService.cancelCard(player.id, action.gameId);
     case 'CHOOSE_PILE':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameplayService.choosePile(player.id, action.gameId, action.pile));
+        return gameplayService.choosePile(player.id, action.gameId, action.pile);
     case 'PLAYER_READY':
-        return authService.getPlayerFromToken(action.token)
-            .then(player => gameplayService.playerReady(player.id, action.gameId));
+        return gameplayService.playerReady(player.id, action.gameId);
 
     default:
         return Promise.reject('Unhandled action: ' + action.type);
     }
 }
 
+function loadPlayerFromToken(token) {
+    return token ? authService.getPlayerFromToken(token) : Promise.resolve(null);
+}
+
 function handleNewClient(socket) {
     socket.on('action', (action, sendBack) => {
         sendBack = sendBack || (() => null);
 
-        handleAction(socket, action)
+        loadPlayerFromToken(action.token)
+            .then(player => handleAction(socket, action, player))
             .then((result) => sendBack(result),
                   (error) => {
                       log.error({error});
