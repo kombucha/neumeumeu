@@ -3,17 +3,18 @@ import {Link} from 'react-router';
 import {sortBy} from 'common/utils';
 import PureRenderComponent from 'client/components/PureRenderComponent';
 import Fireworks from 'client/components/Fireworks';
-import actionCreators from 'client/actions';
+import {joinGame, leaveGame} from 'client/actions';
 import StrokedText from 'client/components/StrokedText';
 
 export default class GameResults extends PureRenderComponent {
     componentWillMount() {
         const gameId = this.props.params.gameId;
-        this.props.updateCurrentGame(gameId);
+        this.props.joinGame(gameId);
     }
 
     componentWillUnmount() {
-        this.props.clearCurrentGame();
+        const gameId = this.props.params.gameId;
+        this.props.leaveGame(gameId);
     }
 
     renderResults(game) {
@@ -56,5 +57,5 @@ function mapStateToProps(state) {
 
 export const GameResultsContainer = connect(
     mapStateToProps,
-    actionCreators
+    {joinGame, leaveGame}
 )(GameResults);

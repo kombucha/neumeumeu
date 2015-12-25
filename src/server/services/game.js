@@ -81,11 +81,13 @@ function joinGame(playerId, gameId, password = '') {
                 }, {returnChanges: 'always'})
                 .run()
                 .then(result => {
-                    if (result.unchanged !== 1) {
-                        return {};
-                    }
+                    const game = result.changes[0]['new_val'],
+                        hasChanged = (result.unchanged !== 1),
+                        hasAlreadyJoined = game.players.find(p => p.id === playerId);
 
-                    const game = result.changes[0]['new_val'];
+                    if (hasChanged || hasAlreadyJoined) {
+                        return game;
+                    }
 
                     if (game.status !== GameStatus.WAITING_FOR_PLAYERS) {
                         return Promise.reject('Can\'t join game: Already running');
@@ -93,8 +95,6 @@ function joinGame(playerId, gameId, password = '') {
                         return Promise.reject('Can\'t join game: Wrong password');
                     } else if (game.players.length >= game.maxPlayers) {
                         return Promise.reject('Can\'t join game: Game is full');
-                    } else if (game.players.filter(p => p.id === playerId) === 1) {
-                        return {};
                     }
 
                     return Promise.reject('Can\'t join game: Unknown reason');

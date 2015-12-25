@@ -41,7 +41,10 @@ function handleAction(socket, action) {
 
     case 'JOIN_GAME':
         return authService.getPlayerFromToken(action.token)
-            .then(player => gameService.joinGame(player.id, action.id, action.password));
+            .then(player => {
+                return gameService.joinGame(player.id, action.id, action.password)
+                    .then(game => gameplayService.transformGameplayForPlayer(player.id, game));
+            });
     case 'CREATE_GAME':
         return authService.getPlayerFromToken(action.token)
             .then(player => gameService.createGame(player.id, action.game))

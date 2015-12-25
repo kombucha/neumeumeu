@@ -1,9 +1,19 @@
+import {updatePath} from 'redux-simple-router';
+import Errors from 'common/constants/errors';
 import api from 'client/api';
+import {joinRoom, leaveRoom} from './remote';
+import {addErrorMessage} from './errors';
 
-function fetchedCurrentGame(game) {
+function updateCurrentGame(game) {
     return {
         type: 'UPDATE_CURRENT_GAME',
         game
+    };
+}
+
+function clearCurrentGame() {
+    return {
+        type: 'CLEAR_CURRENT_GAME'
     };
 }
 
@@ -31,16 +41,27 @@ function playerReady(gameId) {
     return () => api.playerReady(gameId);
 }
 
-function updateCurrentGame(gameId) {
+function joinGame(gameId, password) {
     return dispatch => {
-        return api.getGame(gameId)
-            .then(game => dispatch(fetchedCurrentGame(game)));
+        return api.joinGame(gameId, password)
+            .then(game => {
+                dispatch(updateCurrentGame(game));
+                dispatch(joinRoom(gameId));
+            })
+            .catch((error) => {
+                if (error === Errors.INVALID_TOKEN) {
+                    return dispatch(updatePath('/register'));
+                }
+
+                dispatch(addErrorMessage(error));
+            });
     };
 }
 
-function clearCurrentGame() {
-    return {
-        type: 'CLEAR_CURRENT_GAME'
+function leaveGame(gameId) {
+    return dispatch => {
+        dispatch(leaveRoom(gameId));
+        dispatch(clearCurrentGame());
     };
 }
 
@@ -52,13 +73,15 @@ function applyResolutionStep(step) {
 }
 
 export default {
-    updateCurrentGame,
-    clearCurrentGame,
+    joinGame,
+    leaveGame,
     startGame,
+    playerReady,
+
     playCard,
     cancelCard,
     choosePile,
+
     toggleAI,
-    playerReady,
     applyResolutionStep
 };

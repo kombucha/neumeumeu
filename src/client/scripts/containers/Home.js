@@ -5,20 +5,17 @@ import GameList from 'client/components/GameList';
 import {LoginStatusContainer} from 'client/components/LoginStatus';
 import StrokedText from 'client/components/StrokedText';
 import GameStatus from 'common/constants/game-status';
-import {register, fetchGames, joinGame, joinRoom, leaveRoom} from 'client/actions';
+import {joinLobby, leaveLobby} from 'client/actions';
 import {updatePath} from 'redux-simple-router';
 
 export default class Home extends PureRenderComponent {
 
     componentWillMount() {
-        const playerId = this.props.player ? this.props.player.id : undefined;
-
-        this.props.joinRoom('lobby');
-        this.props.fetchGames(playerId);
+        this.props.joinLobby();
     }
 
     componentWillUnmount() {
-        this.props.leaveRoom('lobby');
+        this.props.leaveLobby();
     }
 
     renderEmptyGamesPlaceholder() {
@@ -33,17 +30,13 @@ export default class Home extends PureRenderComponent {
         return (
             <div className="home__section">
                 <h2 className="home__section-title">My Games</h2>
-                <GameList games={games} onSelectGame={this.onSelectPlayersGame.bind(this)}/>
+                <GameList games={games} onSelectGame={this.onSelectGame.bind(this)}/>
             </div>
         );
     }
 
-    onSelectPlayersGame(game) {
+    onSelectGame(game) {
         this.props.updatePath(`/games/${game.id}`);
-    }
-
-    onSelectCurrentGame(game) {
-        this.props.joinGame(game.id);
     }
 
     render() {
@@ -73,7 +66,7 @@ export default class Home extends PureRenderComponent {
                                 currentGames.length === 0
                                     ? this.renderEmptyGamesPlaceholder()
                                     : (
-                                        <GameList games={currentGames} onSelectGame={this.onSelectCurrentGame.bind(this)}/>
+                                        <GameList games={currentGames} onSelectGame={this.onSelectGame.bind(this)}/>
                                     )
                             }
 
@@ -110,8 +103,5 @@ function mapStateToProps(state) {
 
 export const HomeContainer = connect(
     mapStateToProps,
-    Object.assign({},
-        {register, fetchGames, joinGame, joinRoom, leaveRoom},
-        {updatePath}
-    )
+    {joinLobby, leaveLobby, updatePath}
 )(Home);

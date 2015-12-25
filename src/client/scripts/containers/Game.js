@@ -15,9 +15,7 @@ import ChoosePile from 'client/components/ChoosePile';
 export default class Game extends PureRenderComponent {
     componentWillMount() {
         const gameId = this.props.params.gameId;
-
-        this.props.joinRoom(gameId);
-        this.props.updateCurrentGame(gameId);
+        this.props.joinGame(gameId);
     }
 
     componentDidUpdate() {
@@ -32,8 +30,7 @@ export default class Game extends PureRenderComponent {
 
     componentWillUnmount() {
         const gameId = this.props.params.gameId;
-        this.props.leaveRoom(gameId);
-        this.props.clearCurrentGame();
+        this.props.leaveGame(gameId);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -76,7 +73,7 @@ export default class Game extends PureRenderComponent {
     }
 
     renderLoadingGame() {
-        return (<div>Loading game...</div>);
+        return (<div>Joining game...</div>);
     }
 
     renderPreGameHUD(canStartGame) {

@@ -1,5 +1,5 @@
-import Errors from 'common/constants/errors';
 import api from 'client/api';
+import {joinRoom, leaveRoom} from 'client/actions/remote';
 import {addErrorMessage} from 'client/actions/errors';
 import {updatePath} from 'redux-simple-router';
 
@@ -15,29 +15,8 @@ function createGame(game) {
         return api.createGame(game)
             .then((gameId) => {
                 dispatch(updatePath(`/games/${gameId}`));
-            });
-    };
-}
-
-function joinGame(gameId, password) {
-    return dispatch => {
-        return api.joinGame(gameId, password)
-            .then(() => dispatch(updatePath(`/games/${gameId}`)))
-            .catch((error) => {
-                if (error === Errors.INVALID_TOKEN) {
-                    return dispatch(updatePath('/register'));
-                }
-
-                dispatch(addErrorMessage(error));
-            });
-    };
-}
-
-function spectateGame(gameId) {
-    // TODO
-    return {
-        type: 'SPECTATE_GAME',
-        id: gameId
+            })
+            .catch(err => addErrorMessage(err));
     };
 }
 
@@ -48,9 +27,23 @@ function fetchGames() {
     };
 }
 
+function joinLobby() {
+    return dispatch => {
+        return api.fetchGames()
+            .then(games => {
+                dispatch(updateGames(games));
+                dispatch(joinRoom('lobby'));
+            });
+    };
+}
+
+function leaveLobby() {
+    return leaveRoom('lobby');
+}
+
 export default {
     createGame,
     fetchGames,
-    joinGame,
-    spectateGame
+    joinLobby,
+    leaveLobby
 };
