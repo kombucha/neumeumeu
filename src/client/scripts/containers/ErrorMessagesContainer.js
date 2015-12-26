@@ -37,7 +37,7 @@ class ErrorMessagesContainer extends PureRenderComponent {
     render() {
         const {message} = this.state,
             hasMessage = !!message,
-            messageText = hasMessage ? message.text : null;
+            messageText = hasMessage ? message.text : '';
 
         return (
             <ErrorMessage text={messageText}/>
