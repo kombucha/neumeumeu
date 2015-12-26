@@ -16,7 +16,7 @@ function createGame(game) {
             .then((gameId) => {
                 dispatch(updatePath(`/games/${gameId}`));
             })
-            .catch(err => addErrorMessage(err));
+            .catch(err => dispatch(addErrorMessage(err)));
     };
 }
 

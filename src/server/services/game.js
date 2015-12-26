@@ -5,9 +5,10 @@ import PlayerStatus from 'common/constants/player-status';
 import GameStatus from 'common/constants/game-status';
 
 const simpleGameProjection = [
-    'id', 'isProtected', 'maxPlayers', 'status', 'name',
-    {'players': ['id', 'name']}
-];
+        'id', 'isProtected', 'maxPlayers', 'status', 'name',
+        {'players': ['id', 'name']}
+    ],
+    MAX_CONCURRENT_GAMES = 5;
 
 function createGamePlayer(player) {
     return {
@@ -31,6 +32,23 @@ function createBot() {
     });
 }
 
+function checkOnGoingGames(playerId) {
+    return r.table('game')
+        .filter(
+            r.row('owner').eq(playerId)
+            .and(r.row('status').ne(GameStatus.ENDED))
+        )
+        .count()
+        .run()
+        .then(count => {
+            if (count >= MAX_CONCURRENT_GAMES) {
+                return Promise.reject('Too many concurrent games');
+            }
+
+            return count;
+        });
+}
+
 function createGame(playerId, options) {
     const maxMalus = isNaN(options.maxMalus) ? 66 : parseInt(options.maxMalus, 10),
         maxPlayers = isNaN(options.maxPlayers) ? 10 : parseInt(options.maxPlayers, 10),
@@ -48,7 +66,8 @@ function createGame(playerId, options) {
             cardsInPlay: [[], [], [], []]
         };
 
-    return getPlayer(playerId)
+    return checkOnGoingGames(playerId)
+        .then(() => getPlayer(playerId))
         .then(player => {
             newGame.players = [createGamePlayer(player), ...newGame.players];
             return r.table('game')
