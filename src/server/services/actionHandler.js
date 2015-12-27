@@ -14,8 +14,11 @@ function handleAction(socket, action, player) {
 
     switch (action.type) {
     case 'LOGIN':
-        socketService.associatePlayerWithSocket(player.id, socket.id);
-        return player;
+        return authService.login(action.username, action.password)
+            .then(result => {
+                socketService.associatePlayerWithSocket(result.player.id, socket.id);
+                return result;
+            });
     case 'LOGOUT':
         return authService.logout(action.token)
             .then(result => {
@@ -55,7 +58,7 @@ function handleAction(socket, action, player) {
     case 'PLAY_CARD':
         return gameplayService.playCard(player.id, action.gameId, action.cardValue);
     case 'CANCEL_CARD':
-        return player => gameplayService.cancelCard(player.id, action.gameId);
+        return gameplayService.cancelCard(player.id, action.gameId);
     case 'CHOOSE_PILE':
         return gameplayService.choosePile(player.id, action.gameId, action.pile);
     case 'PLAYER_READY':
