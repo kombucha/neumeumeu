@@ -25,13 +25,14 @@ class RegisterForm extends FormComponent {
         }
 
         const newUser = Object.assign({}, {
-            username: this.state.username,
-            password: this.state.password,
-            avatarURL: this.state.avatarURL,
-            email: this.state.email
-        });
+                username: this.state.username,
+                password: this.state.password,
+                avatarURL: this.state.avatarURL,
+                email: this.state.email
+            }),
+            {redirectTo} = this.props;
 
-        this.props.register(newUser);
+        this.props.register(newUser, redirectTo);
     }
 
     validate(formValues) {

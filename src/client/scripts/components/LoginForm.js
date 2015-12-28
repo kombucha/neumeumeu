@@ -1,13 +1,18 @@
+import {connect} from 'react-redux';
+import {login} from 'client/actions';
 import FormComponent from 'client/components/FormComponent';
-import {PropTypes} from 'react';
 import StrokedText from 'client/components/StrokedText';
 
-export default class LoginForm extends FormComponent {
+class LoginForm extends FormComponent {
 
     handleSubmit(event) {
         event.preventDefault();
+
+        const {redirectTo} = this.props;
+
         // TODO: validation
-        this.props.handleLogin(this.state.username, this.state.password);
+
+        this.props.login(this.state.username, this.state.password, redirectTo);
     }
 
     render() {
@@ -33,6 +38,7 @@ export default class LoginForm extends FormComponent {
     }
 }
 
-LoginForm.propTypes = {
-    handleLogin: PropTypes.func.isRequired
-};
+export default connect(
+    null,
+    {login}
+)(LoginForm);

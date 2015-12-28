@@ -3,7 +3,11 @@ export default function (store) {
         const isAuthenticated = !!store.getState().authentication.token;
 
         if (!isAuthenticated) {
-            replaceState({nextPathname: nextState.location.pathname}, '/register');
+            replaceState(
+                {nextPathname: nextState.location.pathname},
+                '/register',
+                {redirectTo: nextState.location.pathname}
+            );
         }
     };
 }
