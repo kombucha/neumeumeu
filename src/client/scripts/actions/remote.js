@@ -1,9 +1,16 @@
 import api from 'client/api';
+import {addErrorMessage} from './errors';
 
 function updateRemoteStatus(connected) {
-    return {
-        type: 'UPDATE_REMOTE_STATUS',
-        connected
+    return dispatch => {
+        dispatch({
+            type: 'UPDATE_REMOTE_STATUS',
+            connected
+        });
+
+        if (!connected) {
+            dispatch(addErrorMessage('Connection lost', 10000));
+        }
     };
 }
 
