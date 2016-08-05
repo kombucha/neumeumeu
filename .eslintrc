@@ -10,7 +10,6 @@ plugins:
   - "react"
 globals:
   __USE_MOCKS__: true
-  __SERVER_PORT__: true
 rules:
   indent: [2, 4]
   quotes: [2, "single"]
