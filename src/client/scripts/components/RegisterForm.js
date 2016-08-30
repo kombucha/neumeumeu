@@ -51,17 +51,17 @@ class RegisterForm extends FormComponent {
     render() {
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
-                <input id="email"
-                    placeholder="Email"
-                    type="email"
-                    required
-                    onChange={this.onChange('email')}/>
-
                 <input id="username"
                     type="text"
                     placeholder="Username"
                     required
                     onChange={this.onChange('username')}/>
+
+                <input id="email"
+                    placeholder="Email"
+                    type="email"
+                    required
+                    onChange={this.onChange('email')}/>
 
                 <label className="form__label form__label--avatar">
                     <img className="register-form__avatar-preview" src={this.state.avatarURL} alt="avatar"/>

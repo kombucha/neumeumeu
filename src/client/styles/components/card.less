@@ -94,7 +94,7 @@
 }
 
 .card__value--top {
-    font-size: 22px;
+    font-size: 22px * @card-ratio;
     letter-spacing: .1em;
     z-index: 1;
     margin: 3px 0 0 3px;
@@ -108,17 +108,19 @@
 .card__malus {
     position: relative;
     text-align: center;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    margin: 5px 30px 0 8px;
+    margin: 0 16px 0 8px;
     line-height: 13px;
 
     span {
         display: inline-block;
         border-radius: 50%;
-        width: 8px;
-        height: 8px;
-        margin: 0 2px;
+        width: 5px;
+        height: 5px;
+        margin: 0 1px;
     }
 }
 
@@ -132,7 +134,7 @@
 
     &::before {
         .icon;
-        font-size: 105px;
+        font-size: 105px * @card-ratio;
     }
 
     span {
@@ -142,17 +144,17 @@
         left: 50%;
         transform: translate(-50%, -50%);
 
-        font-size: @card-center-type;
+        font-size: @card-center-type * @card-ratio;
     }
 }
 
 .card__value__text {
-    -webkit-text-stroke-width: 4px;
+    -webkit-text-stroke-width: 4px * @card-ratio;
     -webkit-text-stroke-color: @color-blue-dark;
 }
 
 .card__value__border {
-    -webkit-text-stroke-width: 12px;
+    -webkit-text-stroke-width: 12px * @card-ratio;
     -webkit-text-stroke-color: @color-white;
 }
 
