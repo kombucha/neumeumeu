@@ -8,8 +8,8 @@ const animationSettings = {
 
     cardTranslateX: '-25%',
     cardScale: '0.4',
-    cardHeight: 200,
-    pileSpace: 40
+    cardHeight: 160,
+    pileSpace: 32
 };
 
 function animate(step, gameDomElement, currentPlayerIndex) {
