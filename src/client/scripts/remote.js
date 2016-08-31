@@ -28,7 +28,9 @@ function configureSocket() {
         return {on: () => null};
     }
 
-    return io(`${location.protocol}//${location.hostname}:${__SERVER_PORT__}`);
+    const portSuffix = location.port ? `:${location.port}` : '';
+
+    return io(`${location.protocol}//${location.hostname}${portSuffix}`);
 }
 
 export default {

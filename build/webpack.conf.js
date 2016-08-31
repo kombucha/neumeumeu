@@ -41,8 +41,7 @@ var webpackConf = {
             'process.env': {
                 'NODE_ENV': '"' + conf.env + '"'
             },
-            '__USE_MOCKS__': conf.useMocks,
-            '__SERVER_PORT__': conf.serverPort
+            '__USE_MOCKS__': conf.useMocks
         }),
         new Webpack.optimize.CommonsChunkPlugin('vendor', conf.files.clientVendorBundleName),
         new Webpack.optimize.OccurenceOrderPlugin()
