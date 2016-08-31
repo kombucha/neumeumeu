@@ -36,7 +36,7 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
         },
 
         options = {
-            duration: animationSettings.duration + 500,
+            duration: animationSettings.duration,
             delay: animationSettings.delay
         },
 
