@@ -24,18 +24,20 @@ const Player = ({player, isCurrentPlayer, cancelCard, canCancelCard, defaultAvat
             <div className="player__username">{player.name}</div>
             <img className="player__avatar" src={avatarURL} alt="{player.name}'s avatar"/>
 
-            {
-                showCancelAction
-                    ? (<button className="player__cancel" onClick={() => cancelCard()}></button>)
-                    : null
-            }
-
-            <div className="player__card">
+            <div className="player__card-container">
                 {
-                    player.chosenCard
-                        ? (<Card className="card--player" card={player.chosenCard} flippable={true}/>)
-                        : (<div className="player__card-placeholder"></div>)
+                    showCancelAction
+                        ? (<button className="player__cancel" onClick={() => cancelCard()}></button>)
+                        : null
                 }
+
+                <div className="player__card">
+                    {
+                        player.chosenCard
+                            ? (<Card className="card--player" card={player.chosenCard} flippable={true}/>)
+                            : (<div className="player__card-placeholder"></div>)
+                    }
+                </div>
             </div>
         </div>
     );

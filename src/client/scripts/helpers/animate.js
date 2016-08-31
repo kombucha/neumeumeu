@@ -8,10 +8,9 @@ const animationSettings = {
 
     cardTranslateX: '-25%',
     cardScale: '0.4',
-    cardHeight: 200,
-    pileSpace: 40
+    cardHeight: 160,
+    pileSpace: 32
 };
-
 
 function animate(step, gameDomElement, currentPlayerIndex) {
     return play(step, gameDomElement, currentPlayerIndex);
@@ -37,7 +36,7 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
         },
 
         options = {
-            duration: animationSettings.duration,
+            duration: animationSettings.duration + 500,
             delay: animationSettings.delay
         },
 
@@ -53,14 +52,14 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
 
     // Init card's CSS
     setStyle(card, {
-        position: 'absolute',
-        margin: 0
+        position: 'fixed'
     });
 
     return new Promise((resolve) => {
         Velocity(innerCard, innerCardProp, options);
         options.complete = function() {
             card.removeAttribute('style');
+            innerCard.removeAttribute('style');
             resolve();
         };
         Velocity(card, cardProp, options);
