@@ -63,6 +63,8 @@ function handleAction(socket, action, player) {
         return gameplayService.choosePile(player.id, action.gameId, action.pile);
     case 'PLAYER_READY':
         return gameplayService.playerReady(player.id, action.gameId);
+	case 'SEND_CHAT_MESSAGE':
+        return gameplayService.sendChatMessage(player.id, action.gameId, action.messageText);
 
     default:
         return Promise.reject('Unhandled action: ' + action.type);
@@ -74,16 +76,17 @@ function loadPlayerFromToken(token) {
 }
 
 function handleNewClient(socket) {
-    socket.on('action', (action, sendBack) => {
+	socket.on('action', (action, sendBack) => {
         sendBack = sendBack || (() => null);
 
-        loadPlayerFromToken(action.token)
+    	loadPlayerFromToken(action.token)
             .then(player => handleAction(socket, action, player))
             .then((result) => sendBack(result),
-                  (error) => {
-                      log.error({error});
-                      sendBack({error});
-                  });
+	  			(error) => {
+		      		console.log("error : " + error);
+			      	log.error({error});
+			      	sendBack({error});
+			  	});
     });
     socket.on('disconnect', () => socketService.dissociatePlayerFromSocket(socket.id));
 }

@@ -1,8 +1,9 @@
 import {UNKNOWN_CARD_VALUE, generateGameCards} from 'common/deck';
-import {sum, sortBy} from 'common/utils';
+import {dateInSeconds, sum, sortBy} from 'common/utils';
 import Errors from 'common/constants/errors';
 import GameStatus from 'common/constants/game-status';
 import PlayerStatus from 'common/constants/player-status';
+import ChatConf from 'common/constants/chat';
 import r from 'server/database';
 import ai from 'server/services/ai';
 
@@ -75,6 +76,7 @@ function startRound(playerId, gameId) {
                 hand: gameCards.hands[idx],
                 chosenCard: null,
                 chosenPile: null,
+				message: null,
                 status: PlayerStatus.CHOOSING_CARD
             }));
             game.resolutionSteps = null;
@@ -123,6 +125,18 @@ function cancelCard(playerId, gameId) {
 
             return updatePlayerInGame(game.id, player);
         })
+        .then(returnEmptyObject);
+}
+
+function sendChatMessage(playerId, gameId, messageText) {
+    return checkMessage(messageText)
+		.then(() => getGame(gameId))
+        .then(game => {
+            const newPlayer = game.players.find(player => player.id === playerId);
+            newPlayer.message = createMessage(messageText);
+
+            return updatePlayerInGame(game.id, newPlayer);
+    	})
         .then(returnEmptyObject);
 }
 
@@ -311,7 +325,8 @@ function fullPlayer(player) {
         hand: player.hand.map(simpleCard),
         chosenCard: simpleCard(player.chosenCard),
         malusCards: player.malusCards.map(simpleCard),
-        malus: computeTotalCardMalus(player.malusCards)
+        malus: computeTotalCardMalus(player.malusCards),
+		message: getMessage(player)
     });
 }
 
@@ -323,8 +338,21 @@ function otherPlayer(player) {
         avatarURL: player.avatarURL,
         chosenCard: simpleCard(player.chosenCard ? {value: UNKNOWN_CARD_VALUE} : null),
         malus: computeTotalCardMalus(player.malusCards),
-        AIEnabled: player.AIEnabled
+        AIEnabled: player.AIEnabled,
+		message: getMessage(player)
     };
+}
+
+function getMessage(player) {
+	if (player.message && player.message.text.length > 0) {
+		var expireDate = dateInSeconds(player.message.date) + (ChatConf.MESSAGE_EXPIRE_INTERVAL / 1000);	//ms => s
+		if (expireDate > dateInSeconds(Date.now())) {
+			player.message.expire = (expireDate - dateInSeconds(Date.now())) * 1000;	//s => ms
+			player.message.notificationEffect = ChatConf.MESSAGE_ANIMATE_EFFECT;
+			return player.message;
+		}
+	}
+	return null;
 }
 
 function simpleCard(card) {
@@ -339,15 +367,28 @@ function returnEmptyObject() {
     return {};
 }
 
+function checkMessage(messageText) {
+	if (messageText.length > 0 && messageText.length < ChatConf.MESSAGE_MAX_LENGTH) {
+		return Promise.resolve();
+	}
+	else {
+		return Promise.reject();
+	}
+}
+function createMessage(messageText, auto = false) {
+	return {text : messageText, expire: ChatConf.MESSAGE_EXPIRE_INTERVAL, date: Date.now(), autoMessage: auto};
+}
 
 export default {
     startRound,
 
     playCard,
     cancelCard,
+	sendChatMessage,
     choosePile,
     toggleAI,
     playerReady,
+	createMessage,
 
     resolveTurn,
     getGameplayForPlayer,

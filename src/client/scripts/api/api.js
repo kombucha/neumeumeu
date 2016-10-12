@@ -156,6 +156,15 @@ function leaveRoom(id) {
     });
 }
 
+function sendChatMessage(gameId, messageText) {
+    return emitAction({
+        type: 'SEND_CHAT_MESSAGE',
+        token: getAuthToken(),
+        gameId,
+        messageText
+    });
+}
+
 export default {
     init,
 
@@ -176,5 +185,6 @@ export default {
     playCard,
     cancelCard,
     choosePile,
-    playerReady
+    playerReady,
+    sendChatMessage
 };

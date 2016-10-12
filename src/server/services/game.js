@@ -2,7 +2,9 @@ import r from 'server/database';
 import {getPlayer} from 'server/services/player';
 import {range} from 'common/utils';
 import PlayerStatus from 'common/constants/player-status';
+import ChatConf from 'common/constants/chat';
 import GameStatus from 'common/constants/game-status';
+import {createMessage} from './gameplay';
 
 const simpleGameProjection = [
         'id', 'isProtected', 'maxPlayers', 'status', 'name',
@@ -19,7 +21,8 @@ function createGamePlayer(player) {
         chosenCard: null,
         status: PlayerStatus.IDLE,
         malusCards: [],
-        AIEnabled: !!player.AIEnabled
+        AIEnabled: !!player.AIEnabled,
+        message: ChatConf.LOGON_HELLO_MESSAGE ? createMessage(ChatConf.LOGON_HELLO_MESSAGE, true) : null
     };
 }
 
