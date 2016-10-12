@@ -9,8 +9,9 @@ import CardsInPlay from 'client/components/CardsInPlay';
 import PlayerHud from 'client/components/PlayerHUD';
 import StrokedText from 'client/components/StrokedText';
 import {findDOMNode} from 'react-dom';
-import Animate from 'client/helpers/animate';
+import {Animate} from 'client/helpers/animate';
 import ChoosePile from 'client/components/ChoosePile';
+import ChatBox from 'client/components/ChatBox';
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -60,6 +61,10 @@ export default class Game extends PureRenderComponent {
         this.props.cancelCard(this.props.game.id);
     }
 
+    sendChatMessage(messageText) {
+        this.props.sendChatMessage(this.props.game.id, messageText);
+    }
+
     getReady(gameId) {
         return this.props.playerReady(gameId);
     }
@@ -90,6 +95,14 @@ export default class Game extends PureRenderComponent {
                 gameStatus={game.status}
                 onHandCardClicked={this.playCard.bind(this)}
                 onSelectedCardClicked={this.cancelCard.bind(this)}/>
+        );
+    }
+
+    renderChatBox() {
+        return (
+			<div className="chat__entry__box" >
+				<ChatBox onSubmitMessage={this.sendChatMessage.bind(this)} autoFocus={true} />
+			</div>
         );
     }
 
@@ -129,6 +142,10 @@ export default class Game extends PureRenderComponent {
                         ? <ChoosePile/>
                         : null
                 }
+
+				{
+					(game.players.length > 1) ? this.renderChatBox() : null
+				}
 
                 {
                     gameStarted

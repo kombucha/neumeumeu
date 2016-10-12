@@ -8,7 +8,9 @@ export default ({players, canCancelCard, cancelCard, currentPlayerIndex = -1}) =
                     <Player player={player}
                         cancelCard={cancelCard}
                         canCancelCard={canCancelCard}
-                        isCurrentPlayer={idx === currentPlayerIndex}/>
+                        isCurrentPlayer={idx === currentPlayerIndex}
+                        showMessage={players.length > 1}
+						zone={(idx+1) > (players.length / 2) ? 'right' : 'left'}/>
                 </li>
             ))
         }

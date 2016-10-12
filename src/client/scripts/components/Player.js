@@ -3,8 +3,9 @@ import {PropTypes} from 'react';
 import classNames from 'classnames/dedupe';
 import PlayerStatus from 'common/constants/player-status';
 import Card from './Card';
+import ChatMessage from './ChatMessage';
 
-const Player = ({player, isCurrentPlayer, cancelCard, canCancelCard, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
+const Player = ({player, isCurrentPlayer, cancelCard, canCancelCard, showMessage, zone, defaultAvatarURL='/images/players/avatar-default.svg'}) => {
     const avatarURL = player.avatarURL || defaultAvatarURL,
         classes = classNames(
             'player',
@@ -39,6 +40,12 @@ const Player = ({player, isCurrentPlayer, cancelCard, canCancelCard, defaultAvat
                     }
                 </div>
             </div>
+			{
+				(showMessage && player.message)
+					? (<ChatMessage className={classNames('message--player', zone == 'right' ? 'message--align-right' : 'message--align-left')}
+							isCurrentPlayer={isCurrentPlayer} message={player.message} hideOnClick={true} />)
+					: null
+			}
         </div>
     );
 };

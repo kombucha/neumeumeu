@@ -87,6 +87,10 @@ function pTimeout(time) {
     });
 }
 
+function dateInSeconds(date) {
+    return Math.floor(date / 1000);
+}
+
 export default {
     copyArray,
     randomInt,
@@ -97,5 +101,6 @@ export default {
     chunk,
     sum,
     promisify,
-    pTimeout
+    pTimeout,
+    dateInSeconds
 };

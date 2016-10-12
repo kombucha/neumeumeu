@@ -12,7 +12,7 @@ const animationSettings = {
     pileSpace: 32
 };
 
-function animate(step, gameDomElement, currentPlayerIndex) {
+function Animate(step, gameDomElement, currentPlayerIndex) {
     return play(step, gameDomElement, currentPlayerIndex);
 }
 
@@ -176,4 +176,4 @@ function getPlayer(player, gameDomElement) {
         .querySelectorAll('.players .player__avatar')[player];
 }
 
-export default animate;
+export default {Animate, shake};

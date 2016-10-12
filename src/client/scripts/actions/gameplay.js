@@ -1,7 +1,7 @@
 import {updatePath} from 'redux-simple-router';
 import Errors from 'common/constants/errors';
 import api from 'client/api';
-import {joinRoom, leaveRoom} from './remote';
+import {joinRoom,leaveRoom} from './remote';
 import {addErrorMessage} from './errors';
 
 function updateCurrentGame(game) {
@@ -68,6 +68,10 @@ function applyResolutionStep(step) {
     };
 }
 
+function sendChatMessage(gameId, messageText) {
+    return () => api.sendChatMessage(gameId, messageText);
+}
+
 export default {
     joinGame,
     leaveGame,
@@ -77,5 +81,6 @@ export default {
     startGame,
     playCard,
     cancelCard,
-    choosePile
+    choosePile,
+    sendChatMessage
 };
