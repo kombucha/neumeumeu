@@ -6,6 +6,7 @@ import PlayerStatus from 'common/constants/player-status';
 import ChatConf from 'common/constants/chat';
 import r from 'server/database';
 import ai from 'server/services/ai';
+import GameplayConstants from 'common/constants/gameplay';
 
 // Data
 function getGame(id) {
@@ -89,8 +90,14 @@ function startRound(playerId, gameId) {
 function playCard(playerId, gameId, cardValue) {
     return getGame(gameId)
         .then(game => {
-            const newPlayer = game.players.find(player => player.id === playerId),
-                cardIdx = newPlayer.hand.findIndex(card => card.value === cardValue),
+            const newPlayer = game.players.find(player => player.id === playerId);
+
+            //If cardValue = AUTO_CARD_VALUE => Use Ai to choose card
+            if (cardValue === GameplayConstants.AUTO_CARD_VALUE) {
+                cardValue = ai.chooseCard(newPlayer.hand, game.cardsInPlay, game.players.length);
+            }
+
+            const cardIdx = newPlayer.hand.findIndex(card => card.value === cardValue),
                 userOwnsCard = cardIdx !== -1;
 
             if (game.status !== GameStatus.WAITING_FOR_CARDS || !userOwnsCard) {
@@ -146,6 +153,11 @@ function choosePile(playerId, gameId, pileIdx) {
             const player = game.players.find(p => p.id === playerId);
             if (game.status !== GameStatus.WAITING_FOR_PILE_CHOICE || player.status !== PlayerStatus.HAS_TO_CHOOSE_PILE) {
                 return Promise.reject(Errors.INVALID_MOVE);
+            }
+
+            //If pileIdx = AUTO_PILE_VALUE => Use Ai to choose pile
+            if (pileIdx === GameplayConstants.AUTO_PILE_VALUE) {
+                pileIdx = ai.choosePileIdx(game.cardsInPlay);
             }
 
             player.status = PlayerStatus.CHOOSED_PILE;
@@ -368,7 +380,7 @@ function returnEmptyObject() {
 }
 
 function checkMessage(messageText) {
-	if (messageText.length > 0 && messageText.length < ChatConf.MESSAGE_MAX_LENGTH) {
+	if (messageText.length > 0 && messageText.length <= ChatConf.MESSAGE_MAX_LENGTH) {
 		return Promise.resolve();
 	}
 	else {

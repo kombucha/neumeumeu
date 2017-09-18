@@ -24,7 +24,6 @@ export default class ChatMessage extends Component {
         } else {
             this.setTimer();
         }
-        this.setTimer();
     }
     componentWillUnmount() {
         clearTimeout(this._timer);

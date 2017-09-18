@@ -1,0 +1,7 @@
+export default {
+    ENABLE_TIMEOUT: true,
+    CHOOSE_CARD_TIMEOUT: 30,
+    CHOOSE_PILE_TIMEOUT: 30,
+    AUTO_CARD_VALUE: -999,
+    AUTO_PILE_VALUE: -9999
+};
