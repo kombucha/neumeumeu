@@ -1,27 +1,27 @@
 @hand-width: 800px;
 
 .player-hud {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 
-    position: relative;
-    overflow: hidden;
-    min-height: @card-height + 2 * @s-game-gutter;
-    z-index: @z-playerHud;
+  position: relative;
+  overflow: hidden;
+  min-height: @card-height + 2 * @s-game-gutter;
+  z-index: @z-playerHud;
 }
 
 .player-hud__main {
-    display: flex;
-    justify-content: baseline;
-    align-items: flex-end;
-    flex-direction: row;
+  display: flex;
+  justify-content: baseline;
+  align-items: flex-end;
+  flex-direction: row;
 }
 
 .player-hud {
-    .hand {
-        max-width: @hand-width;
-        margin: auto;
-        padding-right: @s-player-menu;
-    }
+  .hand {
+    max-width: @hand-width;
+    margin: auto;
+    padding-right: @s-player-menu;
+  }
 }

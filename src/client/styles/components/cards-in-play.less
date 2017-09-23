@@ -3,42 +3,40 @@
 @cards-selection-padding: @u-small;
 
 .cards-in-play {
-    min-height: @card-height + (4/5*@card-height);
-    z-index: @z-carsInPlay;
+  min-height: @card-height + (4/5*@card-height);
+  z-index: @z-carsInPlay;
 }
 
 .cards-in-play__pile {
-    min-width: @card-width;
+  min-width: @card-width;
 }
 
 .cards-in-play__piles {
-    max-width: @cards-in-play-width;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+  max-width: @cards-in-play-width;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .cards-in-play--selectable {
-    .cards-in-play__pile:hover {
+  .cards-in-play__pile:hover {
+    .card-pile {
+      position: relative;
+      cursor: pointer;
 
-        .card-pile {
-            position: relative;
-            cursor: pointer;
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: -@cards-selection-padding;
 
-            &::before {
-                content: "";
-                position: absolute;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                margin: -@cards-selection-padding;
-
-                border-radius: 3px;
-                background: @color-green;
-
-            }
-        }
+        border-radius: 3px;
+        background: @color-green;
+      }
     }
+  }
 }

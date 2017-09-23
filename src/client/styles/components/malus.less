@@ -1,37 +1,37 @@
 .malus {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: @card-width;
+  z-index: @z-playerHud;
+
+  &::before,
+  &::after {
+    content: "";
+    background: @color-orange;
+    width: 500px;
+    height: 500px;
+    display: block;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: @card-width;
-    z-index: @z-playerHud;
+    bottom: -350px;
+    right: -350px;
+    border-radius: 50%;
+  }
 
-    &::before,
-    &::after {
-        content: "";
-        background: @color-orange;
-        width: 500px;
-        height: 500px;
-        display: block;
-        position: absolute;
-        bottom: -350px;
-        right: -350px;
-        border-radius: 50%;
-    }
+  &:before {
+    box-shadow: @shadow-l1;
+    transform: translate(3px, -25px);
+    background: @color-white;
+  }
 
-    &:before {
-        box-shadow: @shadow-l1;
-        transform: translate(3px, -25px);
-        background: @color-white;
-    }
-
-    .stroked-text {
-        display: block;
-        position: absolute;
-        bottom: @u-small;
-        right: @u-medium;
-        z-index: inherit;
-        font-size: 12rem;
-        text-align: center;
-        color: @color-red;
-    }
+  .stroked-text {
+    display: block;
+    position: absolute;
+    bottom: @u-small;
+    right: @u-medium;
+    z-index: inherit;
+    font-size: 12rem;
+    text-align: center;
+    color: @color-red;
+  }
 }

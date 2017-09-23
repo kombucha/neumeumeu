@@ -1,47 +1,46 @@
-
 const noOpPromise = () => Promise.resolve({});
 
 function init() {}
 
 function login() {
-    return Promise.resolve(require('./mocks/login.json'));
+  return Promise.resolve(require("./mocks/login.json"));
 }
 
 function createGame() {
-    return Promise.resolve({});
+  return Promise.resolve({});
 }
 
 function fetchGames() {
-    return Promise.resolve(require('./mocks/currentGames.json'));
+  return Promise.resolve(require("./mocks/currentGames.json"));
 }
 
 function getGame(gameId) {
-    const response = Object.assign({}, require('./mocks/gameInProgress.json'), {
-        id: gameId
-    });
+  const response = Object.assign({}, require("./mocks/gameInProgress.json"), {
+    id: gameId,
+  });
 
-    return Promise.resolve(response);
+  return Promise.resolve(response);
 }
 
 export default {
-    init,
+  init,
 
-    login,
-    logout: noOpPromise,
-    register: noOpPromise,
-    associateSocketToPlayer: noOpPromise,
+  login,
+  logout: noOpPromise,
+  register: noOpPromise,
+  associateSocketToPlayer: noOpPromise,
 
-    joinRoom: noOpPromise,
-    leaveRoom: noOpPromise,
+  joinRoom: noOpPromise,
+  leaveRoom: noOpPromise,
 
-    playerReady: noOpPromise,
-    createGame,
-    fetchGames,
-    getGame,
-    joinGame: noOpPromise,
+  playerReady: noOpPromise,
+  createGame,
+  fetchGames,
+  getGame,
+  joinGame: noOpPromise,
 
-    startGame: noOpPromise,
-    playCard: noOpPromise,
-    cancelCard: noOpPromise,
-    choosePile: noOpPromise
+  startGame: noOpPromise,
+  playCard: noOpPromise,
+  cancelCard: noOpPromise,
+  choosePile: noOpPromise,
 };

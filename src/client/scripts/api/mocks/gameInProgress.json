@@ -1,48 +1,27 @@
 {
-    "id": "0",
-    "name": "IWN",
-    "cardsInPlay": [
-        [
-            60,
-            3
-        ],
-        [
-            19,
-            20,
-            21
-        ],
-        [
-            30,
-            38
-        ],
-        [
-            40,
-            41,
-            42,
-            43,
-            44
-        ]
-    ],
+  "id": "0",
+  "name": "IWN",
+  "cardsInPlay": [[60, 3], [19, 20, 21], [30, 38], [40, 41, 42, 43, 44]],
 
-    "players": [
-        {"id":"7", "name": "Gabriela", "hand": [], "malus": 20},
-        {"id":"2", "name": "Azadeh", "hand": [], "malus": 22, "chosenCard": -1},
-        {
-            "id": "1",
-            "name": "Vincent",
-            "status": "choosing_card",
-            "malus": 17,
-            "chosenCard": 11,
-            "hand": [ 55, 10, 104, 22, 78, 1, 24 ]
-        },
-        {"id":"3", "name": "Hugo", "hand": [], "malus": 2},
-        {"id":"4", "name": "Samuel", "hand": [], "malus": 40},
-        {"id":"5", "name": "Julian", "hand": [], "malus": 200},
-        {"id":"6", "name": "Arnaud", "hand": [], "malus": 4}
-    ],
-    "maxPlayers": 10,
-    "owner": "1",
-    "status": "waiting_for_cards",
-    "isProtected": false,
-    "resolutionSteps": null
+  "players": [
+    { "id": "7", "name": "Gabriela", "hand": [], "malus": 20 },
+    { "id": "2", "name": "Azadeh", "hand": [], "malus": 22, "chosenCard": -1 },
+    {
+      "id": "1",
+      "name": "Vincent",
+      "status": "choosing_card",
+      "malus": 17,
+      "chosenCard": 11,
+      "hand": [55, 10, 104, 22, 78, 1, 24]
+    },
+    { "id": "3", "name": "Hugo", "hand": [], "malus": 2 },
+    { "id": "4", "name": "Samuel", "hand": [], "malus": 40 },
+    { "id": "5", "name": "Julian", "hand": [], "malus": 200 },
+    { "id": "6", "name": "Arnaud", "hand": [], "malus": 4 }
+  ],
+  "maxPlayers": 10,
+  "owner": "1",
+  "status": "waiting_for_cards",
+  "isProtected": false,
+  "resolutionSteps": null
 }

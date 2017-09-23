@@ -1,6 +1,4 @@
-export default() => {
-    // TODO
-    return (
-        <div className="player-menu"></div>
-    );
+export default () => {
+  // TODO
+  return <div className="player-menu" />;
 };

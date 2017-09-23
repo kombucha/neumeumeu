@@ -1,3 +1,3 @@
-import rethinkdbdash from 'rethinkdbdash';
+import rethinkdbdash from "rethinkdbdash";
 
 export default rethinkdbdash();

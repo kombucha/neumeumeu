@@ -1,33 +1,33 @@
 @hand-offset: -60px;
 
 .hand__cards {
-    display: flex;
-    justify-content: center;
-    margin-bottom: @hand-offset;
+  display: flex;
+  justify-content: center;
+  margin-bottom: @hand-offset;
 }
 
 .hand__item {
-    flex: 1;
+  flex: 1;
 
-    .card--hand {
-        cursor: default;
-    }
+  .card--hand {
+    cursor: default;
+  }
 }
 
 .hand--choosing-card .hand__item {
-    transition: transform .2s ease-out;
+  transition: transform 0.2s ease-out;
 
-    .card--hand {
-        cursor: pointer;
-    }
+  .card--hand {
+    cursor: pointer;
+  }
 
-    &:hover,
-    &:focus {
-        transform: translateY(@hand-offset - @s-game-gutter);
-    }
+  &:hover,
+  &:focus {
+    transform: translateY(@hand-offset - @s-game-gutter);
+  }
 }
 
 // Card modifier
 .card--hand {
-    cursor: pointer;
+  cursor: pointer;
 }

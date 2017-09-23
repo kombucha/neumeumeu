@@ -7,29 +7,29 @@
  * @param {int} delay The delay in milliseconds
  */
 function requestInterval(fn, delay) {
-    if (!requestAnimationFrame) {
-        return setInterval(fn, delay);
+  if (!requestAnimationFrame) {
+    return setInterval(fn, delay);
+  }
+
+  var start = new Date().getTime(),
+    handle = new Object();
+
+  function loop() {
+    var current = new Date().getTime(),
+      delta = current - start;
+
+    if (delta >= delay) {
+      fn.call();
+      start = new Date().getTime();
     }
 
-    var start = new Date().getTime(),
-        handle = new Object();
-
-    function loop() {
-        var current = new Date().getTime(),
-            delta = current - start;
-
-        if (delta >= delay) {
-            fn.call();
-            start = new Date().getTime();
-        }
-
-        if (!handle.cancelled) {
-            handle.value = requestAnimationFrame(loop);
-        }
+    if (!handle.cancelled) {
+      handle.value = requestAnimationFrame(loop);
     }
+  }
 
-    handle.value = requestAnimationFrame(loop);
-    return handle;
+  handle.value = requestAnimationFrame(loop);
+  return handle;
 }
 
 /**
@@ -38,15 +38,15 @@ function requestInterval(fn, delay) {
  * @param {int|object} fn The callback function
  */
 function clearRequestInterval(handle) {
-    if (cancelAnimationFrame && handle) {
-        handle.cancelled = true;
-        return cancelAnimationFrame(handle.value);
-    }
+  if (cancelAnimationFrame && handle) {
+    handle.cancelled = true;
+    return cancelAnimationFrame(handle.value);
+  }
 
-    return clearInterval(handle);
+  return clearInterval(handle);
 }
 
 export default {
-    requestInterval,
-    clearRequestInterval
+  requestInterval,
+  clearRequestInterval,
 };

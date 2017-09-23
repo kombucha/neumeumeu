@@ -1,7 +1,7 @@
 {
-    "player": {
-        "id": "1",
-        "name": "kombu"
-    },
-    "token": "super-token"
+  "player": {
+    "id": "1",
+    "name": "kombu"
+  },
+  "token": "super-token"
 }

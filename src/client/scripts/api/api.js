@@ -1,190 +1,193 @@
-let socket,
-    store;
+let socket, store;
 
 function init(_socket, _store) {
-    socket = _socket;
-    store = _store;
-    window.socket = socket;
+  socket = _socket;
+  store = _store;
+  window.socket = socket;
 }
 
 function getAuthToken() {
-    return store.getState().authentication.token;
+  return store.getState().authentication.token;
 }
 
 function emitAction(action, waitForResponse = true) {
-    return new Promise((resolve, reject) => {
-        if (!socket) {
-            return reject('Api was not initialized');
+  return new Promise((resolve, reject) => {
+    if (!socket) {
+      return reject("Api was not initialized");
+    }
+
+    const cb = waitForResponse
+      ? result => {
+          if (result.error) {
+            return reject(result.error);
+          }
+
+          return resolve(result);
         }
+      : undefined;
 
-        const cb = waitForResponse ? (result) => {
-            if (result.error) {
-                return reject(result.error);
-            }
+    socket.emit("action", action, cb);
 
-            return resolve(result);
-        } : undefined;
-
-        socket.emit('action', action, cb);
-
-        if (!waitForResponse) {
-            return Promise.resolve(action);
-        }
-    })
-    .catch((result) => {
-        console.warn(`Received error "${JSON.stringify(result, null, 2)}" for action`, action); // eslint-disable-line no-console
-        return Promise.reject(result);
-    });
+    if (!waitForResponse) {
+      return Promise.resolve(action);
+    }
+  }).catch(result => {
+    console.warn(
+      `Received error "${JSON.stringify(result, null, 2)}" for action`,
+      action
+    ); // eslint-disable-line no-console
+    return Promise.reject(result);
+  });
 }
 
 function login(username, password) {
-    return emitAction({
-        type: 'LOGIN',
-        username,
-        password
-    });
+  return emitAction({
+    type: "LOGIN",
+    username,
+    password,
+  });
 }
 
 function logout() {
-    return emitAction({
-        type: 'LOGOUT',
-        token: getAuthToken()
-    });
+  return emitAction({
+    type: "LOGOUT",
+    token: getAuthToken(),
+  });
 }
 
 function register(newUser) {
-    return emitAction({
-        type: 'REGISTER',
-        user: newUser
-    });
+  return emitAction({
+    type: "REGISTER",
+    user: newUser,
+  });
 }
 
 function associateSocketToPlayer(playerId, socketId) {
-    return emitAction({
-        type: 'ASSOCIATE_PLAYER_TO_SOCKET',
-        playerId,
-        socketId
-    });
+  return emitAction({
+    type: "ASSOCIATE_PLAYER_TO_SOCKET",
+    playerId,
+    socketId,
+  });
 }
 
 function getGame(id) {
-    return emitAction({
-        type: 'GET_GAME',
-        token: getAuthToken(),
-        id
-    });
+  return emitAction({
+    type: "GET_GAME",
+    token: getAuthToken(),
+    id,
+  });
 }
 
 function fetchGames() {
-    return emitAction({
-        type: 'UPDATE_GAMES'
-    });
+  return emitAction({
+    type: "UPDATE_GAMES",
+  });
 }
 
 function createGame(game) {
-    return emitAction({
-        type: 'CREATE_GAME',
-        token: getAuthToken(),
-        game
-    });
+  return emitAction({
+    type: "CREATE_GAME",
+    token: getAuthToken(),
+    game,
+  });
 }
 
 function joinGame(id, password) {
-    return emitAction({
-        type: 'JOIN_GAME',
-        token: getAuthToken(),
-        id,
-        password
-    });
+  return emitAction({
+    type: "JOIN_GAME",
+    token: getAuthToken(),
+    id,
+    password,
+  });
 }
 
 function startGame(id) {
-    return emitAction({
-        type: 'START_GAME',
-        token: getAuthToken(),
-        id
-    });
+  return emitAction({
+    type: "START_GAME",
+    token: getAuthToken(),
+    id,
+  });
 }
 
 function playCard(gameId, cardValue) {
-    return emitAction({
-        type: 'PLAY_CARD',
-        token: getAuthToken(),
-        gameId,
-        cardValue
-    });
+  return emitAction({
+    type: "PLAY_CARD",
+    token: getAuthToken(),
+    gameId,
+    cardValue,
+  });
 }
 
 function cancelCard(gameId) {
-    return emitAction({
-        type: 'CANCEL_CARD',
-        token: getAuthToken(),
-        gameId
-    });
+  return emitAction({
+    type: "CANCEL_CARD",
+    token: getAuthToken(),
+    gameId,
+  });
 }
 
 function choosePile(gameId, pile) {
-    return emitAction({
-        type: 'CHOOSE_PILE',
-        token: getAuthToken(),
-        gameId,
-        pile
-    });
+  return emitAction({
+    type: "CHOOSE_PILE",
+    token: getAuthToken(),
+    gameId,
+    pile,
+  });
 }
 
 function playerReady(gameId) {
-    return emitAction({
-        type: 'PLAYER_READY',
-        token: getAuthToken(),
-        gameId
-    });
+  return emitAction({
+    type: "PLAYER_READY",
+    token: getAuthToken(),
+    gameId,
+  });
 }
 
 function joinRoom(id) {
-    return emitAction({
-        type: 'JOIN_ROOM',
-        token: getAuthToken(),
-        id
-    });
+  return emitAction({
+    type: "JOIN_ROOM",
+    token: getAuthToken(),
+    id,
+  });
 }
 
 function leaveRoom(id) {
-    return emitAction({
-        type: 'LEAVE_ROOM',
-        token: getAuthToken(),
-        id
-    });
+  return emitAction({
+    type: "LEAVE_ROOM",
+    token: getAuthToken(),
+    id,
+  });
 }
 
 function sendChatMessage(gameId, messageText) {
-    return emitAction({
-        type: 'SEND_CHAT_MESSAGE',
-        token: getAuthToken(),
-        gameId,
-        messageText
-    });
+  return emitAction({
+    type: "SEND_CHAT_MESSAGE",
+    token: getAuthToken(),
+    gameId,
+    messageText,
+  });
 }
 
 export default {
-    init,
+  init,
 
-    login,
-    logout,
-    register,
-    associateSocketToPlayer,
+  login,
+  logout,
+  register,
+  associateSocketToPlayer,
 
-    joinRoom,
-    leaveRoom,
+  joinRoom,
+  leaveRoom,
 
-    createGame,
-    fetchGames,
-    getGame,
-    joinGame,
+  createGame,
+  fetchGames,
+  getGame,
+  joinGame,
 
-    startGame,
-    playCard,
-    cancelCard,
-    choosePile,
-    playerReady,
-    sendChatMessage
+  startGame,
+  playCard,
+  cancelCard,
+  choosePile,
+  playerReady,
+  sendChatMessage,
 };

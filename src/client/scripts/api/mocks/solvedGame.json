@@ -1,67 +1,54 @@
 {
-    "id": "0",
-    "name": "IWN",
-    "cardsInPlay": [
-        [
-            3,
-            4,
-            5,
-            6
-        ],
-        [
-            19,
-            20,
-            21
-        ],
-        [
-            30,
-            38
-        ],
-        [
-            40,
-            41,
-            42,
-            43,
-            44
-        ]
-    ],
+  "id": "0",
+  "name": "IWN",
+  "cardsInPlay": [[3, 4, 5, 6], [19, 20, 21], [30, 38], [40, 41, 42, 43, 44]],
 
-    "players": [{
-        "id": "1",
-        "name": "Hugo",
-        "status": "played_card",
-        "malus": 2,
-        "chosenCard": 8,
-        "hand": [55, 10, 104, 22, 78, 1, 24]
-    }, {
-        "id": "2",
-        "name": "Vincent",
-        "status": "played_card",
-        "malus": 0,
-        "chosenCard": 7,
-        "hand": [55, 10, 104, 22, 78, 1, 24]
-    }],
-    "maxPlayers": 10,
-    "owner": "1",
-    "status": "solved",
-    "isProtected": false,
-    "resolutionSteps": [{
-        "fromPlayer": 1,
-        "toPile": 0
-    }, {
-        "fromPile": 0,
-        "toPlayer": 0
-    }, {
-        "fromPile": 1,
-        "toPlayer": 0
-    }, {
-        "fromPile": 2,
-        "toPlayer": 0
-    }, {
-        "fromPile": 3,
-        "toPlayer": 1
-    }, {
-        "fromPlayer": 0,
-        "toPile": 0
-    }]
+  "players": [
+    {
+      "id": "1",
+      "name": "Hugo",
+      "status": "played_card",
+      "malus": 2,
+      "chosenCard": 8,
+      "hand": [55, 10, 104, 22, 78, 1, 24]
+    },
+    {
+      "id": "2",
+      "name": "Vincent",
+      "status": "played_card",
+      "malus": 0,
+      "chosenCard": 7,
+      "hand": [55, 10, 104, 22, 78, 1, 24]
+    }
+  ],
+  "maxPlayers": 10,
+  "owner": "1",
+  "status": "solved",
+  "isProtected": false,
+  "resolutionSteps": [
+    {
+      "fromPlayer": 1,
+      "toPile": 0
+    },
+    {
+      "fromPile": 0,
+      "toPlayer": 0
+    },
+    {
+      "fromPile": 1,
+      "toPlayer": 0
+    },
+    {
+      "fromPile": 2,
+      "toPlayer": 0
+    },
+    {
+      "fromPile": 3,
+      "toPlayer": 1
+    },
+    {
+      "fromPlayer": 0,
+      "toPile": 0
+    }
+  ]
 }

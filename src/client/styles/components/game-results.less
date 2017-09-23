@@ -1,69 +1,69 @@
 .game-results {
-    color: darken(@color-red, 20%);
-    text-align: center;
+  color: darken(@color-red, 20%);
+  text-align: center;
 }
 
 .game-results__players {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 100%;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 100vh;
 }
 
 .game-results__player {
-    display: flex;
-    align-items: baseline;
+  display: flex;
+  align-items: baseline;
 
-    + .game-results__player {
-        margin-top: @u-medium;
-    }
+  + .game-results__player {
+    margin-top: @u-medium;
+  }
 }
 
 .game-results__player__malus {
-    flex: 1;
-    display: inline-block;
-    font-size: .7em;
-    text-align: right;
-    margin-right: 5rem;
+  flex: 1;
+  display: inline-block;
+  font-size: 0.7em;
+  text-align: right;
+  margin-right: 5rem;
 }
 
 .game-results__player__name {
-    flex: 1;
-    display: inline-block;
-    min-width: 18rem;
-    text-align: left;
+  flex: 1;
+  display: inline-block;
+  min-width: 18rem;
+  text-align: left;
 }
 
 .game-results__back {
-    position: fixed;
-    bottom: @u-medium;
-    left: @u-medium;
+  position: fixed;
+  bottom: @u-medium;
+  left: @u-medium;
 }
 
 // RANK STYLES
 
 .game-results__player:first-child {
-    color: @color-yellow;
-    text-align: center;
+  color: @color-yellow;
+  text-align: center;
 
-    .game-results__player__name {
-        font-size: 1.8em;
-    }
+  .game-results__player__name {
+    font-size: 1.8em;
+  }
 }
 
-.game-results__player:nth-child(2)  {
-    color: @color-purple-light;
+.game-results__player:nth-child(2) {
+  color: @color-purple-light;
 
-    .game-results__player__name {
-        font-size: 1.4em;
-    }
+  .game-results__player__name {
+    font-size: 1.4em;
+  }
 }
 
-.game-results__player:nth-child(3)  {
-    color: @color-purple;
+.game-results__player:nth-child(3) {
+  color: @color-purple;
 
-    .game-results__player__name {
-        font-size: 1.2em;
-    }
+  .game-results__player__name {
+    font-size: 1.2em;
+  }
 }

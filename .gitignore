@@ -60,3 +60,4 @@ node_modules
 ### App ###
 dist/
 rethinkdb_data/
+package-lock.json

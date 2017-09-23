@@ -1,65 +1,70 @@
 .m_clearfix {
-    &::before, &::after {
-        display: table;
-        content: " ";
-        clear: both;
-    }
+  &::before,
+  &::after {
+    display: table;
+    content: " ";
+    clear: both;
+  }
 }
 
 .box-shadow(@value) {
-	-webkit-box-shadow: @value;
-	-moz-box-shadow: @value;
-	box-shadow: @value;
+  -webkit-box-shadow: @value;
+  -moz-box-shadow: @value;
+  box-shadow: @value;
 }
 
 .text-shadow(@value) {
-	-webkit-text-shadow: @value;
-	-moz-text-shadow: @value;
-	text-shadow: @value;
+  -webkit-text-shadow: @value;
+  -moz-text-shadow: @value;
+  text-shadow: @value;
 }
 
 .border-radius(@value) {
-    -webkit-border-radius: @value;
-    -moz-border-radius: @value;
-    border-radius: @value;
+  -webkit-border-radius: @value;
+  -moz-border-radius: @value;
+  border-radius: @value;
 }
 
 .opacity(@value) {
-	-webkit-opacity: @value;
-	-moz-opacity: @value;
-	opacity: @value;
+  -webkit-opacity: @value;
+  -moz-opacity: @value;
+  opacity: @value;
 }
 
 .transition (@transition) {
-	-webkit-transition: @transition;
-	-moz-transition:    @transition;
-	-ms-transition:     @transition;
-	-o-transition:      @transition;
+  -webkit-transition: @transition;
+  -moz-transition: @transition;
+  -ms-transition: @transition;
+  -o-transition: @transition;
 }
 
 .calc (@prop, @value) {
-    @prop: -moz-calc(@value);
-    @prop: -webkit-calc(@value);
-    @prop: -o-calc(@value);
-    @prop: -ms-calc(@value);
-    @prop: calc(@value);
+  @prop: -moz-calc(@value);
+  @prop: -webkit-calc(@value);
+  @prop: -o-calc(@value);
+  @prop: -ms-calc(@value);
+  @prop: calc(@value);
 }
 
 .placeholder(@color, @opacity: 1) {
-    &::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-        color: @color;
-        opacity: @opacity;
-    }
-    &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-       color: @color;
-       opacity: @opacity;
-    }
-    &::-moz-placeholder { /* Mozilla Firefox 19+ */
-       color: @color;
-       opacity: @opacity;
-    }
-    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-       color: @color;
-       opacity: @opacity;
-    }
+  &::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: @color;
+    opacity: @opacity;
+  }
+  &:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: @color;
+    opacity: @opacity;
+  }
+  &::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: @color;
+    opacity: @opacity;
+  }
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: @color;
+    opacity: @opacity;
+  }
 }

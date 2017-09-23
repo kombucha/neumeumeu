@@ -5,127 +5,126 @@
 @player-cancel-size: 22px;
 
 .player {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: @player-width;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: @player-width;
+  position: relative;
 }
 
 .player--current {
-
-    &::before {
-        display: block;
-        position: absolute;
-        top: -12px;
-        left: 0px;
-        z-index: -1;
-        content: ' ';
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: @player-width/2 @player-width/2 0 @player-width/2;
-        border-color: @color-blue transparent transparent transparent;
-    }
+  &::before {
+    display: block;
+    position: absolute;
+    top: -12px;
+    left: 0px;
+    z-index: -1;
+    content: " ";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: @player-width/2 @player-width/2 0 @player-width/2;
+    border-color: @color-blue transparent transparent transparent;
+  }
 }
 
 .player--played-card {
-    .player__avatar {
-        border-color: #8dd00c;
-    }
+  .player__avatar {
+    border-color: #8dd00c;
+  }
 }
 
 .player--choosing-pile {
-    .player__avatar {
-        border-color: #E9A810;
-    }
+  .player__avatar {
+    border-color: #e9a810;
+  }
 }
 
 .player--ai {
-    .player__avatar {
-        border-color: purple;
-    }
+  .player__avatar {
+    border-color: purple;
+  }
 }
 
 .player__avatar {
-    position: relative;
-    width: @player-avatar-size;
-    height: @player-avatar-size;
-    margin-bottom: @player-avatar-space;
+  position: relative;
+  width: @player-avatar-size;
+  height: @player-avatar-size;
+  margin-bottom: @player-avatar-space;
 
-    border: @player-avatar-border solid #fff;
-    border-radius: 50%;
-    box-shadow: @shadow-l1;
-    z-index: 1;
+  border: @player-avatar-border solid #fff;
+  border-radius: 50%;
+  box-shadow: @shadow-l1;
+  z-index: 1;
 }
 
 .player__username {
-    font-size: 14px;
-    font-weight: bold;
+  font-size: 14px;
+  font-weight: bold;
 
-    margin-bottom: @player-avatar-space;
+  margin-bottom: @player-avatar-space;
 
-    letter-spacing: .1em;
-    text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 
-    white-space: nowrap;
-    max-width: @player-width;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: @player-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-    color: white;
+  color: white;
 }
 
 .player__malus {
-    position: absolute;
-    top: @u-medium;
-    left: 50%;
-    margin-left: @player-width/2;
-    font-size: 1.8rem;
-    letter-spacing: .1em;
-    text-shadow: @shadow-l1;
+  position: absolute;
+  top: @u-medium;
+  left: 50%;
+  margin-left: @player-width/2;
+  font-size: 1.8rem;
+  letter-spacing: 0.1em;
+  text-shadow: @shadow-l1;
 }
 
 .player__card-container {
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    margin-top: 100px;
-    margin-left: -25px;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  margin-top: 100px;
+  margin-left: -25px;
 }
 
 .player__card {
-    position: absolute;
-    height: 0;
-    width: 0;
+  position: absolute;
+  height: 0;
+  width: 0;
 }
 
 .card--player {
-    transform: translateX(-25%) scale(.4);
-    transform-origin: 50% 0 0;
+  transform: translateX(-25%) scale(0.4);
+  transform-origin: 50% 0 0;
 }
 
 .player__cancel {
-    transition: background-color .2s ease-out;
+  transition: background-color 0.2s ease-out;
+  position: absolute;
+  background-color: @color-red;
+  width: @player-cancel-size;
+  height: @player-cancel-size;
+  border-radius: 50%;
+  z-index: @z-players;
+  margin: (-@player-cancel-size / 2) (38px + @player-cancel-size / 2);
+
+  &::before {
+    content: "\2716";
+    color: #fff;
+    font-size: 12px;
     position: absolute;
-    background-color: @color-red;
-    width: @player-cancel-size;
-    height: @player-cancel-size;
-    border-radius: 50%;
-    z-index: @z-players;
-    margin: (-@player-cancel-size / 2) (38px + @player-cancel-size / 2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-    &::before {
-        content: "\2716";
-        color: #FFF;
-        font-size: 12px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    &:hover {
-        background-color: @color-purple;
-    }
+  &:hover {
+    background-color: @color-purple;
+  }
 }

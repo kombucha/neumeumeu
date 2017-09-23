@@ -41,207 +41,205 @@
 @color-card-0-corner: @color-card-2-corner;
 
 .card {
-    position: relative;
-    height: @card-height;
-    width: @card-width;
+  position: relative;
+  height: @card-height;
+  width: @card-width;
 }
 
 .card__backface,
 .card__frontface {
-    position: relative;
-    width: @card-width;
-    height: @card-height;
+  position: relative;
+  width: @card-width;
+  height: @card-height;
 
-    background: @color-white;
-    box-shadow: @shadow-l1;
-    border-radius: 3px;
+  background: @color-white;
+  box-shadow: @shadow-l1;
+  border-radius: 3px;
 
-    user-select: none;
-    -webkit-user-drag: element;
+  user-select: none;
+  -webkit-user-drag: element;
 
-    position: absolute;
-    top: 0;
+  position: absolute;
+  top: 0;
 }
 
-.card__backface{
-    background-color: @color-purple;
+.card__backface {
+  background-color: @color-purple;
 
-    .card__value--center::before {
-        color: @color-yellow;
-        font-size: 70px;
-    }
+  .card__value--center::before {
+    color: @color-yellow;
+    font-size: 70px;
+  }
 }
 
 .card__frontface {
-    &::before {
-        content: '';
-        position: absolute;
-        top: @u-medium;
-        left: @card-border;
-        right: @card-border;
-        bottom: @card-border;
-        border-left: (@card-width - 16px) solid;
-        border-top: @card-border solid transparent;
-        border-bottom: @card-border solid transparent;
-        border-radius: 2%;
-    }
+  &::before {
+    content: "";
+    position: absolute;
+    top: @u-medium;
+    left: @card-border;
+    right: @card-border;
+    bottom: @card-border;
+    border-left: (@card-width - 16px) solid;
+    border-top: @card-border solid transparent;
+    border-bottom: @card-border solid transparent;
+    border-radius: 2%;
+  }
 }
 
 // TOP
 .card__top {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .card__value--top {
-    font-size: 22px * @card-scale;
-    letter-spacing: .1em;
-    z-index: 1;
-    margin: (8px * @card-scale) 0 0 (8px * @card-scale);
+  font-size: 22px * @card-scale;
+  letter-spacing: 0.1em;
+  z-index: 1;
+  margin: (8px * @card-scale) 0 0 (8px * @card-scale);
 }
 
 .card__value--top {
-    flex: 1;
-    text-align: left;
+  flex: 1;
+  text-align: left;
 }
 
 .card__malus {
-    position: relative;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    margin: 0 (8px * @card-scale);
-    line-height: 13px;
+  position: relative;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 (8px * @card-scale);
+  line-height: 13px;
 
-    span {
-        display: inline-block;
-        border-radius: 50%;
-        width: 5px;
-        height: 5px;
-        margin-left: 3px;
-    }
+  span {
+    display: inline-block;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: 3px;
+  }
 }
 
 // CENTER
 .card__value--center {
-    .icon-fairy;
+  .icon-fairy;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &::before {
+    .icon;
+    font-size: 105px * @card-scale;
+  }
+
+  span {
+    text-align: center;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    &::before {
-        .icon;
-        font-size: 105px * @card-scale;
-    }
-
-    span {
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        font-size: @card-center-type * @card-scale;
-    }
+    font-size: @card-center-type * @card-scale;
+  }
 }
 
 .card__value__text {
-    -webkit-text-stroke-width: 4px * @card-scale;
-    -webkit-text-stroke-color: @color-blue-dark;
+  -webkit-text-stroke-width: 4px * @card-scale;
+  -webkit-text-stroke-color: @color-blue-dark;
 }
 
 .card__value__border {
-    -webkit-text-stroke-width: 12px * @card-scale;
-    -webkit-text-stroke-color: @color-white;
+  -webkit-text-stroke-width: 12px * @card-scale;
+  -webkit-text-stroke-color: @color-white;
 }
 
 // CARD FLIP ANIMATION
 
 .card--flippable {
-    perspective: 800px;
+  perspective: 800px;
 
-    .card__frontface {
-        transition: transform .3s linear .3s, opacity 1ms .3s;
-        opacity: 1;
-        transform: rotateY(0);
-    }
+  .card__frontface {
+    transition: transform 0.3s linear 0.3s, opacity 1ms 0.3s;
+    opacity: 1;
+    transform: rotateY(0);
+  }
 
-    .card__backface {
-        transition: transform .3s linear, opacity 1ms .3s;
-        opacity: 0;
-        transform: rotateY(90deg);
-    }
+  .card__backface {
+    transition: transform 0.3s linear, opacity 1ms 0.3s;
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
 }
 
 .card.card--flippable.card--flipped {
-    .card__frontface {
-        transition: transform .3s linear, opacity 1ms .3s;
-        opacity: 0;
-        transform: rotateY(-90deg);
-    }
+  .card__frontface {
+    transition: transform 0.3s linear, opacity 1ms 0.3s;
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
 
-    .card__backface {
-        transition: transform .3s linear .3s, opacity 1ms .3s;
-        opacity: 1;
-        transform: rotateY(0);
-    }
+  .card__backface {
+    transition: transform 0.3s linear 0.3s, opacity 1ms 0.3s;
+    opacity: 1;
+    transform: rotateY(0);
+  }
 }
-
 
 // MALUS DEPENDENCIES
 .mixin__card(@color-background, @color-number, @color-logo, @color-malus, @color-corner) {
-    .card__frontface {
-
-        &::before {
-            border-left-color: @color-background;
-        }
-
-        .card__value--top {
-            color: @color-corner;
-        }
-
-        .card__value__text {
-            color: @color-number;
-        }
-
-        .card__value--center::before {
-            color: @color-logo;
-        }
-
-        .card__malus span {
-            background: @color-malus;
-        }
+  .card__frontface {
+    &::before {
+      border-left-color: @color-background;
     }
+
+    .card__value--top {
+      color: @color-corner;
+    }
+
+    .card__value__text {
+      color: @color-number;
+    }
+
+    .card__value--center::before {
+      color: @color-logo;
+    }
+
+    .card__malus span {
+      background: @color-malus;
+    }
+  }
 }
 
 .mixin_applyCard(@index) {
-    @background: "color-card-@{index}-background";
-    @number: "color-card-@{index}-number";
-    @logo: "color-card-@{index}-logo";
-    @malus: "color-card-@{index}-malus";
-    @corner: "color-card-@{index}-corner";
-    .mixin__card(@@background, @@number, @@logo, @@malus, @@corner)
+  @background: "color-card-@{index}-background";
+  @number: "color-card-@{index}-number";
+  @logo: "color-card-@{index}-logo";
+  @malus: "color-card-@{index}-malus";
+  @corner: "color-card-@{index}-corner";
+  .mixin__card(@@background, @@number, @@logo, @@malus, @@corner);
 }
 
 .card--malus-1 {
-    .mixin_applyCard(1);
+  .mixin_applyCard(1);
 }
 
 .card--malus-2 {
-    .mixin_applyCard(2);
+  .mixin_applyCard(2);
 }
 
 .card--malus-3 {
-    .mixin_applyCard(3);
+  .mixin_applyCard(3);
 }
 
 .card--malus-5 {
-    .mixin_applyCard(5);
+  .mixin_applyCard(5);
 }
 
 .card--malus-7 {
-    .mixin_applyCard(7);
+  .mixin_applyCard(7);
 }
