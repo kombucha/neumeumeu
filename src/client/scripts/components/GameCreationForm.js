@@ -1,11 +1,13 @@
 import {Link} from 'react-router';
 import FormComponent from 'client/components/FormComponent';
 import StrokedText from 'client/components/StrokedText';
+import {ENABLE_TIMEOUT} from 'common/constants/gameplay';
 
 export default class GameCreationForm extends FormComponent {
     constructor(props) {
         super(props);
         this.state = {
+            enableUserActionTimeout: ENABLE_TIMEOUT,
             isProtected: false,
             maxMalus: 66,
             maxPlayers: 4,
@@ -26,7 +28,7 @@ export default class GameCreationForm extends FormComponent {
     }
 
     render() {
-        const {name, isProtected, password, maxMalus, botsCount, maxPlayers} = this.state;
+        const {name, enableUserActionTimeout, isProtected, password, maxMalus, botsCount, maxPlayers} = this.state;
 
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -37,10 +39,20 @@ export default class GameCreationForm extends FormComponent {
                     onChange={this.onChange('name')} required/>
 
                 <label className="form__label">
+                    <span className="form__text">User Timeout ?</span>
+                    <span className="form__checkbox">
+                        <input type="checkbox"
+                            checked={enableUserActionTimeout}
+                            onChange={this.onCheckboxChange('enableUserActionTimeout')}/>
+                        <span className="form__checkbox__placeholder"></span>
+                    </span>
+                </label>
+
+                <label className="form__label">
                     <span className="form__text">Protected ?</span>
                     <span className="form__checkbox">
                         <input type="checkbox"
-                            value={isProtected}
+                            checked={isProtected}
                             onChange={this.onCheckboxChange('isProtected')}/>
                         <span className="form__checkbox__placeholder"></span>
                     </span>

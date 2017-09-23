@@ -58,6 +58,7 @@ function createGame(playerId, options) {
         botsCount = isNaN(options.botsCount) ? 0 : Math.min(maxPlayers, parseInt(options.botsCount, 10)),
         newGame = {
             name: options.name,
+            enableUserActionTimeout: options.enableUserActionTimeout,
             password: options.password,
             maxMalus,
             maxPlayers,

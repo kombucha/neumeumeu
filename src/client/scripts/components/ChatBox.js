@@ -6,7 +6,7 @@ export default class Chatbox extends Component {
         if (this.props.onSubmitMessage && ev.which === 13) {
             const trimmedMessage = this.refs.messageInput.value ? this.refs.messageInput.value.trim() : null;
 
-            if (trimmedMessage.length > 0) { //&& (!this.state || this.state.lastMessage != trimmedMessage)) {
+            if (trimmedMessage && trimmedMessage.length > 0) { //&& (!this.state || this.state.lastMessage != trimmedMessage)) {
                 // this.setState({
                 //     lastMessage: trimmedMessage
                 // });

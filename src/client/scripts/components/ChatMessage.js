@@ -10,9 +10,10 @@ export default class ChatMessage extends Component {
             this.setState({
                 hidden: false
             });
-        }
-        if (!this.isHidden() && this.props.message.notificationEffect && !this.props.isCurrentPlayer) {
-            shake(this.refs.messageDiv);
+
+            if (!this.isHidden() && this.props.message.notificationEffect && !this.props.isCurrentPlayer) {
+                shake(this.refs.messageDiv);
+            }
         }
     }
     componentDidMount() {
@@ -23,7 +24,6 @@ export default class ChatMessage extends Component {
         } else {
             this.setTimer();
         }
-        this.setTimer();
     }
     componentWillUnmount() {
         clearTimeout(this._timer);

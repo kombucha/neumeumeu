@@ -12,6 +12,9 @@ import {findDOMNode} from 'react-dom';
 import {Animate} from 'client/helpers/animate';
 import ChoosePile from 'client/components/ChoosePile';
 import ChatBox from 'client/components/ChatBox';
+import Timer from 'client/components/Timer';
+import GameplayConstants from 'common/constants/gameplay';
+
 
 export default class Game extends PureRenderComponent {
     componentWillMount() {
@@ -55,6 +58,13 @@ export default class Game extends PureRenderComponent {
 
     playCard(card) {
         this.props.playCard(this.props.game.id, card.value);
+    }
+
+    autoPlayCard() {
+        this.props.playCard(this.props.game.id, GameplayConstants.AUTO_CARD_VALUE);
+    }
+    autoChoosePile() {
+        this.handlePileSelected(GameplayConstants.AUTO_PILE_VALUE);
     }
 
     cancelCard() {
@@ -106,6 +116,19 @@ export default class Game extends PureRenderComponent {
         );
     }
 
+    renderTimer(currentStatus) {
+        const
+            coundownTimeout = currentStatus === PlayerStatus.CHOOSING_CARD ? GameplayConstants.CHOOSE_CARD_TIMEOUT : GameplayConstants.CHOOSE_PILE_TIMEOUT,
+            timeoutAction = currentStatus === PlayerStatus.CHOOSING_CARD ? this.autoPlayCard.bind(this) : this.autoChoosePile.bind(this),
+            alertText = currentStatus === PlayerStatus.CHOOSING_CARD ? 'Play your card !' : null;
+
+        return (
+			<div className="timer__container" >
+				<Timer countdown={coundownTimeout} onTimeout={timeoutAction} alertText={alertText} />
+			</div>
+        );
+    }
+
     renderStartGame() {
         return (
             <button className="game__start button" type="button" onClick={this.startGame.bind(this)}>
@@ -146,6 +169,12 @@ export default class Game extends PureRenderComponent {
 				{
 					(game.players.length > 1) ? this.renderChatBox() : null
 				}
+
+                {
+                    game.enableUserActionTimeout && (currentPlayer.status === PlayerStatus.CHOOSING_CARD || currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE)
+                        ? this.renderTimer(currentPlayer.status)
+                        : null
+                }
 
                 {
                     gameStarted
