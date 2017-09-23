@@ -1,4 +1,4 @@
-import { shuffle, chunk } from "common/utils";
+const { shuffle, chunk } = require("common/utils");
 
 const NUMBER_OF_CARDS = 104;
 const UNKNOWN_CARD_VALUE = -1;
@@ -25,8 +25,8 @@ function computeMalus(cardNumber) {
 }
 
 function generateDeck() {
-  let deck = [],
-    cardNumber;
+  let deck = [];
+  let cardNumber;
 
   for (cardNumber = 1; cardNumber <= NUMBER_OF_CARDS; cardNumber++) {
     deck.push(generateCard(cardNumber));
@@ -57,7 +57,7 @@ function fullCardFromId(cardId) {
   };
 }
 
-export default {
+module.exports = {
   NUMBER_OF_CARDS,
   UNKNOWN_CARD_VALUE,
 

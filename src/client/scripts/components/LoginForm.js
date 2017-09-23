@@ -1,22 +1,20 @@
+import React from "react";
 import { connect } from "react-redux";
 import { login } from "client/actions";
 import FormComponent from "client/components/FormComponent";
 import StrokedText from "client/components/StrokedText";
 
 class LoginForm extends FormComponent {
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
 
     const { redirectTo } = this.props;
-
-    // TODO: validation
-
     this.props.login(this.state.username, this.state.password, redirectTo);
-  }
+  };
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit}>
         <input
           id="username"
           type="text"

@@ -1,11 +1,11 @@
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import ErrorMessage from "client/components/ErrorMessage";
 import { popLastErrorMessage } from "client/actions/errors";
-import PureRenderComponent from "client/components/PureRenderComponent";
 
 const MESSAGE_TIME = 1000;
 
-class ErrorMessagesContainer extends PureRenderComponent {
+class ErrorMessagesContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -35,9 +35,9 @@ class ErrorMessagesContainer extends PureRenderComponent {
   }
 
   render() {
-    const { message } = this.state,
-      hasMessage = !!message,
-      messageText = hasMessage ? message.text : "";
+    const { message } = this.state;
+    const hasMessage = !!message;
+    const messageText = hasMessage ? message.text : "";
 
     return <ErrorMessage text={messageText} />;
   }

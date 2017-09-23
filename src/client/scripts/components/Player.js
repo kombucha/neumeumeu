@@ -1,4 +1,5 @@
-import { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 import classNames from "classnames/dedupe";
 import PlayerStatus from "common/constants/player-status";
@@ -14,17 +15,19 @@ const Player = ({
   zone,
   defaultAvatarURL = "/images/players/avatar-default.svg",
 }) => {
-  const avatarURL = player.avatarURL || defaultAvatarURL,
-    classes = classNames("player", {
-      "player--current": isCurrentPlayer,
-      "player--played-card":
-        player.status === PlayerStatus.PLAYED_CARD ||
-        player.status === PlayerStatus.CHOOSED_PILE,
-      "player--choosing-pile":
-        player.status === PlayerStatus.HAS_TO_CHOOSE_PILE,
-      "player--ai": !!player.AIEnabled,
-    }),
-    showCancelAction = isCurrentPlayer && player.chosenCard && canCancelCard;
+  const avatarURL = player.avatarURL || defaultAvatarURL;
+
+  const classes = classNames("player", {
+    "player--current": isCurrentPlayer,
+    "player--played-card":
+      player.status === PlayerStatus.PLAYED_CARD ||
+      player.status === PlayerStatus.CHOOSED_PILE,
+    "player--choosing-pile": player.status === PlayerStatus.HAS_TO_CHOOSE_PILE,
+    "player--ai": !!player.AIEnabled,
+  });
+
+  const showCancelAction =
+    isCurrentPlayer && player.chosenCard && canCancelCard;
 
   return (
     <div className={classes}>
@@ -57,7 +60,7 @@ const Player = ({
         <ChatMessage
           className={classNames(
             "message--player",
-            zone == "right" ? "message--align-right" : "message--align-left"
+            zone === "right" ? "message--align-right" : "message--align-left"
           )}
           isCurrentPlayer={isCurrentPlayer}
           message={player.message}

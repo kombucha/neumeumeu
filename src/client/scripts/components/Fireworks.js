@@ -1,3 +1,4 @@
+import React from "react";
 import { findDOMNode } from "react-dom";
 import { Component } from "react";
 
@@ -43,10 +44,7 @@ export default class Fireworks extends Component {
   }
 
   _startAnimating() {
-    this._intervalHandle = requestInterval(
-      () => this.updateParticles(),
-      ANIMATION_STEP
-    );
+    this._intervalHandle = requestInterval(() => this.updateParticles(), ANIMATION_STEP);
   }
 
   _stopAnimating() {
@@ -78,11 +76,11 @@ export default class Fireworks extends Component {
   }
 
   updateParticles() {
-    const particleElements = findDOMNode(this).children,
-      particles = this._particles;
-    let p,
-      pEl,
-      pAlive = 0;
+    const particleElements = findDOMNode(this).children;
+    const particles = this._particles;
+    let p;
+    let pEl;
+    let pAlive = 0;
 
     // http://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
     // Euler approximation approximation :D
@@ -114,9 +112,10 @@ export default class Fireworks extends Component {
       pAlive++;
 
       // Update p
-      let aX = 0,
-        aY = 0,
-        aZ = 0;
+      let aX = 0;
+
+      let aY = 0;
+      let aZ = 0;
       aY += GRAVITY + p.forceY;
       aX += p.forceX;
       aZ += p.forceZ;
@@ -136,10 +135,7 @@ export default class Fireworks extends Component {
       }
 
       // Alive or dead
-      if (
-        Math.abs(p.x) > p.originX + p.maxRadius ||
-        Math.abs(p.y) > p.originY + p.maxRadius
-      ) {
+      if (Math.abs(p.x) > p.originX + p.maxRadius || Math.abs(p.y) > p.originY + p.maxRadius) {
         p.alive = false;
         pEl.style.display = "none";
       }

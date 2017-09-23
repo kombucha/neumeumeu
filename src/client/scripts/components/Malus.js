@@ -1,3 +1,4 @@
+import React from "react";
 import StrokedText from "client/components/StrokedText";
 
 export default ({ malus }) => (

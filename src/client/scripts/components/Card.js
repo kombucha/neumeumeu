@@ -1,14 +1,16 @@
+import React from "react";
 import classNames from "classnames/dedupe";
 import { range } from "common/utils";
 
 export default ({ card, className, onClick, flippable }) => {
-  const isFlipped = !!card.value,
-    classes = classNames(
-      "card",
-      className,
-      flippable ? "card--flippable" : null,
-      isFlipped ? "card--malus-" + card.malus : "card--flipped"
-    );
+  const isFlipped = !!card.value;
+
+  const classes = classNames(
+    "card",
+    className,
+    flippable ? "card--flippable" : null,
+    isFlipped ? `card--malus-${card.malus}` : "card--flipped"
+  );
 
   return (
     <div className={classes} onClick={onClick}>

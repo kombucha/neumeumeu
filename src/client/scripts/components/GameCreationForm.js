@@ -1,25 +1,23 @@
+import React from "react";
 import { Link } from "react-router";
 import FormComponent from "client/components/FormComponent";
 import StrokedText from "client/components/StrokedText";
 import { ENABLE_TIMEOUT } from "common/constants/gameplay";
 
 export default class GameCreationForm extends FormComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      enableUserActionTimeout: ENABLE_TIMEOUT,
-      isProtected: false,
-      maxMalus: 66,
-      maxPlayers: 4,
-      botsCount: 0,
-    };
-  }
+  state = {
+    enableUserActionTimeout: ENABLE_TIMEOUT,
+    isProtected: false,
+    maxMalus: 66,
+    maxPlayers: 4,
+    botsCount: 0,
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     const game = Object.assign({}, this.state);
     this.props.onCreateGame(game);
-  }
+  };
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.botsCount > nextState.maxPlayers - 1) {
@@ -39,7 +37,7 @@ export default class GameCreationForm extends FormComponent {
     } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit}>
         <p className="form__text">New game</p>
         <input
           type="text"

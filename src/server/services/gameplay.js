@@ -1,12 +1,12 @@
-import { UNKNOWN_CARD_VALUE, generateGameCards } from "common/deck";
-import { dateInSeconds, sum, sortBy } from "common/utils";
-import Errors from "common/constants/errors";
-import GameStatus from "common/constants/game-status";
-import PlayerStatus from "common/constants/player-status";
-import ChatConf from "common/constants/chat";
-import r from "server/database";
-import ai from "server/services/ai";
-import GameplayConstants from "common/constants/gameplay";
+const { UNKNOWN_CARD_VALUE, generateGameCards } = require("common/deck");
+const { dateInSeconds, sum, sortBy } = require("common/utils");
+const Errors = require("common/constants/errors");
+const GameStatus = require("common/constants/game-status");
+const PlayerStatus = require("common/constants/player-status");
+const ChatConf = require("common/constants/chat");
+const r = require("server/database");
+const ai = require("server/services/ai");
+const GameplayConstants = require("common/constants/gameplay");
 
 // Data
 function getGame(id) {
@@ -38,16 +38,15 @@ function updatePlayerInGame(gameId, player) {
       .get(gameId)
       // DAMN that's convoluted...
       .update(
-        game => {
-          return game("players").offsetsOf(p => p("id").eq(player.id))(
+        game =>
+          game("players").offsetsOf(p => p("id").eq(player.id))(
             0
           ).do(playerIdx => ({
             players: game("players").changeAt(
               playerIdx,
               game("players")(playerIdx).merge(player)
             ),
-          }));
-        },
+          })),
         { returnChanges: "always" }
       )
       .run()
@@ -119,9 +118,9 @@ function playCard(playerId, gameId, cardValue) {
       }
 
       const cardIdx = newPlayer.hand.findIndex(
-          card => card.value === cardValue
-        ),
-        userOwnsCard = cardIdx !== -1;
+        card => card.value === cardValue
+      );
+      const userOwnsCard = cardIdx !== -1;
 
       if (game.status !== GameStatus.WAITING_FOR_CARDS || !userOwnsCard) {
         return Promise.reject(Errors.INVALID_MOVE);
@@ -236,12 +235,14 @@ function solve(game) {
     return Promise.resolve(game);
   }
 
-  const sortedPlayers = sortBy(p => p.chosenCard.value, game.players),
-    pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]),
-    playerHasToChoosePile = player =>
-      pilesTopCards.every(topCard => player.chosenCard.value < topCard.value),
-    playerWithTooSmallCard = sortedPlayers.find(playerHasToChoosePile),
-    someoneHasChosenPile = sortedPlayers.some(hasChosenPile);
+  const sortedPlayers = sortBy(p => p.chosenCard.value, game.players);
+  const pilesTopCards = game.cardsInPlay.map(pile => pile[pile.length - 1]);
+
+  const playerHasToChoosePile = player =>
+    pilesTopCards.every(topCard => player.chosenCard.value < topCard.value);
+
+  const playerWithTooSmallCard = sortedPlayers.find(playerHasToChoosePile);
+  const someoneHasChosenPile = sortedPlayers.some(hasChosenPile);
 
   // Wait for player to chose pile
   if (
@@ -315,11 +316,13 @@ function solve(game) {
 }
 
 function solveEnd(game) {
-  const stillCardsToPlay = game.players.some(p => p.hand.length > 0),
-    everyoneReadyForNextTurn = game.players.every(
-      p => p.status === PlayerStatus.READY_FOR_NEXT_ROUND
-    ),
-    endReached = isEndReached(game);
+  const stillCardsToPlay = game.players.some(p => p.hand.length > 0);
+
+  const everyoneReadyForNextTurn = game.players.every(
+    p => p.status === PlayerStatus.READY_FOR_NEXT_ROUND
+  );
+
+  const endReached = isEndReached(game);
 
   if (game.status !== GameStatus.SOLVED || !everyoneReadyForNextTurn) {
     return Promise.resolve(game);
@@ -371,13 +374,13 @@ function hasChosenPile(player) {
 
 function destinationPileIdx(card, piles) {
   return piles.reduce((resultIdx, pile, idx, piles) => {
-    const currentTopCard = pile[pile.length - 1],
-      resultPile = piles[resultIdx],
-      resultTopCard = resultPile
-        ? resultPile[resultPile.length - 1]
-        : { value: -1 };
+    const currentTopCard = pile[pile.length - 1];
+    const resultPile = piles[resultIdx];
+    const resultTopCard = resultPile
+      ? resultPile[resultPile.length - 1]
+      : { value: -1 };
     return currentTopCard.value < card.value &&
-      currentTopCard.value >= resultTopCard.value
+    currentTopCard.value >= resultTopCard.value
       ? idx
       : resultIdx;
   }, -1);
@@ -470,7 +473,7 @@ function createMessage(messageText, auto = false) {
   };
 }
 
-export default {
+module.exports = {
   startRound,
 
   playCard,

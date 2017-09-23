@@ -20,7 +20,7 @@ export default function users(state = DEFAULT_STATE, action) {
       return login(state, action.token, action.player);
     case "LOGOUT":
       return logout();
+    default:
+      return state;
   }
-
-  return state;
 }

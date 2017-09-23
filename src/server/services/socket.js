@@ -1,6 +1,6 @@
-import Server from "socket.io";
-import r from "server/database";
-import log from "server/log";
+const Server = require("socket.io");
+const r = require("server/database");
+const log = require("server/log");
 
 let io;
 
@@ -78,7 +78,7 @@ function flushSockets() {
     .run();
 }
 
-export default {
+module.exports = {
   start,
 
   on,

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   MESSAGE_EXPIRE_INTERVAL: 5000,
   MESSAGE_MAX_LENGTH: 50,
   MESSAGE_ANIMATE_EFFECT: true,

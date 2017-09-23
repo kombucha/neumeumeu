@@ -1,6 +1,6 @@
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import PureRenderComponent from "client/components/PureRenderComponent";
 import GameList from "client/components/GameList";
 import { LoginStatusContainer } from "client/components/LoginStatus";
 import StrokedText from "client/components/StrokedText";
@@ -8,7 +8,7 @@ import GameStatus from "common/constants/game-status";
 import { joinLobby, leaveLobby } from "client/actions";
 import { updatePath } from "redux-simple-router";
 
-export default class Home extends PureRenderComponent {
+export default class Home extends PureComponent {
   componentWillMount() {
     this.props.joinLobby();
   }
@@ -17,30 +17,26 @@ export default class Home extends PureRenderComponent {
     this.props.leaveLobby();
   }
 
-  renderEmptyGamesPlaceholder() {
-    return (
-      <div className="home__section">
-        <p className="home__placeholder">No game in progress :(</p>
-      </div>
-    );
-  }
+  renderEmptyGamesPlaceholder = () => (
+    <div className="home__section">
+      <p className="home__placeholder">No game in progress :(</p>
+    </div>
+  );
 
-  renderPlayersGames(games) {
-    return (
-      <div className="home__section">
-        <h2 className="home__section-title">My Games</h2>
-        <GameList games={games} onSelectGame={this.onSelectGame.bind(this)} />
-      </div>
-    );
-  }
+  renderPlayersGames = games => (
+    <div className="home__section">
+      <h2 className="home__section-title">My Games</h2>
+      <GameList games={games} onSelectGame={this.onSelectGame} />
+    </div>
+  );
 
-  onSelectGame(game) {
+  onSelectGame = game => {
     this.props.updatePath(`/games/${game.id}`);
-  }
+  };
 
   render() {
-    const isAuthenticated = !!this.props.player,
-      { playersGames, currentGames } = this.props;
+    const isAuthenticated = !!this.props.player;
+    const { playersGames, currentGames } = this.props;
 
     return (
       <div className="home">
@@ -52,9 +48,11 @@ export default class Home extends PureRenderComponent {
               <StrokedText text="Create Game" />
             </Link>
 
-            {isAuthenticated && playersGames.length
-              ? this.renderPlayersGames(playersGames)
-              : this.renderEmptyGamesPlaceholder()}
+            {isAuthenticated && playersGames.length ? (
+              this.renderPlayersGames(playersGames)
+            ) : (
+              this.renderEmptyGamesPlaceholder()
+            )}
 
             <div className="home__section">
               <h2 className="home__section-title">Current Games</h2>
@@ -63,7 +61,7 @@ export default class Home extends PureRenderComponent {
               ) : (
                 <GameList
                   games={currentGames}
-                  onSelectGame={this.onSelectGame.bind(this)}
+                  onSelectGame={this.onSelectGame}
                 />
               )}
             </div>
@@ -84,13 +82,15 @@ function canJoinGame(game) {
 
 function mapStateToProps(state) {
   // Should data massaging happen here ?
-  const games = state.games || [],
-    player = state.authentication.player,
-    playerId = player ? player.id : undefined,
-    playersGames = games.filter(g => isPlayerPartOfGame(g, playerId)),
-    currentGames = games.filter(
-      g => canJoinGame(g) && !playersGames.some(g2 => g.id === g2.id)
-    );
+  const games = state.games || [];
+
+  const player = state.authentication.player;
+  const playerId = player ? player.id : undefined;
+  const playersGames = games.filter(g => isPlayerPartOfGame(g, playerId));
+
+  const currentGames = games.filter(
+    g => canJoinGame(g) && !playersGames.some(g2 => g.id === g2.id)
+  );
 
   return {
     playersGames,

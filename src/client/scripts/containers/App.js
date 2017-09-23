@@ -1,3 +1,4 @@
+import React from "react";
 import ErrorMessagesContainer from "client/containers/ErrorMessagesContainer";
 
 export default props => (

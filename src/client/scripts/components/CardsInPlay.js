@@ -1,3 +1,4 @@
+import React from "react";
 import CardPile from "./CardPile";
 import classNames from "classnames/dedupe";
 

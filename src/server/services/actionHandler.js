@@ -1,16 +1,16 @@
-import log from "server/log";
-import socketService from "server/services/socket";
-import gameService from "server/services/game";
-import gameplayService from "server/services/gameplay";
-import authService from "server/services/authentication";
-import realtimeHandler from "server/services/realtimeHandler";
+const log = require("server/log");
+const socketService = require("server/services/socket");
+const gameService = require("server/services/game");
+const gameplayService = require("server/services/gameplay");
+const authService = require("server/services/authentication");
+const realtimeHandler = require("server/services/realtimeHandler");
 
 function start() {
   socketService.on("connection", handleNewClient);
 }
 
 function handleAction(socket, action, player) {
-  log.info({ action: action });
+  log.info({ action });
 
   switch (action.type) {
     case "LOGIN":
@@ -79,7 +79,7 @@ function handleAction(socket, action, player) {
       );
 
     default:
-      return Promise.reject("Unhandled action: " + action.type);
+      return Promise.reject(`Unhandled action: ${action.type}`);
   }
 }
 
@@ -96,7 +96,7 @@ function handleNewClient(socket) {
       .then(
         result => sendBack(result),
         error => {
-          console.log("error : " + error);
+          console.log(`error : ${error}`);
           log.error({ error });
           sendBack({ error });
         }
@@ -107,6 +107,4 @@ function handleNewClient(socket) {
   );
 }
 
-export default {
-  start,
-};
+module.exports = { start };

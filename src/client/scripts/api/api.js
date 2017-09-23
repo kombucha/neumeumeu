@@ -1,4 +1,5 @@
-let socket, store;
+let socket;
+let store;
 
 function init(_socket, _store) {
   socket = _socket;
@@ -16,15 +17,15 @@ function emitAction(action, waitForResponse = true) {
       return reject("Api was not initialized");
     }
 
-    const cb = waitForResponse
-      ? result => {
-          if (result.error) {
-            return reject(result.error);
-          }
-
-          return resolve(result);
+    const cb = waitForResponse ?
+      result => {
+        if (result.error) {
+          return reject(result.error);
         }
-      : undefined;
+
+        return resolve(result);
+      } :
+      undefined;
 
     socket.emit("action", action, cb);
 
@@ -32,10 +33,7 @@ function emitAction(action, waitForResponse = true) {
       return Promise.resolve(action);
     }
   }).catch(result => {
-    console.warn(
-      `Received error "${JSON.stringify(result, null, 2)}" for action`,
-      action
-    ); // eslint-disable-line no-console
+    console.warn(`Received error "${JSON.stringify(result, null, 2)}" for action`, action); // eslint-disable-line no-console
     return Promise.reject(result);
   });
 }

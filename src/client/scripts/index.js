@@ -1,3 +1,4 @@
+import React from "react";
 import ReactDOM from "react-dom";
 import Router, { Route } from "react-router";
 import { Provider } from "react-redux";
@@ -28,23 +29,24 @@ const requireAuth = auth(store);
 
 // ROUTING
 const ROUTES = (
-    <Route component={App}>
-      <Route path="/" component={HomeContainer} />
-      <Route path="/register" component={RegisterContainer} />
-      <Route
-        path="/games/create"
-        component={GameCreationContainer}
-        onEnter={requireAuth}
-      />
-      <Route
-        path="/games/:gameId"
-        component={GameContainer}
-        onEnter={requireAuth}
-      />
-      <Route path="/games/:gameId/results" component={GameResultsContainer} />
-    </Route>
-  ),
-  history = createBrowserHistory();
+  <Route component={App}>
+    <Route path="/" component={HomeContainer} />
+    <Route path="/register" component={RegisterContainer} />
+    <Route
+      path="/games/create"
+      component={GameCreationContainer}
+      onEnter={requireAuth}
+    />
+    <Route
+      path="/games/:gameId"
+      component={GameContainer}
+      onEnter={requireAuth}
+    />
+    <Route path="/games/:gameId/results" component={GameResultsContainer} />
+  </Route>
+);
+
+const history = createBrowserHistory();
 
 syncReduxAndRouter(history, store);
 

@@ -30,31 +30,35 @@ function play(step, gameDomElement, currentPlayerIndex) {
 }
 
 function animateCard(fromPlayer, toPile, gameDomElement) {
-  var card = getCardFromPlayer(fromPlayer, gameDomElement),
-    innerCard = card.getElementsByClassName("card--player")[0],
-    cardCoord = card.getBoundingClientRect(),
-    pileCoord = getPile(toPile, gameDomElement).getBoundingClientRect(),
-    cardEndCoords = {
-      top:
-        pileCoord.top +
-        pileCoord.height -
-        (pileCoord.height > 0
-          ? animationSettings.cardHeight - animationSettings.pileSpace
-          : 0),
-      left: pileCoord.left,
-    },
-    options = {
-      duration: animationSettings.duration,
-      delay: animationSettings.delay,
-    },
-    cardProp = {
-      top: [cardEndCoords.top, cardCoord.top],
-      left: [cardEndCoords.left, cardCoord.left],
-    },
-    innerCardProp = {
-      translateX: [0, animationSettings.cardTranslateX],
-      scale: [1, animationSettings.cardScale],
-    };
+  var card = getCardFromPlayer(fromPlayer, gameDomElement);
+  var innerCard = card.getElementsByClassName("card--player")[0];
+  var cardCoord = card.getBoundingClientRect();
+  var pileCoord = getPile(toPile, gameDomElement).getBoundingClientRect();
+
+  var cardEndCoords = {
+    top:
+      pileCoord.top +
+      pileCoord.height -
+      (pileCoord.height > 0
+        ? animationSettings.cardHeight - animationSettings.pileSpace
+        : 0),
+    left: pileCoord.left,
+  };
+
+  var options = {
+    duration: animationSettings.duration,
+    delay: animationSettings.delay,
+  };
+
+  var cardProp = {
+    top: [cardEndCoords.top, cardCoord.top],
+    left: [cardEndCoords.left, cardCoord.left],
+  };
+
+  var innerCardProp = {
+    translateX: [0, animationSettings.cardTranslateX],
+    scale: [1, animationSettings.cardScale],
+  };
 
   // Init card's CSS
   setStyle(card, {
@@ -73,21 +77,24 @@ function animateCard(fromPlayer, toPile, gameDomElement) {
 }
 
 function animatePile(fromPile, toPlayer, gameDomElement, currentPlayerIndex) {
-  var pile = getPile(fromPile, gameDomElement),
-    pileCards = pile.getElementsByClassName("card--pile"),
-    card = pileCards[0].getBoundingClientRect(),
-    isCurrentPlayer = toPlayer == currentPlayerIndex,
-    target = isCurrentPlayer
-      ? gameDomElement.querySelectorAll(".malus .stroked-text")[0]
-      : getPlayer(toPlayer, gameDomElement),
-    targetCoord = target.getBoundingClientRect(),
-    sequence = [],
-    pileCardsProp = {
-      top: targetCoord.top - card.height / 2 + targetCoord.height / 2,
-      left: targetCoord.left - card.width / 2 + targetCoord.width / 2,
-      scale: 0.2,
-      rotateZ: [45, 0],
-    };
+  var pile = getPile(fromPile, gameDomElement);
+  var pileCards = pile.getElementsByClassName("card--pile");
+  var card = pileCards[0].getBoundingClientRect();
+  var isCurrentPlayer = toPlayer === currentPlayerIndex;
+
+  var target = isCurrentPlayer
+    ? gameDomElement.querySelectorAll(".malus .stroked-text")[0]
+    : getPlayer(toPlayer, gameDomElement);
+
+  var targetCoord = target.getBoundingClientRect();
+  var sequence = [];
+
+  var pileCardsProp = {
+    top: targetCoord.top - card.height / 2 + targetCoord.height / 2,
+    left: targetCoord.left - card.width / 2 + targetCoord.width / 2,
+    scale: 0.2,
+    rotateZ: [45, 0],
+  };
 
   pileCards = Array.prototype.slice.call(pileCards);
 
@@ -96,8 +103,8 @@ function animatePile(fromPile, toPlayer, gameDomElement, currentPlayerIndex) {
     var pileCardCoord = pileCard.getBoundingClientRect();
     setStyle(pileCard, {
       position: "absolute",
-      top: pileCardCoord.top + "px",
-      left: pileCardCoord.left + "px",
+      top: `${pileCardCoord.top}px`,
+      left: `${pileCardCoord.left}px`,
       "z-index": 7,
     });
   });
@@ -130,8 +137,8 @@ function animatePile(fromPile, toPlayer, gameDomElement, currentPlayerIndex) {
 }
 
 function shake(element, duration = 400, intensity = 3) {
-  var sequence = [],
-    shakeDuration = 20;
+  var sequence = [];
+  var shakeDuration = 20;
 
   for (var i = 0; i < duration / shakeDuration; i++) {
     sequence.push({

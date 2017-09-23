@@ -1,12 +1,3 @@
-extends: ["eslint:recommended", "prettier"]
-env:
-  es6: true
-  browser: true
-  node: true
-ecmaFeatures:
-  jsx: true
-  modules: true
-plugins:
-  - "react"
+extends: ["eslint:recommended", "react-app", "prettier"]
 globals:
   __USE_MOCKS__: true

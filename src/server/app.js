@@ -1,18 +1,17 @@
-import config from "../config";
-import { Server } from "http";
-import path from "path";
-import express from "express";
-import html5History from "connect-history-api-fallback";
-import compression from "compression";
-// import attachRealtimeServer from 'server/socket';
-import socketService from "server/services/socket";
-import actionHandler from "server/services/actionHandler";
-import realtimeHandler from "server/services/realtimeHandler";
-import log from "server/log";
+const config = require("../config");
+const { Server } = require("http");
+const path = require("path");
+const express = require("express");
+const html5History = require("connect-history-api-fallback");
+const compression = require("compression");
+const socketService = require("server/services/socket");
+const actionHandler = require("server/services/actionHandler");
+const realtimeHandler = require("server/services/realtimeHandler");
+const log = require("server/log");
 
-const app = express(),
-  server = Server(app),
-  staticAssetsPath = path.resolve(__dirname, "..", "..", "dist");
+const app = express();
+const server = Server(app);
+const staticAssetsPath = path.resolve(__dirname, "..", "..", "dist");
 
 app
   .use(html5History())

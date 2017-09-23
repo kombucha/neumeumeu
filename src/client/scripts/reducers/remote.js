@@ -31,7 +31,7 @@ export default function remote(state = DEFAULT_STATE, action) {
       return joinRoom(state, action.id);
     case "LEAVE_ROOM":
       return leaveRoom(state, action.id);
+    default:
+      return state;
   }
-
-  return state;
 }

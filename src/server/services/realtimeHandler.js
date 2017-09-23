@@ -1,8 +1,8 @@
-import log from "server/log";
-import GameStatus from "common/constants/game-status";
-import socketService from "server/services/socket";
-import gameService from "server/services/game";
-import gameplayService from "server/services/gameplay";
+const log = require("server/log");
+const GameStatus = require("common/constants/game-status");
+const socketService = require("server/services/socket");
+const gameService = require("server/services/game");
+const gameplayService = require("server/services/gameplay");
 
 function start() {
   startRealtimeLobbyUpdate();
@@ -31,11 +31,13 @@ function onGameUpdate(newGame, oldGame, end) {
   }
 
   log.info("Game update", newGame.id, newGame.status);
+
   const shouldSendResolutionSteps =
-      newGame.status === GameStatus.SOLVED &&
-      oldGame &&
-      oldGame.status !== newGame.status,
-    shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;
+    newGame.status === GameStatus.SOLVED &&
+    oldGame &&
+    oldGame.status !== newGame.status;
+
+  const shouldSendUpdate = newGame.status !== GameStatus.SOLVED || !oldGame;
 
   // When game is solved, send a special game object
   // With details as to how to solve the game
@@ -80,7 +82,7 @@ function startRunningGamesRealtimeUpdate() {
   });
 }
 
-export default {
+module.exports = {
   start,
   startGameRealtimeUpdate,
 };

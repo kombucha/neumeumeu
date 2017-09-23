@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   { name: "Avatar 1", value: "/images/players/avatar-01.svg" },
   { name: "Avatar 2", value: "/images/players/avatar-02.svg" },
   { name: "Avatar 3", value: "/images/players/avatar-03.svg" },

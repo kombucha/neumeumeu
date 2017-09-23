@@ -1,3 +1,4 @@
+import React from "react";
 import GameItem from "client/components/GameItem";
 
 export default ({ games, onSelectGame }) => {

@@ -11,12 +11,12 @@ function requestInterval(fn, delay) {
     return setInterval(fn, delay);
   }
 
-  var start = new Date().getTime(),
-    handle = new Object();
+  var start = new Date().getTime();
+  var handle = {};
 
   function loop() {
-    var current = new Date().getTime(),
-      delta = current - start;
+    var current = new Date().getTime();
+    var delta = current - start;
 
     if (delta >= delay) {
       fn.call();

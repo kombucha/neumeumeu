@@ -1,11 +1,11 @@
-import PureRenderComponent from "client/components/PureRenderComponent";
+import React, { PureComponent } from "react";
 import LoginForm from "client/components/LoginForm";
 import RegisterForm from "client/components/RegisterForm";
 
-export default class Register extends PureRenderComponent {
+export default class Register extends PureComponent {
   render() {
-    const { query } = this.props.location,
-      redirectTo = query ? query.redirectTo : undefined;
+    const { query } = this.props.location;
+    const redirectTo = query ? query.redirectTo : undefined;
 
     return (
       <div>

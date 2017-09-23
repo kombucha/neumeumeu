@@ -10,10 +10,11 @@ export default function configureStore(initialState) {
     Object.assign({}, reducers, { routing: routeReducer })
   );
 
-  let middlewares = [thunkMiddleware, gameInflaterMiddleware],
-    storeEnhancers = [
-      persistState("authentication", { key: "card-game-auth" }),
-    ];
+  let middlewares = [thunkMiddleware, gameInflaterMiddleware];
+
+  let storeEnhancers = [
+    persistState("authentication", { key: "card-game-auth" }),
+  ];
 
   if (process.env.NODE_ENV !== "production") {
     middlewares = [

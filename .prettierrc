@@ -1,4 +1,5 @@
 {
+  "printWidth": 80,
   "jsxBracketSameLine": true,
   "trailingComma": "es5"
 }

@@ -4,9 +4,9 @@ import { updateRemoteStatus, joinRoom } from "client/actions";
 
 function bindSocketToStore(socket, store) {
   socket.on("connect", () => {
-    const state = store.getState(),
-      currentPlayer = state.authentication.player,
-      rooms = state.remote.rooms;
+    const state = store.getState();
+    const currentPlayer = state.authentication.player;
+    const rooms = state.remote.rooms;
 
     // Set remote connected
     store.dispatch(updateRemoteStatus(true));
@@ -28,6 +28,7 @@ function configureSocket() {
     return { on: () => null };
   }
 
+  const { location } = window;
   const portSuffix = location.port ? `:${location.port}` : "";
 
   return io(`${location.protocol}//${location.hostname}${portSuffix}`);

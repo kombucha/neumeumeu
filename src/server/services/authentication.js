@@ -1,7 +1,7 @@
-import crypto from "crypto";
-import r from "server/database";
-import Errors from "common/constants/errors";
-import { promisify } from "common/utils";
+const crypto = require("crypto");
+const r = require("server/database");
+const Errors = require("common/constants/errors");
+const { promisify } = require("common/utils");
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
@@ -154,7 +154,7 @@ function hashAndSaltPassword(password, salt) {
   );
 }
 
-export default {
+module.exports = {
   getPlayerFromToken,
   register,
   login,

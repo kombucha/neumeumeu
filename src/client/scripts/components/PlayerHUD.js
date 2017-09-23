@@ -1,3 +1,4 @@
+import React from "react";
 import Hand from "client/components/Hand";
 import Malus from "client/components/Malus";
 import PlayerMenu from "client/components/playerMenu";

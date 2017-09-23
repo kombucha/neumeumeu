@@ -1,12 +1,12 @@
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { sortBy } from "common/utils";
-import PureRenderComponent from "client/components/PureRenderComponent";
 import Fireworks from "client/components/Fireworks";
 import { joinGame, leaveGame } from "client/actions";
 import StrokedText from "client/components/StrokedText";
 
-export default class GameResults extends PureRenderComponent {
+export default class GameResults extends PureComponent {
   componentWillMount() {
     const gameId = this.props.params.gameId;
     this.props.joinGame(gameId);
@@ -25,7 +25,7 @@ export default class GameResults extends PureRenderComponent {
           {rankedPlayers.map((p, idx) => (
             <li key={p.id} className="game-results__player">
               <span className="game-results__player__malus">
-                <StrokedText text={p.malus + "pts"} />
+                <StrokedText text={`${p.malus}pts`} />
               </span>
               <span className="game-results__player__name">
                 {idx === 0 ? <Fireworks /> : null}

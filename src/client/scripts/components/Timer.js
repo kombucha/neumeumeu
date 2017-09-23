@@ -1,27 +1,27 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import classNames from "classnames/dedupe";
 
 export default class Timer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       timer: null,
       countdown: props.countdown || 0,
     };
-    this.tick = this.tick.bind(this);
-    this.stopCountDown = this.stopCountDown.bind(this);
   }
+
   componentDidMount() {
     let timer = setInterval(this.tick, 1000);
     this.setState({ timer });
   }
+
   componentWillUnmount() {
     if (this.state.timer) {
       this.stopCountDown();
     }
   }
-  tick() {
+
+  tick = () => {
     this.setState({
       countdown: this.state.countdown - 1,
     });
@@ -31,13 +31,13 @@ export default class Timer extends Component {
       }
       this.stopCountDown();
     }
-  }
-  stopCountDown() {
+  };
+
+  stopCountDown = () => {
     clearInterval(this.state.timer);
-    this.setState({
-      timer: null,
-    });
-  }
+    this.setState({ timer: null });
+  };
+
   render() {
     let alertClass = "";
     if (this.state.countdown > 0) {

@@ -1,20 +1,21 @@
-import r from "server/database";
-import { getPlayer } from "server/services/player";
-import { range } from "common/utils";
-import PlayerStatus from "common/constants/player-status";
-import ChatConf from "common/constants/chat";
-import GameStatus from "common/constants/game-status";
-import { createMessage } from "./gameplay";
+const r = require("server/database");
+const { getPlayer } = require("server/services/player");
+const { range } = require("common/utils");
+const PlayerStatus = require("common/constants/player-status");
+const ChatConf = require("common/constants/chat");
+const GameStatus = require("common/constants/game-status");
+const { createMessage } = require("./gameplay");
 
 const simpleGameProjection = [
-    "id",
-    "isProtected",
-    "maxPlayers",
-    "status",
-    "name",
-    { players: ["id", "name"] },
-  ],
-  MAX_CONCURRENT_GAMES = 5;
+  "id",
+  "isProtected",
+  "maxPlayers",
+  "status",
+  "name",
+  { players: ["id", "name"] },
+];
+
+const MAX_CONCURRENT_GAMES = 5;
 
 function createGamePlayer(player) {
   return {
@@ -63,27 +64,30 @@ function checkOnGoingGames(playerId) {
 
 function createGame(playerId, options) {
   const maxMalus = isNaN(options.maxMalus)
-      ? 66
-      : parseInt(options.maxMalus, 10),
-    maxPlayers = isNaN(options.maxPlayers)
-      ? 10
-      : parseInt(options.maxPlayers, 10),
-    botsCount = isNaN(options.botsCount)
-      ? 0
-      : Math.min(maxPlayers, parseInt(options.botsCount, 10)),
-    newGame = {
-      name: options.name,
-      enableUserActionTimeout: options.enableUserActionTimeout,
-      password: options.password,
-      maxMalus,
-      maxPlayers,
+    ? 66
+    : parseInt(options.maxMalus, 10);
 
-      creationDate: r.now(),
-      status: GameStatus.WAITING_FOR_PLAYERS,
-      players: range(Math.max(0, botsCount)).map(createBot),
-      owner: playerId,
-      cardsInPlay: [[], [], [], []],
-    };
+  const maxPlayers = isNaN(options.maxPlayers)
+    ? 10
+    : parseInt(options.maxPlayers, 10);
+
+  const botsCount = isNaN(options.botsCount)
+    ? 0
+    : Math.min(maxPlayers, parseInt(options.botsCount, 10));
+
+  const newGame = {
+    name: options.name,
+    enableUserActionTimeout: options.enableUserActionTimeout,
+    password: options.password,
+    maxMalus,
+    maxPlayers,
+
+    creationDate: r.now(),
+    status: GameStatus.WAITING_FOR_PLAYERS,
+    players: range(Math.max(0, botsCount)).map(createBot),
+    owner: playerId,
+    cardsInPlay: [[], [], [], []],
+  };
 
   return checkOnGoingGames(playerId)
     .then(() => getPlayer(playerId))
@@ -137,9 +141,9 @@ function joinGame(playerId, gameId, password = "") {
       )
       .run()
       .then(result => {
-        const game = result.changes[0]["new_val"],
-          hasChanged = result.unchanged !== 1,
-          hasAlreadyJoined = game.players.find(p => p.id === playerId);
+        const game = result.changes[0]["new_val"];
+        const hasChanged = result.unchanged !== 1;
+        const hasAlreadyJoined = game.players.find(p => p.id === playerId);
 
         if (hasChanged || hasAlreadyJoined) {
           return game;
@@ -182,7 +186,7 @@ function onLobbyUpdate(cb) {
     });
 }
 
-export default {
+module.exports = {
   createGame,
   joinGame,
   getCurrentGames,

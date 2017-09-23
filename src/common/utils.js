@@ -39,10 +39,10 @@ function sum(selector, arr) {
 
 // http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
 function shuffle(arr) {
-  let arrCopy = arr.slice(),
-    counter = arrCopy.length,
-    temp,
-    index;
+  let arrCopy = arr.slice();
+  let counter = arrCopy.length;
+  let temp;
+  let index;
 
   // While there are elements in the arrCopy
   while (counter > 0) {
@@ -94,7 +94,7 @@ function dateInSeconds(date) {
   return Math.floor(date / 1000);
 }
 
-export default {
+module.exports = {
   copyArray,
   randomInt,
   pickRandom,

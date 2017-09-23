@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   IDLE: "idle",
   CHOOSING_CARD: "choosing_card",
   PLAYED_CARD: "played_card",

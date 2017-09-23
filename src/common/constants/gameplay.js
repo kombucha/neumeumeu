@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   ENABLE_TIMEOUT: true,
   CHOOSE_CARD_TIMEOUT: 30,
   CHOOSE_PILE_TIMEOUT: 30,

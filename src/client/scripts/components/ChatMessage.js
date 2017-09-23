@@ -1,8 +1,10 @@
+import React, { Component } from "react";
 import classNames from "classnames/dedupe";
 import { shake } from "client/helpers/animate";
-import { Component } from "react";
 
 export default class ChatMessage extends Component {
+  state = {};
+
   componentWillReceiveProps(nextProps) {
     // reset the timer if children are changed
     if (
@@ -15,7 +17,7 @@ export default class ChatMessage extends Component {
       });
 
       if (
-        !this.isHidden() &&
+        !this.state.hidden &&
         this.props.message.notificationEffect &&
         !this.props.isCurrentPlayer
       ) {
@@ -23,6 +25,7 @@ export default class ChatMessage extends Component {
       }
     }
   }
+
   componentDidMount() {
     if (this.props.message.notificationEffect && !this.props.isCurrentPlayer) {
       //Animation for the first message
@@ -34,42 +37,41 @@ export default class ChatMessage extends Component {
   componentWillUnmount() {
     clearTimeout(this._timer);
   }
-  hide() {
+
+  hide = () => {
     clearTimeout(this._timer);
     this.setState({
       hidden: true,
     });
-  }
-  isHidden() {
-    return this.state && this.state.hidden;
-  }
-  setTimer() {
+  };
+
+  setTimer = () => {
     // clear any existing timer
-    this._timer != null ? clearTimeout(this._timer) : null;
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
 
     // hide after `delay` milliseconds
-    this._timer = setTimeout(
-      function() {
-        this.setState({
-          hidden: true,
-        });
-        this._timer = null;
-      }.bind(this),
-      this.props.message.expire
-    );
-  }
+    this._timer = setTimeout(() => {
+      this.setState({
+        hidden: true,
+      });
+      this._timer = null;
+    }, this.props.message.expire);
+  };
+
   render() {
     const classes = classNames(
       "chat__message",
       this.props.className,
-      this.isHidden() ? "message-hidden" : "message-shown"
+      this.state.hidden ? "message-hidden" : "message-shown"
     );
 
     return (
       <div
         ref="messageDiv"
         className={classes}
-        onClick={this.props.hideOnClick ? this.hide.bind(this) : null}>
+        onClick={this.props.hideOnClick ? this.hide : null}>
         <div className="chat__message__arrow" />
         <span className="chat__message__contents">
           {this.props.message.text}

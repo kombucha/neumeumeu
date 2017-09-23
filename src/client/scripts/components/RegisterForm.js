@@ -1,3 +1,4 @@
+import React from "react";
 import { connect } from "react-redux";
 import AVATARS from "common/constants/avatars";
 import { register, addErrorMessage } from "client/actions";
@@ -5,18 +6,15 @@ import FormComponent from "client/components/FormComponent";
 import StrokedText from "client/components/StrokedText";
 
 class RegisterForm extends FormComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      avatarURL: AVATARS[0].value,
-    };
-  }
+  state = {
+    avatarURL: AVATARS[0].value,
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
 
-    const validation = this.validate(this.state),
-      hasErrors = validation.errors.length > 0;
+    const validation = this.validate(this.state);
+    const hasErrors = validation.errors.length > 0;
 
     if (hasErrors) {
       const firstError = validation.errors[0];
@@ -24,20 +22,21 @@ class RegisterForm extends FormComponent {
     }
 
     const newUser = Object.assign(
-        {},
-        {
-          username: this.state.username,
-          password: this.state.password,
-          avatarURL: this.state.avatarURL,
-          email: this.state.email,
-        }
-      ),
-      { redirectTo } = this.props;
+      {},
+      {
+        username: this.state.username,
+        password: this.state.password,
+        avatarURL: this.state.avatarURL,
+        email: this.state.email,
+      }
+    );
+
+    const { redirectTo } = this.props;
 
     this.props.register(newUser, redirectTo);
-  }
+  };
 
-  validate(formValues) {
+  validate = formValues => {
     const errors = [];
 
     if (formValues.password !== formValues.confirmPassword) {
@@ -48,11 +47,11 @@ class RegisterForm extends FormComponent {
     }
 
     return { errors };
-  }
+  };
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit}>
         <input
           id="username"
           type="text"

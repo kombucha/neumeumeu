@@ -1,7 +1,5 @@
-import bunyan from "bunyan";
+const bunyan = require("bunyan");
 
-const log = bunyan.createLogger({
-  name: "jeu-de-carte",
-});
+const log = bunyan.createLogger({ name: "jeu-de-carte" });
 
-export default log;
+module.exports = log;

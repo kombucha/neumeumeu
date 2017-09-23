@@ -1,5 +1,5 @@
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import PureRenderComponent from "client/components/PureRenderComponent";
 import actionCreators from "client/actions";
 
 import GameStatus from "common/constants/game-status";
@@ -15,7 +15,7 @@ import ChatBox from "client/components/ChatBox";
 import Timer from "client/components/Timer";
 import GameplayConstants from "common/constants/gameplay";
 
-export default class Game extends PureRenderComponent {
+export default class Game extends PureComponent {
   componentWillMount() {
     const gameId = this.props.params.gameId;
     this.props.joinGame(gameId);
@@ -23,11 +23,11 @@ export default class Game extends PureRenderComponent {
 
   componentDidUpdate() {
     const {
-        applyResolutionStep,
-        resolutionStep,
-        currentPlayerIndex,
-      } = this.props,
-      shouldAnimate = !!resolutionStep;
+      applyResolutionStep,
+      resolutionStep,
+      currentPlayerIndex,
+    } = this.props;
+    const shouldAnimate = !!resolutionStep;
 
     if (shouldAnimate) {
       return Animate(
@@ -60,89 +60,74 @@ export default class Game extends PureRenderComponent {
     }
   }
 
-  startGame() {
+  startGame = () => {
     this.props.startGame(this.props.game.id);
-  }
+  };
 
-  playCard(card) {
+  playCard = card => {
     this.props.playCard(this.props.game.id, card.value);
-  }
+  };
 
-  autoPlayCard() {
+  autoPlayCard = () => {
     this.props.playCard(this.props.game.id, GameplayConstants.AUTO_CARD_VALUE);
-  }
-  autoChoosePile() {
+  };
+  autoChoosePile = () => {
     this.handlePileSelected(GameplayConstants.AUTO_PILE_VALUE);
-  }
+  };
 
-  cancelCard() {
+  cancelCard = () => {
     this.props.cancelCard(this.props.game.id);
-  }
+  };
 
-  sendChatMessage(messageText) {
+  sendChatMessage = messageText => {
     this.props.sendChatMessage(this.props.game.id, messageText);
-  }
+  };
 
-  getReady(gameId) {
+  getReady = gameId => {
     return this.props.playerReady(gameId);
-  }
+  };
 
-  handlePileSelected(pile) {
+  handlePileSelected = pile => {
     if (this.props.game.status !== GameStatus.WAITING_FOR_PILE_CHOICE) {
       return;
     }
 
     this.props.choosePile(this.props.game.id, pile);
-  }
+  };
 
-  renderLoadingGame() {
-    return <div>Joining game...</div>;
-  }
+  renderLoadingGame = () => <div>Joining game...</div>;
 
-  renderPreGameHUD(canStartGame) {
-    return canStartGame ? (
-      this.renderStartGame()
-    ) : (
-      <div>Waiting for players</div>
-    );
-  }
+  renderPreGameHUD = canStartGame =>
+    canStartGame ? this.renderStartGame() : <div>Waiting for players</div>;
 
-  renderPlayerHUD(game, player) {
-    return (
-      <PlayerHud
-        player={player}
-        gameId={game.id}
-        gameStatus={game.status}
-        onHandCardClicked={this.playCard.bind(this)}
-        onSelectedCardClicked={this.cancelCard.bind(this)}
-      />
-    );
-  }
+  renderPlayerHUD = (game, player) => (
+    <PlayerHud
+      player={player}
+      gameId={game.id}
+      gameStatus={game.status}
+      onHandCardClicked={this.playCard}
+      onSelectedCardClicked={this.cancelCard}
+    />
+  );
 
-  renderChatBox() {
-    return (
-      <div className="chat__entry__box">
-        <ChatBox
-          onSubmitMessage={this.sendChatMessage.bind(this)}
-          autoFocus={true}
-        />
-      </div>
-    );
-  }
+  renderChatBox = () => (
+    <div className="chat__entry__box">
+      <ChatBox onSubmitMessage={this.sendChatMessage} autoFocus />
+    </div>
+  );
 
-  renderTimer(currentStatus) {
+  renderTimer = currentStatus => {
     const coundownTimeout =
-        currentStatus === PlayerStatus.CHOOSING_CARD
-          ? GameplayConstants.CHOOSE_CARD_TIMEOUT
-          : GameplayConstants.CHOOSE_PILE_TIMEOUT,
-      timeoutAction =
-        currentStatus === PlayerStatus.CHOOSING_CARD
-          ? this.autoPlayCard.bind(this)
-          : this.autoChoosePile.bind(this),
-      alertText =
-        currentStatus === PlayerStatus.CHOOSING_CARD
-          ? "Play your card !"
-          : null;
+      currentStatus === PlayerStatus.CHOOSING_CARD
+        ? GameplayConstants.CHOOSE_CARD_TIMEOUT
+        : GameplayConstants.CHOOSE_PILE_TIMEOUT;
+
+    const timeoutAction =
+      currentStatus === PlayerStatus.CHOOSING_CARD
+        ? this.autoPlayCard
+        : this.autoChoosePile;
+    const alertText =
+      currentStatus === PlayerStatus.CHOOSING_CARD ? "Play your card !" : null;
 
     return (
       <div className="timer__container">
@@ -153,26 +138,24 @@ export default class Game extends PureRenderComponent {
         />
       </div>
     );
-  }
+  };
 
-  renderStartGame() {
-    return (
-      <button
-        className="game__start button"
-        type="button"
-        onClick={this.startGame.bind(this)}>
-        <StrokedText text="Start game" />
-      </button>
-    );
-  }
+  renderStartGame = () => (
+    <button
+      className="game__start button"
+      type="button"
+      onClick={this.startGame}>
+      <StrokedText text="Start game" />
+    </button>
+  );
 
-  renderGame(game) {
-    const { currentPlayer, currentPlayerIndex } = this.props,
-      isOwner = game.owner === currentPlayer.id,
-      gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS,
-      topPlayers = game.players,
-      canStartGame = !gameStarted && isOwner && game.players.length >= 2,
-      canCancelCard = game.status === GameStatus.WAITING_FOR_CARDS;
+  renderGame = game => {
+    const { currentPlayer, currentPlayerIndex } = this.props;
+    const isOwner = game.owner === currentPlayer.id;
+    const gameStarted = game.status !== GameStatus.WAITING_FOR_PLAYERS;
+    const topPlayers = game.players;
+    const canStartGame = !gameStarted && isOwner && game.players.length >= 2;
+    const canCancelCard = game.status === GameStatus.WAITING_FOR_CARDS;
 
     return (
       <div className="game">
@@ -180,7 +163,7 @@ export default class Game extends PureRenderComponent {
           players={topPlayers}
           currentPlayerIndex={currentPlayerIndex}
           canCancelCard={canCancelCard}
-          cancelCard={this.cancelCard.bind(this)}
+          cancelCard={this.cancelCard}
         />
 
         {gameStarted ? (
@@ -189,7 +172,7 @@ export default class Game extends PureRenderComponent {
             canSelectPiles={
               currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE
             }
-            onPileSelected={this.handlePileSelected.bind(this)}
+            onPileSelected={this.handlePileSelected}
           />
         ) : null}
 
@@ -201,16 +184,18 @@ export default class Game extends PureRenderComponent {
 
         {game.enableUserActionTimeout &&
         (currentPlayer.status === PlayerStatus.CHOOSING_CARD ||
-          currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE)
-          ? this.renderTimer(currentPlayer.status)
-          : null}
+          currentPlayer.status === PlayerStatus.HAS_TO_CHOOSE_PILE) ? (
+          this.renderTimer(currentPlayer.status)
+        ) : null}
 
-        {gameStarted
-          ? this.renderPlayerHUD(game, currentPlayer)
-          : this.renderPreGameHUD(canStartGame)}
+        {gameStarted ? (
+          this.renderPlayerHUD(game, currentPlayer)
+        ) : (
+          this.renderPreGameHUD(canStartGame)
+        )}
       </div>
     );
-  }
+  };
 
   render() {
     const { game } = this.props;
@@ -219,21 +204,22 @@ export default class Game extends PureRenderComponent {
 }
 
 function mapStateToProps(state) {
-  const game = state.gameplay,
-    resolutionStep =
-      game && game.resolutionSteps && game.resolutionSteps.length > 0
-        ? game.resolutionSteps[0]
-        : null,
-    currentPlayer = game
-      ? game.players.find(
-          player => player.id === state.authentication.player.id
-        )
-      : null,
-    currentPlayerIndex = game
-      ? game.players.findIndex(
-          player => player.id === state.authentication.player.id
-        )
+  const game = state.gameplay;
+
+  const resolutionStep =
+    game && game.resolutionSteps && game.resolutionSteps.length > 0
+      ? game.resolutionSteps[0]
       : null;
+
+  const currentPlayer = game
+    ? game.players.find(player => player.id === state.authentication.player.id)
+    : null;
+
+  const currentPlayerIndex = game
+    ? game.players.findIndex(
+        player => player.id === state.authentication.player.id
+      )
+    : null;
 
   return {
     game,

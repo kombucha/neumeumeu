@@ -9,15 +9,18 @@ function applyResolutionStep(game, step) {
     throw new Error("Invalid step resolution, you're doing it wrong", step);
   }
 
-  const newSteps = copyArray(game.resolutionSteps),
-    players = copyArray(game.players),
-    cardsInPlay = copyArray(game.cardsInPlay),
-    gameAtNextStep = {
-      players,
-      cardsInPlay,
-      resolutionSteps: newSteps,
-    };
-  let newPlayer, playerIdx;
+  const newSteps = copyArray(game.resolutionSteps);
+  const players = copyArray(game.players);
+  const cardsInPlay = copyArray(game.cardsInPlay);
+
+  const gameAtNextStep = {
+    players,
+    cardsInPlay,
+    resolutionSteps: newSteps,
+  };
+
+  let newPlayer;
+  let playerIdx;
   newSteps.shift();
 
   // Apply step
@@ -56,7 +59,7 @@ export default function games(state = null, action) {
       return applyResolutionStep(state, action.step);
     case "CLEAR_CURRENT_GAME":
       return null;
+    default:
+      return state;
   }
-
-  return state;
 }

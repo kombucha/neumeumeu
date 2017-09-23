@@ -1,8 +1,8 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import ChatConf from "common/constants/chat";
 
 export default class Chatbox extends Component {
-  handleEnterKey(ev) {
+  handleEnterKey = ev => {
     if (this.props.onSubmitMessage && ev.which === 13) {
       const trimmedMessage = this.refs.messageInput.value
         ? this.refs.messageInput.value.trim()
@@ -19,11 +19,11 @@ export default class Chatbox extends Component {
       }
       ev.preventDefault();
     }
-  }
-  handleDocumentKeyPress(ev) {
+  };
+  handleDocumentKeyPress = ev => {
     if (
-      ev.target.tagName.toLowerCase() != "input" &&
-      ev.target.tagName.toLowerCase() != "textarea"
+      ev.target.tagName.toLowerCase() !== "input" &&
+      ev.target.tagName.toLowerCase() !== "textarea"
     ) {
       var code = ev.which;
       if (
@@ -38,15 +38,11 @@ export default class Chatbox extends Component {
         ev.preventDefault();
       }
     }
-  }
+  };
   componentDidMount() {
     if (this.props.autoFocus) {
       //User can type without click on the input
-      window.addEventListener(
-        "keypress",
-        this.handleDocumentKeyPress.bind(this),
-        false
-      );
+      window.addEventListener("keypress", this.handleDocumentKeyPress, false);
     }
   }
   componentWillUnmount() {
@@ -54,7 +50,7 @@ export default class Chatbox extends Component {
       //Remove event where user can type without click on the input
       window.removeEventListener(
         "keypress",
-        this.handleDocumentKeyPress.bind(this),
+        this.handleDocumentKeyPress,
         false
       );
     }
@@ -68,7 +64,7 @@ export default class Chatbox extends Component {
         name="chat-message"
         maxLength={ChatConf.MESSAGE_MAX_LENGTH}
         placeholder="Type and press Enter !"
-        onKeyPress={this.handleEnterKey.bind(this)}
+        onKeyPress={this.handleEnterKey}
       />
     );
   }

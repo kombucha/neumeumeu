@@ -1,21 +1,16 @@
 {
-    "plugins": [
-        "babel-plugin-module-alias",
-        "react-require"
-    ],
-    "extra": {
-        "module-alias": [{
-            "src": "./src/client/scripts/",
-            "expose": "client"
-        }, {
-            "src": "./src/server/",
-            "expose": "server"
-        }, {
-            "src": "./src/common/",
-            "expose": "common"
-        }, {
-            "src": "./test/",
-            "expose": "test"
-        }]
-    }
+  "presets": ["env"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "client": "./src/client/scripts/",
+          "server": "./src/server/",
+          "common": "./src/common/",
+          "test": "./test/"
+        }
+      }
+    ]
+  ]
 }

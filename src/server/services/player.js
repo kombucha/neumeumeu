@@ -1,4 +1,4 @@
-import r from "server/database";
+const r = require("server/database");
 
 function getPlayer(playerId) {
   return r
@@ -7,6 +7,4 @@ function getPlayer(playerId) {
     .run();
 }
 
-export default {
-  getPlayer,
-};
+module.exports = { getPlayer };

@@ -1,3 +1,5 @@
+import React from "react";
+
 export default ({ game, onClick }) => {
   return (
     <button className="game-item" onClick={() => onClick(game)}>
