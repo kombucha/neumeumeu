@@ -9,8 +9,8 @@
     "normalize.css": "3.0.3",
     "npm-run-all": "4.1.1",
     "prop-types": "15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
     "react-google-login": "2.9.3",
     "react-redux": "5.0.6",
     "react-router-dom": "4.2.2",
@@ -24,10 +24,12 @@
   },
   "scripts": {
     "build-css": "lessc src/styles/main.less src/index.css",
-    "watch-css": "npm run build-css && chokidar 'src/styles/**/*.less' -c 'npm run build-css'",
+    "watch-css":
+      "npm run build-css && chokidar 'src/styles/**/*.less' -c 'npm run build-css'",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
+    "build":
+      "npm run build-css && react-scripts build && mv build ../neumeumeu-server/public",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

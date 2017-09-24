@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-const config = require("./config");
 const { Server } = require("http");
 const path = require("path");
 const express = require("express");
@@ -13,7 +12,7 @@ const log = require("./log");
 
 const app = express();
 const server = Server(app);
-const staticAssetsPath = path.resolve(__dirname, "..", "..", "dist");
+const staticAssetsPath = path.resolve(__dirname, "public");
 
 app.use(html5History());
 app.use(compression());
@@ -25,7 +24,7 @@ socketService
   .then(() => actionHandler.start())
   .then(() => realtimeHandler.start())
   .then(() => {
-    server.listen(config.port, "localhost", () =>
-      log.info("Server started on port", config.port)
+    server.listen(process.env.PORT, "localhost", () =>
+      log.info("Server started on port", process.env.PORT)
     );
   });

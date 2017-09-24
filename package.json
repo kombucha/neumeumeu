@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/scripts/index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "lerna run start",
+    "build": "lerna run build"
+  },
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/kombucha/jeu-de-carte-online"
