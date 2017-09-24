@@ -9,7 +9,7 @@ export default class GameCreationForm extends FormComponent {
   state = {
     enableUserActionTimeout: ENABLE_TIMEOUT,
     maxMalus: 66,
-    maxPlayers: 4,
+    maxPlayers: 10,
     botsCount: 0,
   };
 
