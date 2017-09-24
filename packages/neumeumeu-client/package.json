@@ -29,7 +29,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build":
-      "npm run build-css && react-scripts build && mv build ../neumeumeu-server/public",
+      "npm run build-css && react-scripts build && rm -fr ../neumeumeu-server/public/ && mv build ../neumeumeu-server/public",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
