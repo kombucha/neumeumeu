@@ -1,3 +1,0 @@
-extends: ["eslint:recommended", "react-app", "prettier"]
-globals:
-  __USE_MOCKS__: true
