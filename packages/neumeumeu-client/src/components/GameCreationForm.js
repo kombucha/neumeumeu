@@ -1,12 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ENABLE_TIMEOUT } from "neumeumeu-common/constants/gameplay";
+import { pickRandom } from "neumeumeu-common/utils";
 
 import FormComponent from "./FormComponent";
 import StrokedText from "./StrokedText";
 
+const WORDS = [
+  "croissant",
+  "pain au chocolat",
+  "bureau",
+  "crayon",
+  "chat",
+  "chien",
+  "piano",
+  "robot",
+  "ciel",
+  "couteau",
+];
+const ADJECTIVES = [
+  "petit",
+  "grand",
+  "délicieux",
+  "pourri",
+  "joyeux",
+  "triste",
+  "laid",
+  "magnifique",
+  "propre",
+  "sale",
+];
+function generateDumbName() {
+  return `${pickRandom(WORDS)} ${pickRandom(ADJECTIVES)}`;
+}
+
 export default class GameCreationForm extends FormComponent {
   state = {
+    name: generateDumbName(),
+    initialSelect: true,
     enableUserActionTimeout: ENABLE_TIMEOUT,
     maxMalus: 66,
     maxPlayers: 10,
@@ -15,7 +46,7 @@ export default class GameCreationForm extends FormComponent {
 
   handleSubmit = event => {
     event.preventDefault();
-    const game = Object.assign({}, this.state);
+    const game = Object.assign({}, this.state, { initialSelect: undefined });
     this.props.onCreateGame(game);
   };
 
@@ -24,6 +55,13 @@ export default class GameCreationForm extends FormComponent {
       this.setState({ botsCount: nextState.maxPlayers - 1 });
     }
   }
+
+  autoSelect = ev => {
+    if (this.state.initialSelect) {
+      ev.target.select();
+      this.setState({ initialSelect: false });
+    }
+  };
 
   render() {
     const {
@@ -42,6 +80,8 @@ export default class GameCreationForm extends FormComponent {
           placeholder="Name"
           value={name}
           onChange={this.onChange("name")}
+          onFocus={this.autoSelect}
+          autoFocus
           required
         />
 
