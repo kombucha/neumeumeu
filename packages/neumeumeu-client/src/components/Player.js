@@ -7,6 +7,11 @@ import PlayerStatus from "neumeumeu-common/constants/player-status";
 import Card from "./Card";
 import ChatMessage from "./ChatMessage";
 
+const formatName = name => {
+  const parts = name.split(/\s+/).filter((_, i) => i < 2);
+  return parts.length === 2 ? `${parts[0]} ${parts[1][0]}.` : parts[0];
+};
+
 const Player = ({
   player,
   isCurrentPlayer,
@@ -33,7 +38,7 @@ const Player = ({
   return (
     <div className={classes}>
       <div className="player__malus">{player.malus}</div>
-      <div className="player__username">{player.name}</div>
+      <div className="player__username">{formatName(player.name)}</div>
       <img
         className="player__avatar"
         src={avatarURL}
