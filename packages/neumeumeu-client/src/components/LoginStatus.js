@@ -25,7 +25,7 @@ export class LoginStatus extends PureComponent {
 
   renderLoggedOut() {
     return (
-      <Link className="button" to="/register">
+      <Link className="button" to="/login">
         <StrokedText text="Connect" />
       </Link>
     );

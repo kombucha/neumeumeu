@@ -1,4 +1,4 @@
-const r = require("server/database");
+const r = require("../database");
 
 function getPlayer(playerId) {
   return r

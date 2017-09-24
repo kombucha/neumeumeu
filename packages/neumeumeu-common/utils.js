@@ -3,14 +3,20 @@ function copyArray(arr) {
 }
 
 function range(size) {
-  return Array.apply(null, Array(size)).map((_, i) => i);
+  return Array.apply(null, Array(size)).map(function(_, i) {
+    return i;
+  });
 }
 
 function getSelectorFunction(selector) {
   if (!selector) {
-    return item => item;
+    return function(item) {
+      return item;
+    };
   } else if (typeof selector === "string") {
-    return item => item[selector];
+    return function(item) {
+      return item[selector];
+    };
   } else if (typeof selector === "function") {
     return selector;
   } else {
@@ -20,8 +26,10 @@ function getSelectorFunction(selector) {
 
 // Returns a sorted COPY of an array
 function sortBy(selector, arr) {
-  const selectorFn = getSelectorFunction(selector);
-  return copyArray(arr).sort((a, b) => selectorFn(a) - selectorFn(b));
+  var selectorFn = getSelectorFunction(selector);
+  return copyArray(arr).sort(function(a, b) {
+    return selectorFn(a) - selectorFn(b);
+  });
 }
 
 function randomInt(min, max) {
@@ -33,16 +41,18 @@ function pickRandom(arr) {
 }
 
 function sum(selector, arr) {
-  const selectorFn = getSelectorFunction(selector);
-  return arr.reduce((sum, item) => sum + selectorFn(item), 0);
+  var selectorFn = getSelectorFunction(selector);
+  return arr.reduce(function(sum, item) {
+    return sum + selectorFn(item);
+  }, 0);
 }
 
 // http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
 function shuffle(arr) {
-  let arrCopy = arr.slice();
-  let counter = arrCopy.length;
-  let temp;
-  let index;
+  var arrCopy = arr.slice();
+  var counter = arrCopy.length;
+  var temp;
+  var index;
 
   // While there are elements in the arrCopy
   while (counter > 0) {
@@ -71,23 +81,22 @@ function chunk(arr, size) {
   return result;
 }
 
-function promisify(fn) {
-  return (...args) =>
-    new Promise((resolve, reject) => {
-      fn(...args, (err, result) => {
-        if (err) {
-          return reject(err);
-        }
-
-        return resolve(result);
-      });
+function promisify(fn, context) {
+  return function() {
+    var args = [].slice.call(arguments);
+    return new Promise(function(resolve, reject) {
+      fn.apply(
+        context,
+        args.concat(function(err, value) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(value);
+          }
+        })
+      );
     });
-}
-
-function pTimeout(time) {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(), time);
-  });
+  };
 }
 
 function dateInSeconds(date) {
@@ -95,15 +104,14 @@ function dateInSeconds(date) {
 }
 
 module.exports = {
-  copyArray,
-  randomInt,
-  pickRandom,
-  range,
-  sortBy,
-  shuffle,
-  chunk,
-  sum,
-  promisify,
-  pTimeout,
-  dateInSeconds,
+  copyArray: copyArray,
+  randomInt: randomInt,
+  pickRandom: pickRandom,
+  range: range,
+  sortBy: sortBy,
+  shuffle: shuffle,
+  chunk: chunk,
+  sum: sum,
+  promisify: promisify,
+  dateInSeconds: dateInSeconds,
 };

@@ -47,7 +47,7 @@ export function joinGame(gameId, password) {
       })
       .catch(error => {
         if (error === Errors.INVALID_TOKEN) {
-          return history.push("/register");
+          return history.push("/login");
         }
 
         dispatch(addErrorMessage(error));

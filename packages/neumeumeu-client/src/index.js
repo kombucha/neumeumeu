@@ -9,7 +9,7 @@ import { configureSocket, bindSocketToStore } from "./remote";
 import api from "./api";
 import App from "./containers/App";
 import { HomeContainer } from "./containers/Home";
-import RegisterContainer from "./containers/Register";
+import LoginContainer from "./containers/Login";
 import { GameContainer } from "./containers/Game";
 import { GameResultsContainer } from "./containers/GameResults";
 import { GameCreationContainer } from "./containers/GameCreation";
@@ -40,7 +40,7 @@ ReactDOM.render(
             path="/games/:gameId/results"
             component={GameResultsContainer}
           />
-          <Route path="/register" component={RegisterContainer} />
+          <Route path="/login" component={LoginContainer} />
           <Route path="/" component={HomeContainer} />
         </Switch>
       </App>

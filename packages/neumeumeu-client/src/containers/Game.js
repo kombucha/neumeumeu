@@ -1,8 +1,7 @@
 import React, { PureComponent } from "react";
 import { findDOMNode } from "react-dom";
-import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { compose } from "recompose";
+import { compose, withProps } from "recompose";
 import GameStatus from "neumeumeu-common/constants/game-status";
 import PlayerStatus from "neumeumeu-common/constants/player-status";
 import GameplayConstants from "neumeumeu-common/constants/gameplay";
@@ -19,7 +18,7 @@ import Timer from "../components/Timer";
 
 export class Game extends PureComponent {
   componentWillMount() {
-    const gameId = this.props.params.gameId;
+    const gameId = this.props.gameId;
     this.props.joinGame(gameId);
   }
 
@@ -41,7 +40,7 @@ export class Game extends PureComponent {
   }
 
   componentWillUnmount() {
-    const gameId = this.props.params.gameId;
+    const gameId = this.props.gameId;
     this.props.leaveGame(gameId);
   }
 
@@ -231,7 +230,7 @@ function mapStateToProps(state) {
 
 export const GameContainer = compose(
   connect(mapStateToProps, actionCreators),
-  withRouter
+  withProps(props => ({ gameId: props.match.params.gameId }))
 )(Game);
 
 export default GameContainer;

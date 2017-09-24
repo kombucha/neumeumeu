@@ -1,12 +1,15 @@
-const { UNKNOWN_CARD_VALUE, generateGameCards } = require("common/deck");
-const { dateInSeconds, sum, sortBy } = require("common/utils");
-const Errors = require("common/constants/errors");
-const GameStatus = require("common/constants/game-status");
-const PlayerStatus = require("common/constants/player-status");
-const ChatConf = require("common/constants/chat");
-const r = require("server/database");
-const ai = require("server/services/ai");
-const GameplayConstants = require("common/constants/gameplay");
+const {
+  UNKNOWN_CARD_VALUE,
+  generateGameCards,
+} = require("neumeumeu-common/deck");
+const { dateInSeconds, sum, sortBy } = require("neumeumeu-common/utils");
+const Errors = require("neumeumeu-common/constants/errors");
+const GameStatus = require("neumeumeu-common/constants/game-status");
+const PlayerStatus = require("neumeumeu-common/constants/player-status");
+const ChatConf = require("neumeumeu-common/constants/chat");
+const GameplayConstants = require("neumeumeu-common/constants/gameplay");
+const r = require("../database");
+const ai = require("./ai");
 
 // Data
 function getGame(id) {
@@ -380,7 +383,7 @@ function destinationPileIdx(card, piles) {
       ? resultPile[resultPile.length - 1]
       : { value: -1 };
     return currentTopCard.value < card.value &&
-    currentTopCard.value >= resultTopCard.value
+      currentTopCard.value >= resultTopCard.value
       ? idx
       : resultIdx;
   }, -1);

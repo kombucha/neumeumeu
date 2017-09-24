@@ -1,9 +1,9 @@
-const log = require("server/log");
-const socketService = require("server/services/socket");
-const gameService = require("server/services/game");
-const gameplayService = require("server/services/gameplay");
-const authService = require("server/services/authentication");
-const realtimeHandler = require("server/services/realtimeHandler");
+const log = require("../log");
+const socketService = require("./socket");
+const gameService = require("./game");
+const gameplayService = require("./gameplay");
+const authService = require("./authentication");
+const realtimeHandler = require("./realtimeHandler");
 
 function start() {
   socketService.on("connection", handleNewClient);
@@ -14,20 +14,13 @@ function handleAction(socket, action, player) {
 
   switch (action.type) {
     case "LOGIN":
-      return authService
-        .login(action.username, action.password)
-        .then(result => {
-          socketService.associatePlayerWithSocket(result.player.id, socket.id);
-          return result;
-        });
+      return authService.loginFromGoogle(action.googleAuthCode).then(result => {
+        socketService.associatePlayerWithSocket(result.player.id, socket.id);
+        return result;
+      });
     case "LOGOUT":
       return authService.logout(action.token).then(result => {
         socketService.dissociatePlayerFromSocket(socket.id);
-        return result;
-      });
-    case "REGISTER":
-      return authService.register(action.user).then(result => {
-        socketService.associatePlayerWithSocket(result.player.id, socket.id);
         return result;
       });
     case "ASSOCIATE_PLAYER_TO_SOCKET":
@@ -96,7 +89,6 @@ function handleNewClient(socket) {
       .then(
         result => sendBack(result),
         error => {
-          console.log(`error : ${error}`);
           log.error({ error });
           sendBack({ error });
         }

@@ -14,10 +14,10 @@ function loginSuccessful(dispatch, loginData, redirectToUrl = "/") {
   return loginData;
 }
 
-export function login(username, password, redirectTo) {
+export function login(googleAuthCode, redirectTo) {
   return dispatch => {
     return api
-      .login(username, password)
+      .login(googleAuthCode)
       .then(loginData => loginSuccessful(dispatch, loginData, redirectTo))
       .catch(error => dispatch(addErrorMessage(error)));
   };
@@ -31,17 +31,4 @@ export function logout() {
     });
 }
 
-export function register(newUser, redirectTo) {
-  return dispatch => {
-    return api
-      .register(newUser)
-      .then(loginData => loginSuccessful(dispatch, loginData, redirectTo))
-      .catch(error => dispatch(addErrorMessage(error)));
-  };
-}
-
-export default {
-  login,
-  logout,
-  register,
-};
+export default { login, logout };

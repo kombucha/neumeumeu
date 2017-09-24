@@ -1,13 +1,15 @@
+require("dotenv").config();
+
 const config = require("./config");
 const { Server } = require("http");
 const path = require("path");
 const express = require("express");
 const html5History = require("connect-history-api-fallback");
 const compression = require("compression");
-const socketService = require("server/services/socket");
-const actionHandler = require("server/services/actionHandler");
-const realtimeHandler = require("server/services/realtimeHandler");
-const log = require("server/log");
+const socketService = require("./services/socket");
+const actionHandler = require("./services/actionHandler");
+const realtimeHandler = require("./services/realtimeHandler");
+const log = require("./log");
 
 const app = express();
 const server = Server(app);

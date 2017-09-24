@@ -1,9 +1,8 @@
 const crypto = require("crypto");
-const r = require("server/database");
-const Errors = require("common/constants/errors");
-const { promisify } = require("common/utils");
-
-const pbkdf2 = promisify(crypto.pbkdf2);
+const google = require("googleapis");
+const Errors = require("neumeumeu-common/constants/errors");
+const { promisify } = require("neumeumeu-common/utils");
+const r = require("../database");
 
 function getPlayerFromToken(token) {
   if (!token) {
@@ -31,78 +30,101 @@ function simplePlayer(player) {
   };
 }
 
-function login(username, password) {
-  const genericError = "Invalid username or password";
+async function loginFromGoogle(authorizationCode) {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URL
+  );
+  const plus = google.plus("v1").people;
+  const loadTokens = promisify(oauth2Client.getToken, oauth2Client);
+  const loadUserProfile = promisify(plus.get, plus);
 
-  return r
-    .table("player")
-    .filter(player => player("name").eq(username))
-    .limit(1)
-    .run()
-    .then(players => {
-      const player = players[0];
-
-      if (!player) {
-        return Promise.reject();
-      }
-
-      return Promise.all([
-        player,
-        checkPassword(password, player.salt, player.password),
-      ]);
-    })
-    .then(([player, isPasswordOk]) => {
-      if (!isPasswordOk) {
-        return Promise.reject();
-      }
-
-      return Promise.all([
-        simplePlayer(player),
-        createTokenForPlayer(player.id),
-      ]);
-    })
-    .then(([player, token]) => {
-      return {
-        player,
-        token,
-      };
-    })
-    .catch(() => Promise.reject(genericError));
+  try {
+    const tokens = await loadTokens(authorizationCode);
+    oauth2Client.setCredentials(tokens);
+    const googleProfile = await loadUserProfile({
+      userId: "me",
+      auth: oauth2Client,
+    });
+    return login(simpleProfile(googleProfile));
+  } catch (e) {
+    return Promise.reject("Error while loading with google");
+  }
 }
 
-function register(newPlayer) {
-  return (
-    isNameAvailable(newPlayer.username)
-      .then(available => {
-        if (!available) {
-          return Promise.reject(
-            `Username "${newPlayer.username}" is already taken !`
-          );
-        }
+function simpleProfile(googleProfile) {
+  const email = googleProfile.emails.find(
+    email => email.type === "account"
+  ) || {
+    value: "",
+  };
 
-        const salt = randomHexString();
+  return {
+    name: googleProfile.displayName,
+    avatarUrl: googleProfile.image ? googleProfile.image.url : "",
+    email: email.value,
+  };
+}
 
-        return Promise.all([
-          Promise.resolve(salt),
-          hashAndSaltPassword(newPlayer.password, salt),
-        ]);
-      })
-      .then(([salt, hashedPassword]) => {
-        return r
-          .table("player")
-          .insert({
-            name: newPlayer.username,
-            email: newPlayer.email,
-            password: hashedPassword,
-            avatarURL: newPlayer.avatarURL,
-            salt,
-            tokens: [],
-          })
-          .run();
-      })
-      // Not really efficient...
-      .then(() => login(newPlayer.username, newPlayer.password))
+async function login(profile) {
+  if (!profile.email) {
+    return new Promise.reject("An email is needed");
+  }
+
+  const playersByEmail = await r
+    .table("player")
+    .filter({ email: profile.email })
+    .limit(1)
+    .run();
+
+  let player = playersByEmail[0];
+
+  if (!player) {
+    player = await createPlayer(profile);
+  }
+
+  const token = await createToken(player);
+
+  return {
+    player: simplePlayer(player),
+    token,
+  };
+}
+
+async function createPlayer(profile) {
+  const newPlayer = {
+    name: profile.name,
+    email: profile.email,
+    avatarURL: profile.avatarURL,
+    tokens: [],
+  };
+
+  const result = await r
+    .table("player")
+    .insert(newPlayer)
+    .run();
+
+  const newPlayerWithId = Object.assign(
+    { id: result.generated_keys[0] },
+    newPlayer
   );
+
+  return newPlayerWithId;
+}
+
+async function createToken(player) {
+  const token = generateToken();
+
+  await r
+    .table("player")
+    .get(player.id)
+    .update({
+      tokens: r.row("tokens").append(token),
+    })
+    .run();
+
+  return token;
 }
 
 function logout(token) {
@@ -112,51 +134,12 @@ function logout(token) {
     .run();
 }
 
-function createTokenForPlayer(playerId) {
-  const token = generateToken();
-  return r
-    .table("player")
-    .get(playerId)
-    .update({
-      tokens: r.row("tokens").append(token),
-    })
-    .run()
-    .then(() => token);
-}
-
-function isNameAvailable(name) {
-  return r
-    .table("player")
-    .filter({ name })
-    .count()
-    .run()
-    .then(count => count === 0);
-}
-
-function randomHexString() {
+function generateToken() {
   return crypto.randomBytes(48).toString("hex");
 }
 
-function generateToken() {
-  // TODO: something better
-  return randomHexString();
-}
-
-function checkPassword(password, salt, hashedPassword) {
-  return hashAndSaltPassword(password, salt).then(
-    checkedPassword => checkedPassword === hashedPassword
-  );
-}
-
-function hashAndSaltPassword(password, salt) {
-  return pbkdf2(password, salt, 4096, 64).then(buffer =>
-    buffer.toString("hex")
-  );
-}
-
 module.exports = {
-  getPlayerFromToken,
-  register,
-  login,
+  loginFromGoogle,
   logout,
+  getPlayerFromToken,
 };

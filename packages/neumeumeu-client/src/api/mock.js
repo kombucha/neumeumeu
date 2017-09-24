@@ -27,7 +27,6 @@ export default {
 
   login,
   logout: noOpPromise,
-  register: noOpPromise,
   associateSocketToPlayer: noOpPromise,
 
   joinRoom: noOpPromise,

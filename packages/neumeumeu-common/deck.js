@@ -1,7 +1,9 @@
-const { shuffle, chunk } = require("./utils");
+var utils = require("./utils");
+var shuffle = utils.shuffle;
+var chunk = utils.chunk;
 
-const NUMBER_OF_CARDS = 104;
-const UNKNOWN_CARD_VALUE = -1;
+var NUMBER_OF_CARDS = 104;
+var UNKNOWN_CARD_VALUE = -1;
 
 function generateCard(cardNumber) {
   return {
@@ -25,8 +27,8 @@ function computeMalus(cardNumber) {
 }
 
 function generateDeck() {
-  let deck = [];
-  let cardNumber;
+  var deck = [];
+  var cardNumber;
 
   for (cardNumber = 1; cardNumber <= NUMBER_OF_CARDS; cardNumber++) {
     deck.push(generateCard(cardNumber));
@@ -36,7 +38,7 @@ function generateDeck() {
 }
 
 function generateGameCards() {
-  const deck = shuffle(generateDeck());
+  var deck = shuffle(generateDeck());
 
   return {
     cardsInPlay: chunk(deck.splice(0, 4), 1),
@@ -58,11 +60,11 @@ function fullCardFromId(cardId) {
 }
 
 module.exports = {
-  NUMBER_OF_CARDS,
-  UNKNOWN_CARD_VALUE,
+  NUMBER_OF_CARDS: NUMBER_OF_CARDS,
+  UNKNOWN_CARD_VALUE: UNKNOWN_CARD_VALUE,
 
-  generateDeck,
-  generateGameCards,
-  computeMalus,
-  fullCardFromId,
+  generateDeck: generateDeck,
+  generateGameCards: generateGameCards,
+  computeMalus: computeMalus,
+  fullCardFromId: fullCardFromId,
 };

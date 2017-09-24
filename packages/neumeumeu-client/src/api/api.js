@@ -17,15 +17,15 @@ function emitAction(action, waitForResponse = true) {
       return reject("Api was not initialized");
     }
 
-    const cb = waitForResponse ?
-      result => {
-        if (result.error) {
-          return reject(result.error);
-        }
+    const cb = waitForResponse
+      ? result => {
+          if (result.error) {
+            return reject(result.error);
+          }
 
-        return resolve(result);
-      } :
-      undefined;
+          return resolve(result);
+        }
+      : undefined;
 
     socket.emit("action", action, cb);
 
@@ -33,16 +33,18 @@ function emitAction(action, waitForResponse = true) {
       return Promise.resolve(action);
     }
   }).catch(result => {
-    console.warn(`Received error "${JSON.stringify(result, null, 2)}" for action`, action); // eslint-disable-line no-console
+    console.warn(
+      `Received error "${JSON.stringify(result, null, 2)}" for action`,
+      action
+    ); // eslint-disable-line no-console
     return Promise.reject(result);
   });
 }
 
-function login(username, password) {
+function login(googleAuthCode) {
   return emitAction({
     type: "LOGIN",
-    username,
-    password,
+    googleAuthCode,
   });
 }
 
@@ -50,13 +52,6 @@ function logout() {
   return emitAction({
     type: "LOGOUT",
     token: getAuthToken(),
-  });
-}
-
-function register(newUser) {
-  return emitAction({
-    type: "REGISTER",
-    user: newUser,
   });
 }
 
@@ -171,7 +166,6 @@ export default {
 
   login,
   logout,
-  register,
   associateSocketToPlayer,
 
   joinRoom,

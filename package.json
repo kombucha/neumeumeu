@@ -26,6 +26,8 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
   "devDependencies": {
+    "babel-eslint": "8.0.0",
+    "eslint": "4.7.2",
     "lerna": "^2.2.0",
     "prettier": "1.7.0"
   }

@@ -11,6 +11,7 @@
     "prop-types": "15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-google-login": "2.9.3",
     "react-redux": "5.0.6",
     "react-router-dom": "4.2.2",
     "react-scripts": "1.0.13",
@@ -35,5 +36,6 @@
     "less": "2.7.2",
     "redux-immutable-state-invariant": "2.0.0",
     "redux-logger": "3.0.6"
-  }
+  },
+  "proxy": "http://localhost:8000"
 }

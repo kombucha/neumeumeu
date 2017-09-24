@@ -1,5 +1,5 @@
-const { pickRandom, sortBy, sum } = require("common/utils");
-const log = require("server/log");
+const { pickRandom, sortBy, sum } = require("neumeumeu-common/utils");
+const log = require("../log");
 
 function computeTotalCardMalus(cards) {
   return sum("malus", cards);
@@ -26,7 +26,7 @@ function destinationPileIdx(card, piles) {
       : { value: -1 };
 
     return currentTopCard.value < card.value &&
-    currentTopCard.value >= resultTopCard.value
+      currentTopCard.value >= resultTopCard.value
       ? idx
       : resultIdx;
   }, -1);

@@ -1,9 +1,9 @@
-const r = require("server/database");
-const { getPlayer } = require("server/services/player");
-const { range } = require("common/utils");
-const PlayerStatus = require("common/constants/player-status");
-const ChatConf = require("common/constants/chat");
-const GameStatus = require("common/constants/game-status");
+const { range } = require("neumeumeu-common/utils");
+const PlayerStatus = require("neumeumeu-common/constants/player-status");
+const ChatConf = require("neumeumeu-common/constants/chat");
+const GameStatus = require("neumeumeu-common/constants/game-status");
+const r = require("../database");
+const { getPlayer } = require("./player");
 const { createMessage } = require("./gameplay");
 
 const simpleGameProjection = [

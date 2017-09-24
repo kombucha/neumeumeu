@@ -1,8 +1,8 @@
-const log = require("server/log");
-const GameStatus = require("common/constants/game-status");
-const socketService = require("server/services/socket");
-const gameService = require("server/services/game");
-const gameplayService = require("server/services/gameplay");
+const log = require("../log");
+const GameStatus = require("neumeumeu-common/constants/game-status");
+const socketService = require("./socket");
+const gameService = require("./game");
+const gameplayService = require("./gameplay");
 
 function start() {
   startRealtimeLobbyUpdate();
