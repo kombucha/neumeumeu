@@ -8,7 +8,6 @@ const { createMessage } = require("./gameplay");
 
 const simpleGameProjection = [
   "id",
-  "isProtected",
   "maxPlayers",
   "status",
   "name",
@@ -78,7 +77,6 @@ function createGame(playerId, options) {
   const newGame = {
     name: options.name,
     enableUserActionTimeout: options.enableUserActionTimeout,
-    password: options.password,
     maxMalus,
     maxPlayers,
 
@@ -101,7 +99,7 @@ function createGame(playerId, options) {
     .then(result => result["generated_keys"][0]);
 }
 
-function joinGame(playerId, gameId, password = "") {
+function joinGame(playerId, gameId) {
   return getPlayer(playerId).then(player => {
     const gamePlayer = createGamePlayer(player);
 
@@ -114,12 +112,6 @@ function joinGame(playerId, gameId, password = "") {
             // Status OK
             game("status")
               .eq(GameStatus.WAITING_FOR_PLAYERS)
-              // AND password OK
-              .and(
-                game("password")
-                  .default("")
-                  .eq(password)
-              )
               // AND not already joined
               .and(
                 game("players")
@@ -151,8 +143,6 @@ function joinGame(playerId, gameId, password = "") {
 
         if (game.status !== GameStatus.WAITING_FOR_PLAYERS) {
           return Promise.reject("Can't join game: Already running");
-        } else if (game.password && game.password !== password) {
-          return Promise.reject("Can't join game: Wrong password");
         } else if (game.players.length >= game.maxPlayers) {
           return Promise.reject("Can't join game: Game is full");
         }

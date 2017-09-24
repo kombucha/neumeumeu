@@ -22,6 +22,5 @@
   "maxPlayers": 10,
   "owner": "1",
   "status": "waiting_for_cards",
-  "isProtected": false,
   "resolutionSteps": null
 }

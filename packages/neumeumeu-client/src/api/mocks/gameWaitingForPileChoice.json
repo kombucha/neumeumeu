@@ -22,6 +22,5 @@
   "maxPlayers": 10,
   "owner": "1",
   "status": "waiting_for_pile_choice",
-  "isProtected": false,
   "resolutionSteps": null
 }

@@ -24,7 +24,6 @@
   "maxPlayers": 10,
   "owner": "1",
   "status": "solved",
-  "isProtected": false,
   "resolutionSteps": [
     {
       "fromPlayer": 1,

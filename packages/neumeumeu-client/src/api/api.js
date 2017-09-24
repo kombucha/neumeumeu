@@ -85,12 +85,11 @@ function createGame(game) {
   });
 }
 
-function joinGame(id, password) {
+function joinGame(id) {
   return emitAction({
     type: "JOIN_GAME",
     token: getAuthToken(),
     id,
-    password,
   });
 }
 

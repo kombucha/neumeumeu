@@ -8,7 +8,6 @@ import StrokedText from "./StrokedText";
 export default class GameCreationForm extends FormComponent {
   state = {
     enableUserActionTimeout: ENABLE_TIMEOUT,
-    isProtected: false,
     maxMalus: 66,
     maxPlayers: 4,
     botsCount: 0,
@@ -30,8 +29,6 @@ export default class GameCreationForm extends FormComponent {
     const {
       name,
       enableUserActionTimeout,
-      isProtected,
-      password,
       maxMalus,
       botsCount,
       maxPlayers,
@@ -59,25 +56,6 @@ export default class GameCreationForm extends FormComponent {
             <span className="form__checkbox__placeholder" />
           </span>
         </label>
-
-        <label className="form__label">
-          <span className="form__text">Protected ?</span>
-          <span className="form__checkbox">
-            <input
-              type="checkbox"
-              checked={isProtected}
-              onChange={this.onCheckboxChange("isProtected")}
-            />
-            <span className="form__checkbox__placeholder" />
-          </span>
-        </label>
-
-        <input
-          disabled={!isProtected}
-          type="password"
-          value={password}
-          onChange={this.onChange("password")}
-        />
 
         <label className="form__label">
           <span className="form__text">Max Players</span>

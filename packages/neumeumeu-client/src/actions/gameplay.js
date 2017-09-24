@@ -37,10 +37,10 @@ export function playerReady(gameId) {
   return () => api.playerReady(gameId);
 }
 
-export function joinGame(gameId, password) {
+export function joinGame(gameId) {
   return dispatch => {
     return api
-      .joinGame(gameId, password)
+      .joinGame(gameId)
       .then(game => {
         dispatch(updateCurrentGame(game));
         dispatch(joinRoom(gameId));

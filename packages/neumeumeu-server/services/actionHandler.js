@@ -36,7 +36,7 @@ function handleAction(socket, action, player) {
 
     case "JOIN_GAME":
       return gameService
-        .joinGame(player.id, action.id, action.password)
+        .joinGame(player.id, action.id)
         .then(game =>
           gameplayService.transformGameplayForPlayer(player.id, game)
         );

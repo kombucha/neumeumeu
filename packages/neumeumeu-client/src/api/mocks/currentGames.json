@@ -4,63 +4,55 @@
     "name": "El chico",
     "players": [],
     "maxPlayers": 10,
-    "status": "waiting_for_players",
-    "isProtected": false
+    "status": "waiting_for_players"
   },
   {
     "id": "1",
     "name": "Angels Room",
     "players": [],
     "maxPlayers": 4,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "2",
     "name": "Bigmac",
     "players": [],
     "maxPlayers": 6,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "3",
     "name": "Super room",
     "players": [],
     "maxPlayers": 8,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "4",
     "name": "Steevie Wonder",
     "players": [],
     "maxPlayers": 8,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "5",
     "name": "Pinocchio",
     "players": [],
     "maxPlayers": 10,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "6",
     "name": "My room",
     "players": [],
     "maxPlayers": 10,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   },
   {
     "id": "7",
     "name": "A B C",
     "players": [],
     "maxPlayers": 5,
-    "status": "waiting_for_players",
-    "isProtected": true
+    "status": "waiting_for_players"
   }
 ]

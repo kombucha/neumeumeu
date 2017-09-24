@@ -62,7 +62,7 @@ function simpleProfile(googleProfile) {
 
   return {
     name: googleProfile.displayName,
-    avatarUrl: googleProfile.image ? googleProfile.image.url : "",
+    avatarURL: googleProfile.image ? googleProfile.image.url : "",
     email: email.value,
   };
 }
