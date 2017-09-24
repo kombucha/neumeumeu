@@ -14,10 +14,13 @@ export default function configureStore(initialState) {
   ];
 
   if (process.env.NODE_ENV !== "production") {
+    const immutableMiddleware = require("redux-immutable-state-invariant")
+      .default;
+    const loggerMiddleware = require("redux-logger").createLogger;
     middlewares = [
-      // require("redux-immutable-state-invariant")(),
+      immutableMiddleware(),
       ...middlewares,
-      // require("redux-logger")({ collapsed: true }),
+      loggerMiddleware({ collapsed: true }),
     ];
   }
 
