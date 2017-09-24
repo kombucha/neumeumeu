@@ -1,3 +1,3 @@
 const rethinkdbdash = require("rethinkdbdash");
 
-module.exports = rethinkdbdash({ port: 32769 });
+module.exports = rethinkdbdash({ port: process.env.DB_PORT });

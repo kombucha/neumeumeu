@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/scripts/index.js",
   "scripts": {
+    "bootstrap": "lerna run bootstrap",
     "start": "lerna run start",
     "build": "lerna run build"
   },
@@ -12,8 +13,7 @@
     "url": "https://bitbucket.org/kombucha/jeu-de-carte-online"
   },
   "author": "Vincent Lemeunier",
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Hugo Pievic"
     },
     {
