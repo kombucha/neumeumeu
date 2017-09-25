@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import { compose, withProps } from "recompose";
 import { Link } from "react-router-dom";
 import { sortBy } from "neumeumeu-common/utils";
 
@@ -9,12 +10,12 @@ import StrokedText from "../components/StrokedText";
 
 export default class GameResults extends PureComponent {
   componentWillMount() {
-    const gameId = this.props.params.gameId;
+    const gameId = this.props.gameId;
     this.props.joinGame(gameId);
   }
 
   componentWillUnmount() {
-    const gameId = this.props.params.gameId;
+    const gameId = this.props.gameId;
     this.props.leaveGame(gameId);
   }
 
@@ -54,7 +55,7 @@ function mapStateToProps(state) {
   };
 }
 
-export const GameResultsContainer = connect(mapStateToProps, {
-  joinGame,
-  leaveGame,
-})(GameResults);
+export const GameResultsContainer = compose(
+  connect(mapStateToProps, { joinGame, leaveGame }),
+  withProps(props => ({ gameId: props.match.params.gameId }))
+)(GameResults);

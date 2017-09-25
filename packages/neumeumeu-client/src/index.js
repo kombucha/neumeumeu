@@ -35,11 +35,11 @@ ReactDOM.render(
             path="/games/create"
             component={GameCreationContainer}
           />
-          <PrivateRoute path="/games/:gameId" component={GameContainer} />
           <PrivateRoute
             path="/games/:gameId/results"
             component={GameResultsContainer}
           />
+          <PrivateRoute path="/games/:gameId" component={GameContainer} />
           <Route path="/login" component={LoginContainer} />
           <Route path="/" component={HomeContainer} />
         </Switch>
