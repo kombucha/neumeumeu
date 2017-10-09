@@ -5,6 +5,7 @@
   "main": "src/scripts/index.js",
   "scripts": {
     "bootstrap": "lerna run bootstrap",
+    "postinstall": "npm run bootstrap",
     "start": "lerna run start",
     "build": "lerna run build"
   },
@@ -13,7 +14,8 @@
     "url": "https://bitbucket.org/kombucha/jeu-de-carte-online"
   },
   "author": "Vincent Lemeunier",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Hugo Pievic"
     },
     {
@@ -27,7 +29,7 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://bitbucket.org/kombucha/jeu-de-carte-online",
+  "homepage": "https://github.com/kombucha/neumeumeu",
   "devDependencies": {
     "babel-eslint": "8.0.0",
     "eslint": "4.7.2",

@@ -1,32 +1,28 @@
-# (Ce n'est pas) 6 Qui Prend !
+# (This isn't) 6 Nimmt !
+
+![Game screenshot](screenshot.jpg "Logo Title Text 1")
 
 ## Description
+Online multiplayer implementation of the card game. Made for fun as a side project to learn [react](https://facebook.github.io/react) and [redux](http://redux.js.org/).
 
-- [Règles du jeu](http://www.gigamic.com/files/catalog/products/rules/rules-6quiprend-05-2012.pdf)
-- [Modélisation](docs/data-modeling.md)
-- [Vocabulaire anglais des jeux de carte](https://en.wikipedia.org/wiki/Glossary_of_card_game_terms)
+Many thanks to this [great tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) !
 
-## Pré-Requis
-- [NodeJS](https://nodejs.org/)
+[Game Rules](https://en.wikipedia.org/wiki/6_Nimmt!)
 
-## Technologies
-### Client
-- [Webpack](http://webpack.github.io/) + [Gulp](http://gulpjs.com/) pour builder la solution
-- [React](https://facebook.github.io/react/) 
-- [redux](http://rackt.github.io/redux/)
+Definitely not bug free ! Player beware. Still fun though. PRs welcome.
 
-A l'avenir : 
-- [socket.io](http://socket.io/) ?
-(cf. http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
+The game is hosted on https://cards.limbocitizen.com/.
 
-### Server
-- TODO
-
-A l'avenir :
-- [Express](http://expressjs.com/) + [socket.io](http://socket.io/) probablement
-
-## Développement Front
-```
-$ npm i
-$ npm run dev
-```
+## Get started
+- Start a [rethinkdb](https://rethinkdb.com/) (using [docker](https://hub.docker.com/_/rethinkdb/) maybe)
+- Fill out the relevant .env files
+- And then:
+  ```sh
+  # In ~
+  npm i
+  # In neumeumeu-server
+  npm start
+  # In neumeumeu-client
+  npm start
+  ```
+Enjoy !
